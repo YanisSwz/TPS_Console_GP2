@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{6B80CF9D-4774-8C7D-2CFA-62A42EFDD296}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "ThisIsMyPlanet",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	]
+}
