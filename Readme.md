@@ -55,4 +55,4 @@ TBD
 
 # Gallery
 
-![alt text](https://gitlabstudents.isartintra.com/projets/2024_gp_2028_gp_2028_tps-thisismyplanet/-/blob/master/Images/Overview.png?raw=true "Overview")
+![Overview](./Images/Overview.png?raw=true)
