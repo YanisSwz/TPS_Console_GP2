@@ -47,6 +47,17 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** Aim Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AimAction;
+
+	/** Shoot Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ShootAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	UActorComponent* Weapon;
+	
 	/** Crouch Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CrouchAction;
@@ -57,10 +68,16 @@ public:
 	APlayerCharacter();
 
 protected:
+	float initialFieldofView;
+	float zoomedFieldOfView = 45.0f;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void Aim();
+	void StopAim();
+	void Shoot();
 	void StartCrouching(const FInputActionValue& Value);
 	void EndCrouching(const FInputActionValue& Value);
 	void StartJumping(const FInputActionValue& Value);
