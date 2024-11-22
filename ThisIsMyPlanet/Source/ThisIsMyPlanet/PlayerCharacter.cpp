@@ -73,14 +73,14 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 }
 
-void APlayerCharacter::StartCrouching(const FInputActionValue& Value)
+void APlayerCharacter::StartCrouching()
 {
 	Crouch();
 	if (GEngine != nullptr)
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Oui");
 }
 
-void APlayerCharacter::EndCrouching(const FInputActionValue& Value)
+void APlayerCharacter::EndCrouching()
 {
 	UnCrouch();
 	if (GEngine != nullptr)
@@ -105,10 +105,19 @@ void APlayerCharacter::StopAim()
 
 void APlayerCharacter::Shoot()
 {
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
+	if (bIsShooting)
+	{
+		//Weapon->Shoot;
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
+	}
+	else
+		GrabComp->Grab(true);
+}
 
-	//Weapon->Shoot;
+void APlayerCharacter::Switch()
+{
+	bIsShooting = !bIsShooting;
 }
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
@@ -166,6 +175,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Shoot
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Shoot);
+
+		EnhancedInputComponent->BindAction(SwitchAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Switch);
 	}
 
 }

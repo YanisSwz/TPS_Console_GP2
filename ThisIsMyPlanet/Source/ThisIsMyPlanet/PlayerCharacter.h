@@ -62,6 +62,16 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CrouchAction;
 
+	/** Switch between Shoot and Grab/Throw Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SwitchAction;
+
+	// Grab/Shoot
+	bool bIsShooting = true;
+
+	// Grab/Launch
+	bool bIsLaunchingLeft = false;
+	bool bIsLaunchingRight = false;
 
 public:
 	// Sets default values for this character's properties
@@ -78,8 +88,9 @@ protected:
 	void Aim();
 	void StopAim();
 	void Shoot();
-	void StartCrouching(const FInputActionValue& Value);
-	void EndCrouching(const FInputActionValue& Value);
+	void Switch();
+	void StartCrouching();
+	void EndCrouching();
 	void StartJumping(const FInputActionValue& Value);
 	void EndJumping(const FInputActionValue& Value);
 
