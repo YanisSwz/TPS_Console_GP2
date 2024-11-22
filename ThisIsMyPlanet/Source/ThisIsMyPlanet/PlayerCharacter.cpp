@@ -32,6 +32,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	initialFieldofView = FollowCamera->FieldOfView;
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -68,6 +69,30 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(-LookAxisVector.Y);
 	}
 
+}
+
+void APlayerCharacter::Aim()
+{
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Aim");
+	
+	FollowCamera->FieldOfView = zoomedFieldOfView;
+}
+
+void APlayerCharacter::StopAim()
+{
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Stop");
+
+	FollowCamera->FieldOfView = initialFieldofView;
+}
+
+void APlayerCharacter::Shoot()
+{
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
+
+	//Weapon->Shoot;
 }
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
@@ -114,6 +139,13 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
+
+		// Aim
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &APlayerCharacter::Aim);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &APlayerCharacter::StopAim);
+
+		// Shoot
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Shoot);
 	}
 
 }
