@@ -22,7 +22,7 @@ void AAnimal::BeginPlay()
 void AAnimal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	Survive();
 }
 
 // Called to bind functionality to input
