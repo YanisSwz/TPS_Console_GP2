@@ -25,6 +25,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +34,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	initialFieldofView = FollowCamera->FieldOfView;
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -68,6 +71,44 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(-LookAxisVector.Y);
 	}
 
+}
+
+void APlayerCharacter::StartCrouching(const FInputActionValue& Value)
+{
+	Crouch();
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Oui");
+}
+
+void APlayerCharacter::EndCrouching(const FInputActionValue& Value)
+{
+	UnCrouch();
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Non");
+}
+
+void APlayerCharacter::Aim()
+{
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Aim");
+	
+	FollowCamera->FieldOfView = zoomedFieldOfView;
+}
+
+void APlayerCharacter::StopAim()
+{
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Stop");
+
+	FollowCamera->FieldOfView = initialFieldofView;
+}
+
+void APlayerCharacter::Shoot()
+{
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
+
+	//Weapon->Shoot;
 }
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
@@ -114,6 +155,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
+
+		// Crouching
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &APlayerCharacter::StartCrouching);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::EndCrouching);
+		
+		// Aim
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &APlayerCharacter::Aim);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &APlayerCharacter::StopAim);
+
+		// Shoot
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Shoot);
 	}
 
 }
