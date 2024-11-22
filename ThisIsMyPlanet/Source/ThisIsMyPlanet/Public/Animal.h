@@ -11,7 +11,14 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 {
 	GENERATED_BODY()
 
-private:
+
+
+
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
+	float speed;
+
 	int health;
 	float pointValue;
 	float sleepTimer;

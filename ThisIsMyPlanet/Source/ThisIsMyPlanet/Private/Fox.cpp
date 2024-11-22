@@ -3,6 +3,11 @@
 
 #include "Fox.h"
 
+void AFox::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void AFox::Survive()
 {
 	if (GEngine)

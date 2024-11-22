@@ -13,7 +13,9 @@ UCLASS()
 class THISISMYPLANET_API AFox : public AAnimal
 {
 	GENERATED_BODY()
-	
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 public:
 	void Survive() override;
 
