@@ -27,6 +27,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
+
+	//Weapon = CreateDefaultSubobject<UActorComponent>(TEXT("Weapon"));
 }
 
 // Called when the game starts or when spawned
