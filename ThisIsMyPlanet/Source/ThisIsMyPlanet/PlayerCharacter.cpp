@@ -25,6 +25,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -68,6 +70,20 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(-LookAxisVector.Y);
 	}
 
+}
+
+void APlayerCharacter::StartCrouching(const FInputActionValue& Value)
+{
+	Crouch();
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Oui");
+}
+
+void APlayerCharacter::EndCrouching(const FInputActionValue& Value)
+{
+	UnCrouch();
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Non");
 }
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
@@ -114,6 +130,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
+
+		// Crouching
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &APlayerCharacter::StartCrouching);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::EndCrouching);
 	}
 
 }
