@@ -6,6 +6,7 @@
 #include "GrabberComponent.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
+#include "Weapon.h"
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -59,8 +60,14 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CrouchAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	UActorComponent* Weapon;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	AWeapon* Weapon;
+
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* ThrowingObjectRight;*/
+
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	USkeletalMeshComponent* ThrowingObjectLeft;*/
 
 
 public:

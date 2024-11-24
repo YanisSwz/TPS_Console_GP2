@@ -110,7 +110,7 @@ void APlayerCharacter::Shoot()
 	if (GEngine != nullptr)
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
 
-	//Weapon->Shoot;
+	//Weapon->Fire();
 }
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
