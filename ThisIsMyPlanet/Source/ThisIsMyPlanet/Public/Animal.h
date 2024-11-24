@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "NavigationSystem.h"
 #include "Animal.generated.h"
 
 UCLASS()
@@ -22,7 +23,9 @@ protected:
 	int health;
 	float pointValue;
 	float sleepTimer;
-
+	FNavLocation targetLocation;
+	bool isSleeping;
+	
 public:
 	// Sets default values for this character's properties
 	AAnimal();

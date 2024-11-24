@@ -2,7 +2,7 @@
 
 
 #include "Chicken.h"
-#include "NavigationSystem.h"
+
 
 void AChicken::BeginPlay()
 {
@@ -18,9 +18,11 @@ void AChicken::Survive()
 	if (!NavSystem)
 		return;
 
-	FNavLocation PatrolPoint;
-	NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), 500.0f, PatrolPoint);
+	
+	NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), 500.0f, targetLocation);
 
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (targetLocation.Location.ToString()));
 	
 }
 
