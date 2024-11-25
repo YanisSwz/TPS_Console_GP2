@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "NavigationSystem.h"
 #include "Animal.generated.h"
 
 UCLASS()
@@ -11,11 +12,20 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 {
 	GENERATED_BODY()
 
-private:
+
+
+
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
+	float speed;
+
 	int health;
 	float pointValue;
 	float sleepTimer;
-
+	FNavLocation targetLocation;
+	bool isSleeping;
+	
 public:
 	// Sets default values for this character's properties
 	AAnimal();
@@ -27,9 +37,6 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void Survive();
 
