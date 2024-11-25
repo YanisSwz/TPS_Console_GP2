@@ -2,6 +2,7 @@
 
 
 #include "GrabbableComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values for this component's properties
 UGrabbableComponent::UGrabbableComponent()
@@ -29,6 +30,12 @@ void UGrabbableComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 {
-	GetOwner()->AttachToActor(parent, FAttachmentTransformRules::KeepRelativeTransform, socketName);
+	GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), socketName);
+
+	FVector socketPos = parent->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(socketName);
+
+	GetOwner()->SetActorLocation(socketPos);
+
+	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

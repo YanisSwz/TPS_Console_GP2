@@ -114,7 +114,17 @@ void APlayerCharacter::Shoot()
 			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
 	}
 	else
-		GrabComp->Grab(true);
+	{
+		if (!bIsLaunchingRight)
+		{
+			if (GrabComp->Grab(true))
+				bIsLaunchingRight = true;
+		}
+		else
+		{
+			//Launch
+		}
+	}
 }
 
 void APlayerCharacter::Switch()
@@ -178,7 +188,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		// Shoot
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Shoot);
 
-		EnhancedInputComponent->BindAction(SwitchAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Switch);
+		EnhancedInputComponent->BindAction(SwitchAction, ETriggerEvent::Started, this, &APlayerCharacter::Switch);
 	}
 
 }

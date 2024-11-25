@@ -46,7 +46,7 @@ bool UGrabberComponent::Grab(bool isRightHand)
 	{
 		for (size_t i = 0; i < Hits.Num(); i++)
 		{
-			UGrabbableComponent* grabbable = Cast<UGrabbableComponent, AActor>(Hits[i].GetActor());
+			UGrabbableComponent* grabbable = Hits[i].GetActor()->GetComponentByClass<UGrabbableComponent>();
 			if (grabbable != nullptr)
 			{
 				if (GEngine)
