@@ -12,6 +12,16 @@
 #include "InputActionValue.h"
 
 
+void APlayerCharacter::SetupStimulusSource()
+{
+	StimulusSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus"));
+	if(StimulusSource)
+	{
+		StimulusSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		StimulusSource->RegisterWithPerceptionSystem();
+	}
+}
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -28,6 +38,7 @@ APlayerCharacter::APlayerCharacter()
 
 	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
 
+	SetupStimulusSource();
 	//Weapon = CreateDefaultSubobject<UActorComponent>(TEXT("Weapon"));
 }
 

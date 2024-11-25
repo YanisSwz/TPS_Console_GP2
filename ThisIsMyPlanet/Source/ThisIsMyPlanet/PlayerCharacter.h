@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "GrabberComponent.h"
 #include "GameFramework/Character.h"
-#include "PlayerCharacter.generated.h"
 #include "Weapon.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "PlayerCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -69,6 +71,9 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* ThrowingObjectLeft;*/
 
+private:
+	class UAIPerceptionStimuliSourceComponent* StimulusSource;
+	void SetupStimulusSource();
 
 public:
 	// Sets default values for this character's properties

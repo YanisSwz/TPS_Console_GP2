@@ -6,6 +6,7 @@
 AAnimalController::AAnimalController()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	SetupPerceptionSystem();
 }
 
 void AAnimalController::BeginPlay()
@@ -20,6 +21,8 @@ void AAnimalController::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	ControlledAnimal = Cast<AAnimal>(InPawn);
+
+	SetupPerceptionSystemValues();
 
 	UBlackboardComponent* TempBlackboard;
 	UseBlackboard(BT->GetBlackboardAsset(), TempBlackboard);
@@ -55,4 +58,46 @@ void AAnimalController::Flee()
 void AAnimalController::Sleep()
 {
 	ControlledAnimal->Sleep();
+}
+
+void AAnimalController::SetupPerceptionSystem()
+{
+	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
+	if (SightConfig)
+	{
+		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
+		SightConfig->SightRadius = 500.f;
+		SightConfig->LoseSightRadius = SightConfig->SightRadius + 25.f;
+		SightConfig->PeripheralVisionAngleDegrees = 90.f;
+		SightConfig->SetMaxAge(5.f);
+		SightConfig->AutoSuccessRangeFromLastSeenLocation = 520.f;
+		SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+		SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+		SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+
+		GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+		GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAnimalController::OnTargetDetected);
+		GetPerceptionComponent()->ConfigureSense(*SightConfig);
+	}
+}
+
+void AAnimalController::SetupPerceptionSystemValues()
+{
+	SightConfig->SightRadius = ControlledAnimal->SightRadius;
+	SightConfig->LoseSightRadius = ControlledAnimal->LoseSightRadius;
+	SightConfig->PeripheralVisionAngleDegrees = ControlledAnimal->PeripheralVisionAngleDegrees;
+	SightConfig->SetMaxAge(ControlledAnimal->MaxAge);
+	SightConfig->AutoSuccessRangeFromLastSeenLocation = ControlledAnimal->AutoSuccessRangeFromLastSeenLocation;
+
+	GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAnimalController::OnTargetDetected);
+	GetPerceptionComponent()->ConfigureSense(*SightConfig);
+}
+
+void AAnimalController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
+{
+	if(auto* const ch = Cast<APlayerCharacter>(Actor))
+	{
+		GetBlackboardComponent()->SetValueAsBool("bDetectedPlayer", Stimulus.WasSuccessfullySensed());
+	}
 }

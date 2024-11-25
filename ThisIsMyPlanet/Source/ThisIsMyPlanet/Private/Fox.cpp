@@ -10,8 +10,8 @@ void AFox::BeginPlay()
 
 void AFox::Survive()
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am survivig"));
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am survivig"));*/
 }
 
 void AFox::Flee()
