@@ -39,6 +39,7 @@ void AAnimalController::Tick(float DeltaTime)
 {
 	if (!ControlledAnimal)
 		return;
+	// if not sleeping: MoveTo(); targetLocation
 }
 
 void AAnimalController::Survive()

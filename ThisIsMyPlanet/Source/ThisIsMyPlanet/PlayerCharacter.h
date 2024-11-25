@@ -6,6 +6,7 @@
 #include "GrabberComponent.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
+#include "Weapon.h"
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -54,9 +55,6 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	/** Shoot Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ShootAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	UActorComponent* Weapon;
 	
 	/** Crouch Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -72,6 +70,8 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	// Grab/Launch
 	bool bIsLaunchingLeft = false;
 	bool bIsLaunchingRight = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	AWeapon* Weapon;
 
 public:
 	// Sets default values for this character's properties

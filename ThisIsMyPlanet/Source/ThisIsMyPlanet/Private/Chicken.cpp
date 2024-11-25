@@ -3,10 +3,27 @@
 
 #include "Chicken.h"
 
+
+void AChicken::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void AChicken::Survive()
 {
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am survivig"));
+
+	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
+	if (!NavSystem)
+		return;
+
+	
+	NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), 500.0f, targetLocation);
+
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (targetLocation.Location.ToString()));
+	
 }
 
 void AChicken::Flee()
