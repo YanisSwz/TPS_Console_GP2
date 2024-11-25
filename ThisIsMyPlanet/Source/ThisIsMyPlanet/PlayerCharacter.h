@@ -5,8 +5,9 @@
 #include "CoreMinimal.h"
 #include "GrabberComponent.h"
 #include "GameFramework/Character.h"
-#include "PlayerCharacter.generated.h"
 #include "Weapon.h"
+#include "PlayerCharacter.generated.h"
+
 
 class USpringArmComponent;
 class UCameraComponent;

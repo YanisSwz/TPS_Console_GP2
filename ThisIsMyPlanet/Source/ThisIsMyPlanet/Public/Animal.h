@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "NavigationSystem.h"
+#include "Navigation/PathFollowingComponent.h"
 #include "Animal.generated.h"
 
 UCLASS()
@@ -12,8 +13,8 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 {
 	GENERATED_BODY()
 
-
-
+public:
+	FNavLocation targetLocation;
 
 protected:
 
@@ -23,7 +24,7 @@ protected:
 	int health;
 	float pointValue;
 	float sleepTimer;
-	FNavLocation targetLocation;
+	
 	bool isSleeping;
 	
 public:
