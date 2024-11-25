@@ -122,7 +122,8 @@ void APlayerCharacter::Shoot()
 		}
 		else
 		{
-			//Launch
+			GrabComp->Launch(true, baseLaunchPower);
+			bIsLaunchingRight = false;
 		}
 	}
 }
@@ -186,7 +187,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &APlayerCharacter::StopAim);
 
 		// Shoot
-		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Shoot);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &APlayerCharacter::Shoot);
 
 		EnhancedInputComponent->BindAction(SwitchAction, ETriggerEvent::Started, this, &APlayerCharacter::Switch);
 	}

@@ -28,5 +28,5 @@ public:
 
 	void AttachTo(AActor* parent, FName socketName);
 
-		
+	void Launch(FVector dir, float power);
 };

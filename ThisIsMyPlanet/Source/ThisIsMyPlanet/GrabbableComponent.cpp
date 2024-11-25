@@ -36,6 +36,21 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 
 	GetOwner()->SetActorLocation(socketPos);
 
+	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(false);
+
 	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+void UGrabbableComponent::Launch(FVector dir, float power)
+{
+	GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(true);
+
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, dir.ToString());
+
+	GetOwner()->GetComponentByClass<UCapsuleComponent>()->AddImpulse(dir * power, NAME_None, true);
+}
