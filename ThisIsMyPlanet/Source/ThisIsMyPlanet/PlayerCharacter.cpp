@@ -57,19 +57,19 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
+		if (bIsAiming)
+		{
+			GetCharacterMovement()->bOrientRotationToMovement = false;
+		}
+		else
+		{
+			GetCharacterMovement()->bOrientRotationToMovement = true;
+		}
+
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 
-		/*if (bIsAiming)
-		{
-			
-		}
-		else
-		{
-			AddMovementInput(ForwardDirection, MovementVector.Y);
-			AddMovementInput(RightDirection, MovementVector.X);
-		}*/
 	}
 
 }
@@ -92,11 +92,8 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 			// Appliquer cette rotation au personnage
 			SetActorRotation(NewRotation);
 		}
-		else
-		{
-			AddControllerPitchInput(-LookAxisVector.Y);
-		}
 		AddControllerYawInput(LookAxisVector.X);
+		AddControllerPitchInput(-LookAxisVector.Y);
 	}
 }
 
@@ -121,6 +118,8 @@ void APlayerCharacter::Aim()
 	
 	bIsAiming = true;
 	FollowCamera->FieldOfView = zoomedFieldOfView;
+
+	Look(0);
 }
 
 void APlayerCharacter::StopAim()
