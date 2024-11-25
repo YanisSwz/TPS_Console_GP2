@@ -45,8 +45,10 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
+		
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
+
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
 		// get forward vector
@@ -58,6 +60,16 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		/*if (bIsAiming)
+		{
+			
+		}
+		else
+		{
+			AddMovementInput(ForwardDirection, MovementVector.Y);
+			AddMovementInput(RightDirection, MovementVector.X);
+		}*/
 	}
 
 }
@@ -68,11 +80,24 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(-LookAxisVector.Y);
-	}
+		if (bIsAiming)
+		{
+			//this->GetActorForwardVector().X = FollowCamera->GetForwardVector().X;
 
+			FRotator ControlRotation = Controller->GetControlRotation();
+
+			// Conserver uniquement le Yaw (axe horizontal) pour éviter les inclinaisons
+			FRotator NewRotation = FRotator(0.0f, ControlRotation.Yaw, 0.0f);
+
+			// Appliquer cette rotation au personnage
+			SetActorRotation(NewRotation);
+		}
+		else
+		{
+			AddControllerPitchInput(-LookAxisVector.Y);
+		}
+		AddControllerYawInput(LookAxisVector.X);
+	}
 }
 
 void APlayerCharacter::StartCrouching()
@@ -94,6 +119,7 @@ void APlayerCharacter::Aim()
 	if (GEngine != nullptr)
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Aim");
 	
+	bIsAiming = true;
 	FollowCamera->FieldOfView = zoomedFieldOfView;
 }
 
@@ -102,6 +128,7 @@ void APlayerCharacter::StopAim()
 	if (GEngine != nullptr)
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Stop");
 
+	bIsAiming = false;
 	FollowCamera->FieldOfView = initialFieldofView;
 }
 

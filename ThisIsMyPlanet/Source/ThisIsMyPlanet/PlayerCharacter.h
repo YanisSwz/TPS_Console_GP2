@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GrabberComponent.h"
+#include "Weapon.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
-#include "Weapon.h"
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -78,6 +78,8 @@ public:
 	APlayerCharacter();
 
 protected:
+	bool bIsAiming = false;
+
 	float initialFieldofView;
 	float zoomedFieldOfView = 45.0f;
 
