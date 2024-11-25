@@ -15,6 +15,8 @@ public:
 	// Sets default values for this pawn's properties
 	AWeapon();
 
+	bool bCanShoot = true;
+
 	void Fire();
 
 protected:
