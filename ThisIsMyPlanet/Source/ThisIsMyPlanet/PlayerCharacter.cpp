@@ -117,7 +117,7 @@ void APlayerCharacter::Aim()
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Aim");
 	
 	bIsAiming = true;
-	FollowCamera->FieldOfView = zoomedFieldOfView;
+	//FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.1f);
 
 	Look(0);
 }
@@ -128,7 +128,7 @@ void APlayerCharacter::StopAim()
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Stop");
 
 	bIsAiming = false;
-	FollowCamera->FieldOfView = initialFieldofView;
+	//FollowCamera->FieldOfView = initialFieldofView;
 }
 
 void APlayerCharacter::Shoot()
@@ -163,6 +163,10 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if(bIsAiming)
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.3f);
+	else
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, initialFieldofView, 0.3f);
 }
 
 // Called to bind functionality to input
