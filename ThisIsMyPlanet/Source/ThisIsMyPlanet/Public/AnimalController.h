@@ -47,8 +47,8 @@ public:
 private:
 	class UAISenseConfig_Sight* SightConfig;
 
+	void CreatePerceptionSystem();
 	void SetupPerceptionSystem();
-	void SetupPerceptionSystemValues();
 
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
