@@ -29,7 +29,7 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UCameraComponent* FollowCamera;
 
 	/** Grabber Component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	UGrabberComponent* GrabComp;
 
 	/** MappingContext */
@@ -73,7 +73,8 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	// Grab/Launch
 	bool bIsLaunchingLeft = false;
 	bool bIsLaunchingRight = false;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	AWeapon* Weapon;
 
 public:

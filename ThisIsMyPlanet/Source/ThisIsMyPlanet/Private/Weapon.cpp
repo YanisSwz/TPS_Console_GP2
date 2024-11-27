@@ -2,6 +2,7 @@
 
 
 #include "Weapon.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -13,7 +14,10 @@ AWeapon::AWeapon()
 
 void AWeapon::Fire()
 {
+	//NewObject<ABullet>(bullet);
+	ABullet* bullet = GetWorld()->SpawnActor<ABullet>();
 
+	bullet->GetComponentByClass<USphereComponent>()->AddImpulse(this->GetActorForwardVector(), NAME_None, true);
 }
 
 // Called when the game starts or when spawned
@@ -29,11 +33,3 @@ void AWeapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
-// Called to bind functionality to input
-void AWeapon::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-

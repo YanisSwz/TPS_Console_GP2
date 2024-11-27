@@ -135,7 +135,7 @@ void APlayerCharacter::Shoot()
 {
 	if (bIsShooting)
 	{
-		//Weapon->Shoot;
+		Weapon->Fire();
 		if (GEngine != nullptr)
 			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
 	}
