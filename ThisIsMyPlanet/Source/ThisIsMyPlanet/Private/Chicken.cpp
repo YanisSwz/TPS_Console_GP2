@@ -33,10 +33,12 @@ void AChicken::Survive()
 		if (!NavSystem)
 			return;
 
-		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), 500.0f, targetLocation);
+		FNavLocation targetFNavLocation;
+		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), 500.0f, targetFNavLocation);
+		targetLocation = targetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
-	if ((GetActorLocation() - targetLocation.Location).Length() <= 120.0f && !bIsEating)
+	if ((GetActorLocation() - targetLocation).Length() <= 160.0f && !bIsEating)
 	{
 		
 		bIsEating = true;
@@ -53,6 +55,19 @@ void AChicken::Flee()
 {
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am fleeig"));
+
+	FVector playerLocation;
+	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
+	FVector player2Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 1)->GetActorLocation();
+	if ((player1Location - GetActorLocation()).Length() < (player2Location - GetActorLocation()).Length())
+	{
+		playerLocation = player1Location;
+	}
+	else
+	{
+		playerLocation = player2Location;
+	}
+	targetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
 }
 
 void AChicken::Sleep()
