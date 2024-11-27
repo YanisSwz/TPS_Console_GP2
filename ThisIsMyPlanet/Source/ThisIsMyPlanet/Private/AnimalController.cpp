@@ -48,7 +48,7 @@ void AAnimalController::Tick(float DeltaTime)
 
 	FVector vector = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 	
-	EPathFollowingRequestResult::Type result = MoveToLocation(ControlledAnimal->targetLocation.Location, 50.0f);
+	EPathFollowingRequestResult::Type result = MoveToLocation(ControlledAnimal->targetLocation.Location, 20.0f);
 	//if (GEngine && result == EPathFollowingRequestResult::Type::Failed)
 	//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "nay");
 	//ControlledAnimal->AddMovementInput((vector - UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation()).GetSafeNormal(), 1000.0f);
