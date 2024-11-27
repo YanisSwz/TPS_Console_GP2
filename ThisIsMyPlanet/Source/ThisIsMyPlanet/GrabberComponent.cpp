@@ -83,7 +83,9 @@ void UGrabberComponent::Launch(bool bIsRightHand, float launchPower)
 			return;
 		}
 
-		rightGrabbedComp->Launch(owner->GetComponentByClass<UCameraComponent>()->GetForwardVector(), launchPower);
+		FVector launch = owner->GetComponentByClass<UCameraComponent>()->GetForwardVector() * launchPower + owner->GetVelocity();
+
+		rightGrabbedComp->Launch(launch, 1);
 
 		rightGrabbedComp = nullptr;
 	}
@@ -96,7 +98,9 @@ void UGrabberComponent::Launch(bool bIsRightHand, float launchPower)
 			return;
 		}
 
-		leftGrabbedComp->Launch(owner->GetComponentByClass<UCameraComponent>()->GetForwardVector(), launchPower);
+		FVector launch = owner->GetComponentByClass<UCameraComponent>()->GetForwardVector() * launchPower + owner->GetVelocity();
+
+		leftGrabbedComp->Launch(launch, 1);
 
 		leftGrabbedComp = nullptr;
 	}
