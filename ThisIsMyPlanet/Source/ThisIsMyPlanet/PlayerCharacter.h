@@ -6,6 +6,8 @@
 #include "GrabberComponent.h"
 #include "Weapon.h"
 #include "GameFramework/Character.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "PlayerCharacter.generated.h"
 
 class USpringArmComponent;
@@ -75,6 +77,10 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	bool bIsLaunchingRight = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	AWeapon* Weapon;
+
+private:
+	class UAIPerceptionStimuliSourceComponent* StimulusSource;
+	void SetupStimulusSource();
 
 public:
 	// Sets default values for this character's properties

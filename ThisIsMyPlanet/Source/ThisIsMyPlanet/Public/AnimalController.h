@@ -5,9 +5,13 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Animal.h"
+#include "../PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Perception/AIPerceptionTypes.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AIPerceptionComponent.h"
 #include "AnimalController.generated.h"
 
 /**
@@ -39,5 +43,13 @@ public:
 	void Survive();
 	void Flee();
 	void Sleep();
-	
+
+private:
+	class UAISenseConfig_Sight* SightConfig;
+
+	void CreatePerceptionSystem();
+	void SetupPerceptionSystem();
+
+	UFUNCTION()
+	void OnTargetDetected(AActor* Actor, FAIStimulus Stimulus);
 };

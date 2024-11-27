@@ -16,10 +16,23 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 public:
 	FNavLocation targetLocation;
 
-protected:
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
-	float speed;
+	float Speed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Sight", meta = (AllowPrivateAccess = "true"))
+	float SightRadius;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Sight", meta = (AllowPrivateAccess = "true"))
+	float LoseSightRadius;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Sight", meta = (AllowPrivateAccess = "true"))
+	float PeripheralVisionAngleDegrees;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Sight", meta = (AllowPrivateAccess = "true"))
+	float MaxAge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Sight", meta = (AllowPrivateAccess = "true"))
+	float AutoSuccessRangeFromLastSeenLocation;
 
 	int health;
 	float pointValue;

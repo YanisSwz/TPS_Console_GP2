@@ -11,8 +11,8 @@ void AChicken::BeginPlay()
 
 void AChicken::Survive()
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am survivig"));
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am survivig"));*/
 
 	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
 	if (!NavSystem)
@@ -21,8 +21,8 @@ void AChicken::Survive()
 	
 	NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), 500.0f, targetLocation);
 
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (targetLocation.Location.ToString()));
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (targetLocation.Location.ToString()));*/
 	
 }
 
