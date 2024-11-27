@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GrabberComponent.h"
-#include "GameFramework/Character.h"
 #include "Weapon.h"
+#include "GameFramework/Character.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "PlayerCharacter.generated.h"
-
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -61,21 +62,33 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CrouchAction;
 
+	/** Switch between Shoot and Grab/Throw Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SwitchAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	float baseLaunchPower = 100;
+
+	// Grab/Shoot
+	bool bIsShooting = true;
+
+	// Grab/Launch
+	bool bIsLaunchingLeft = false;
+	bool bIsLaunchingRight = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	AWeapon* Weapon;
 
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* ThrowingObjectRight;*/
-
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* ThrowingObjectLeft;*/
-
+private:
+	class UAIPerceptionStimuliSourceComponent* StimulusSource;
+	void SetupStimulusSource();
 
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
 protected:
+	bool bIsAiming = false;
+
 	float initialFieldofView;
 	float zoomedFieldOfView = 45.0f;
 
@@ -86,8 +99,9 @@ protected:
 	void Aim();
 	void StopAim();
 	void Shoot();
-	void StartCrouching(const FInputActionValue& Value);
-	void EndCrouching(const FInputActionValue& Value);
+	void Switch();
+	void StartCrouching();
+	void EndCrouching();
 	void StartJumping(const FInputActionValue& Value);
 	void EndJumping(const FInputActionValue& Value);
 

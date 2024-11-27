@@ -2,8 +2,9 @@
 
 
 #include "GrabberComponent.h"
-#include "GrabbableComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values for this component's properties
 UGrabberComponent::UGrabberComponent()
@@ -34,7 +35,7 @@ void UGrabberComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
-bool UGrabberComponent::Grab(bool isRightHand)
+bool UGrabberComponent::Grab(bool bIsRightHand)
 {
 	FVector start = owner->GetActorLocation();
 	FVector forward = owner->GetActorForwardVector();
@@ -46,16 +47,22 @@ bool UGrabberComponent::Grab(bool isRightHand)
 	{
 		for (size_t i = 0; i < Hits.Num(); i++)
 		{
-			UGrabbableComponent* grabbable = Cast<UGrabbableComponent, AActor>(Hits[i].GetActor());
+			UGrabbableComponent* grabbable = Hits[i].GetActor()->GetComponentByClass<UGrabbableComponent>();
 			if (grabbable != nullptr)
 			{
 				if (GEngine)
 					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "GG");
 
-				if (isRightHand)
+				if (bIsRightHand)
+				{
 					grabbable->AttachTo(owner, rightHandSocketName);
+					rightGrabbedComp = grabbable;
+				}
 				else
+				{
 					grabbable->AttachTo(owner, leftHandSocketName);
+					leftGrabbedComp = grabbable;
+				}
 
 				return true;
 			}
@@ -65,3 +72,36 @@ bool UGrabberComponent::Grab(bool isRightHand)
 	return false;
 }
 
+void UGrabberComponent::Launch(bool bIsRightHand, float launchPower)
+{
+	if (bIsRightHand)
+	{
+		if (rightGrabbedComp == nullptr)
+		{
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "nullptr is not launchable!");
+			return;
+		}
+
+		FVector launch = owner->GetComponentByClass<UCameraComponent>()->GetForwardVector() * launchPower + owner->GetVelocity();
+
+		rightGrabbedComp->Launch(launch, 1);
+
+		rightGrabbedComp = nullptr;
+	}
+	else
+	{
+		if (leftGrabbedComp == nullptr)
+		{
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "nullptr is not launchable!");
+			return;
+		}
+
+		FVector launch = owner->GetComponentByClass<UCameraComponent>()->GetForwardVector() * launchPower + owner->GetVelocity();
+
+		leftGrabbedComp->Launch(launch, 1);
+
+		leftGrabbedComp = nullptr;
+	}
+}

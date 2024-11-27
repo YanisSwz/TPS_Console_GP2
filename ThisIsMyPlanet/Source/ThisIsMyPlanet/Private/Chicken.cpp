@@ -12,8 +12,8 @@ void AChicken::BeginPlay()
 
 void AChicken::Survive()
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am survivig"));
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am survivig"));*/
 
 	if (bIsLookingForSpot)
 	{

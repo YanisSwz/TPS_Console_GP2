@@ -12,6 +12,16 @@
 #include "InputActionValue.h"
 
 
+void APlayerCharacter::SetupStimulusSource()
+{
+	StimulusSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus"));
+	if(StimulusSource)
+	{
+		StimulusSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		StimulusSource->RegisterWithPerceptionSystem();
+	}
+}
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -28,6 +38,7 @@ APlayerCharacter::APlayerCharacter()
 
 	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
 
+	SetupStimulusSource();
 	//Weapon = CreateDefaultSubobject<UActorComponent>(TEXT("Weapon"));
 }
 
@@ -45,8 +56,10 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
+		
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
+
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
 		// get forward vector
@@ -55,9 +68,19 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
+		if (bIsAiming)
+		{
+			GetCharacterMovement()->bOrientRotationToMovement = false;
+		}
+		else
+		{
+			GetCharacterMovement()->bOrientRotationToMovement = true;
+		}
+
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
 	}
 
 }
@@ -68,21 +91,31 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		// add yaw and pitch input to controller
+		if (bIsAiming)
+		{
+			//this->GetActorForwardVector().X = FollowCamera->GetForwardVector().X;
+
+			FRotator ControlRotation = Controller->GetControlRotation();
+
+			// Conserver uniquement le Yaw (axe horizontal) pour éviter les inclinaisons
+			FRotator NewRotation = FRotator(0.0f, ControlRotation.Yaw, 0.0f);
+
+			// Appliquer cette rotation au personnage
+			SetActorRotation(NewRotation);
+		}
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(-LookAxisVector.Y);
 	}
-
 }
 
-void APlayerCharacter::StartCrouching(const FInputActionValue& Value)
+void APlayerCharacter::StartCrouching()
 {
 	Crouch();
 	if (GEngine != nullptr)
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Oui");
 }
 
-void APlayerCharacter::EndCrouching(const FInputActionValue& Value)
+void APlayerCharacter::EndCrouching()
 {
 	UnCrouch();
 	if (GEngine != nullptr)
@@ -94,7 +127,10 @@ void APlayerCharacter::Aim()
 	if (GEngine != nullptr)
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Aim");
 	
-	FollowCamera->FieldOfView = zoomedFieldOfView;
+	bIsAiming = true;
+	//FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.1f);
+
+	Look(0);
 }
 
 void APlayerCharacter::StopAim()
@@ -102,15 +138,36 @@ void APlayerCharacter::StopAim()
 	if (GEngine != nullptr)
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Stop");
 
-	FollowCamera->FieldOfView = initialFieldofView;
+	bIsAiming = false;
+	//FollowCamera->FieldOfView = initialFieldofView;
 }
 
 void APlayerCharacter::Shoot()
 {
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
+	if (bIsShooting)
+	{
+		//Weapon->Shoot;
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
+	}
+	else
+	{
+		if (!bIsLaunchingRight)
+		{
+			if (GrabComp->Grab(true))
+				bIsLaunchingRight = true;
+		}
+		else
+		{
+			GrabComp->Launch(true, baseLaunchPower);
+			bIsLaunchingRight = false;
+		}
+	}
+}
 
-	//Weapon->Fire();
+void APlayerCharacter::Switch()
+{
+	bIsShooting = !bIsShooting;
 }
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
@@ -128,6 +185,10 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if(bIsAiming)
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.3f);
+	else
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, initialFieldofView, 0.3f);
 }
 
 // Called to bind functionality to input
@@ -167,7 +228,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &APlayerCharacter::StopAim);
 
 		// Shoot
-		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Shoot);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &APlayerCharacter::Shoot);
+
+		EnhancedInputComponent->BindAction(SwitchAction, ETriggerEvent::Started, this, &APlayerCharacter::Switch);
 	}
 
 }

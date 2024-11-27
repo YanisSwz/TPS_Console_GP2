@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GrabbableComponent.h"
 #include "Components/ActorComponent.h"
 #include "GrabberComponent.generated.h"
 
@@ -13,6 +14,10 @@ class THISISMYPLANET_API UGrabberComponent : public UActorComponent
 	GENERATED_BODY()
 
 	AActor* owner;
+
+	UGrabbableComponent* leftGrabbedComp = nullptr;
+
+	UGrabbableComponent* rightGrabbedComp = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	FName leftHandSocketName;
@@ -39,5 +44,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	bool Grab(bool isRightHand);
+	bool Grab(bool bIsRightHand);
+
+	void Launch(bool bIsRightHand, float launchPower);
 };
