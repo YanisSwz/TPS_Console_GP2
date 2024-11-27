@@ -28,6 +28,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree* BT;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI Perception", meta = (AllowPrivateAccess = "true"))
+	UAISenseConfig_Sight* SightConfig;
+
 	APawn* Player1;
 	APawn* Player2;
 	AAnimal* ControlledAnimal;
@@ -45,7 +48,6 @@ public:
 	void Sleep();
 
 private:
-	class UAISenseConfig_Sight* SightConfig;
 
 	void CreatePerceptionSystem();
 	void SetupPerceptionSystem();

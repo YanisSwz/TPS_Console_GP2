@@ -82,6 +82,7 @@ void AAnimalController::CreatePerceptionSystem()
 		SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 
 		GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+		GetPerceptionComponent()->ConfigureSense(*SightConfig);
 		GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAnimalController::OnTargetDetected);
 	}
 }

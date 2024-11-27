@@ -17,7 +17,7 @@ void APlayerCharacter::SetupStimulusSource()
 	StimulusSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus"));
 	if(StimulusSource)
 	{
-		StimulusSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+		StimulusSource->RegisterForSense(UAISense_Sight::StaticClass());
 		StimulusSource->RegisterWithPerceptionSystem();
 	}
 }
