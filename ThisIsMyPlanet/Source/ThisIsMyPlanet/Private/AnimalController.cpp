@@ -37,9 +37,19 @@ void AAnimalController::OnUnPossess()
 
 void AAnimalController::Tick(float DeltaTime)
 {
+	//Super::Tick(DeltaTime);
 	if (!ControlledAnimal)
 		return;
-	// if not sleeping: MoveTo(); targetLocation
+	
+	
+
+	FVector vector = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
+	
+	//EPathFollowingRequestResult::Type result = MoveToLocation(vector, 50.0f);
+	//if (GEngine && result == EPathFollowingRequestResult::Type::Failed)
+	//	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, "nay");
+	//ControlledAnimal->AddMovementInput((vector - UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation()).GetSafeNormal(), 1000.0f);
+	//ControlledAnimal->SetActorLocation(vector);
 }
 
 void AAnimalController::Survive()
