@@ -15,6 +15,9 @@ class THISISMYPLANET_API AChicken : public AAnimal
 {
 	GENERATED_BODY()
 protected:
+	bool bIsLookingForSpot;
+
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 public:
