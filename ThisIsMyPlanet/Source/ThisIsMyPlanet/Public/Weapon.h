@@ -12,6 +12,9 @@ class THISISMYPLANET_API AWeapon : public APawn
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class ABullet> bullet;
+
 public:
 	// Sets default values for this pawn's properties
 	AWeapon();
@@ -26,7 +29,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+
+private:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

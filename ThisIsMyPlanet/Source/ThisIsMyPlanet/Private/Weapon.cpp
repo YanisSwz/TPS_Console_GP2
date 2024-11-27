@@ -9,15 +9,21 @@ AWeapon::AWeapon()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void AWeapon::Fire()
 {
-	//NewObject<ABullet>(bullet);
-	ABullet* bullet = GetWorld()->SpawnActor<ABullet>();
+	if (bCanShoot) 
+	{
+		UWorld* World = GetWorld();
+		if (World != nullptr)
+		{
+			FActorSpawnParameters ActorSpawnParams;
+			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-	bullet->GetComponentByClass<USphereComponent>()->AddImpulse(this->GetActorForwardVector(), NAME_None, true);
+			World->SpawnActor<ABullet>(bullet, ActorSpawnParams);
+		}
+	}
 }
 
 // Called when the game starts or when spawned
