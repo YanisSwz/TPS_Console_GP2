@@ -66,6 +66,13 @@ void AAnimalController::CreatePerceptionSystem()
 	if (SightConfig)
 	{
 		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
+
+		SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+		SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+		SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+
+		GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+		GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAnimalController::OnTargetDetected);
 	}
 }
 
@@ -77,16 +84,10 @@ void AAnimalController::SetupPerceptionSystem()
 	SightConfig->SetMaxAge(ControlledAnimal->MaxAge);
 	SightConfig->AutoSuccessRangeFromLastSeenLocation = ControlledAnimal->AutoSuccessRangeFromLastSeenLocation;
 
-	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
-	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
-
-	GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
-	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAnimalController::OnTargetDetected);
 	GetPerceptionComponent()->ConfigureSense(*SightConfig);
 }
 
-void AAnimalController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
+void AAnimalController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	if(auto* const ch = Cast<APlayerCharacter>(Actor))
 	{

@@ -51,5 +51,5 @@ private:
 	void SetupPerceptionSystem();
 
 	UFUNCTION()
-	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
+	void OnTargetDetected(AActor* Actor, FAIStimulus Stimulus);
 };
