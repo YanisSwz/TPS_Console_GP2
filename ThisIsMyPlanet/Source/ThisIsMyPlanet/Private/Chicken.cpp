@@ -34,7 +34,7 @@ void AChicken::Survive()
 			return;
 
 		FNavLocation targetFNavLocation;
-		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), 500.0f, targetFNavLocation);
+		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), seedSearchingRadius, targetFNavLocation);
 		targetLocation = targetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
