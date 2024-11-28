@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "GrabberComponent.h"
 #include "Weapon.h"
+#include "Sound/SoundBase.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -77,6 +80,9 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	bool bIsLaunchingRight = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	AWeapon* Weapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds", meta = (AllowPrivateAccess = "true"))
+	USoundBase* Footsteps;
 
 private:
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;

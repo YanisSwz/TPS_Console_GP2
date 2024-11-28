@@ -11,6 +11,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "AnimalController.generated.h"
 
@@ -30,6 +31,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI Perception", meta = (AllowPrivateAccess = "true"))
 	UAISenseConfig_Sight* SightConfig;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI Perception", meta = (AllowPrivateAccess = "true"))
+	UAISenseConfig_Hearing* HearingConfig;
 
 	APawn* Player1;
 	APawn* Player2;
