@@ -6,7 +6,6 @@
 #include "AIController.h"
 #include "Animal.h"
 #include "../PlayerCharacter.h"
-#include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionTypes.h"

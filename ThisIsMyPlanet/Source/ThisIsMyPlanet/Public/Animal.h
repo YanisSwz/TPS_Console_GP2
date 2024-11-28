@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "NavigationSystem.h"
 #include "Navigation/PathFollowingComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Animal.generated.h"
 
 UCLASS()
@@ -14,7 +15,8 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 	GENERATED_BODY()
 
 public:
-	FNavLocation targetLocation;
+	bool bIsSleeping;
+	FVector targetLocation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
 	float Speed;
@@ -40,11 +42,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Hearing", meta = (AllowPrivateAccess = "true"))
 	float HearingMaxAge;
 
+protected:
+
 	int health;
 	float pointValue;
 	float sleepTimer;
 	
-	bool isSleeping;
+	
 	
 public:
 	// Sets default values for this character's properties
