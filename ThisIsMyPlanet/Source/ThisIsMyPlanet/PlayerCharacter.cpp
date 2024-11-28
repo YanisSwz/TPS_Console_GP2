@@ -18,6 +18,7 @@ void APlayerCharacter::SetupStimulusSource()
 	if(StimulusSource)
 	{
 		StimulusSource->RegisterForSense(UAISense_Sight::StaticClass());
+		StimulusSource->RegisterForSense(UAISense_Hearing::StaticClass());
 		StimulusSource->RegisterWithPerceptionSystem();
 	}
 }
@@ -80,6 +81,20 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		if (Footsteps->CurrentPlayCount.Num() == 0)
+		{
+			if (!bIsCrouched || CrouchNoiseReduction <= 0.f)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f);
+				UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f, this, FootstepsRange);
+			}
+			else 
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f / CrouchNoiseReduction);
+				UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f / CrouchNoiseReduction, this, FootstepsRange);
+			}
+		}
 
 	}
 

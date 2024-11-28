@@ -8,6 +8,11 @@ void AFox::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AFox::Tick(float DeltaTime)
+{
+
+}
+
 void AFox::Survive()
 {
 	/*if (GEngine)
