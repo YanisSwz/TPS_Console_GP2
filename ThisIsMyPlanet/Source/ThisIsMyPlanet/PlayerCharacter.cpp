@@ -84,8 +84,16 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 
 		if (Footsteps->CurrentPlayCount.Num() == 0)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation());
-			UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f, this, 500.f);
+			if (!bIsCrouched || CrouchNoiseReduction <= 0.f)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f);
+				UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f, this, FootstepsRange);
+			}
+			else 
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f / CrouchNoiseReduction);
+				UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f / CrouchNoiseReduction, this, FootstepsRange);
+			}
 		}
 
 	}

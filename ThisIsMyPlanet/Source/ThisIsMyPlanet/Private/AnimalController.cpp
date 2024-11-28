@@ -107,8 +107,8 @@ void AAnimalController::SetupPerceptionSystem()
 	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
 	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
 
-	HearingConfig->HearingRange = 1000.f;
-	HearingConfig->SetMaxAge(5.f);
+	HearingConfig->HearingRange = ControlledAnimal->HearingRange;
+	HearingConfig->SetMaxAge(ControlledAnimal->HearingMaxAge);
 
 	GetPerceptionComponent()->ConfigureSense(*HearingConfig);
 }
