@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "GrabberComponent.h"
 #include "Weapon.h"
+#include "Sound/SoundBase.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -21,6 +24,14 @@ UCLASS()
 class THISISMYPLANET_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
+
+	enum Aiming
+	{
+		NONE,
+		WEAPON,
+		ANIMAL_LEFT,
+		ANIMAL_RIGHT
+	};
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -69,6 +80,14 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	float baseLaunchPower = 100;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	FVector CameraZoomGrabPosition = FVector(60, 80, 80);
+
+	FVector BaseCameraPos;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	float CameraZoomSpeed = 0.3f;
+
 	// Grab/Shoot
 	bool bIsShooting = true;
 
@@ -77,6 +96,15 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	bool bIsLaunchingRight = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	AWeapon* Weapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds", meta = (AllowPrivateAccess = "true"))
+	USoundBase* Footsteps;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds", meta = (AllowPrivateAccess = "true"))
+	float FootstepsRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds", meta = (AllowPrivateAccess = "true"))
+	float CrouchNoiseReduction;
 
 private:
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;
@@ -87,7 +115,7 @@ public:
 	APlayerCharacter();
 
 protected:
-	bool bIsAiming = false;
+	Aiming isAiming = NONE;
 
 	float initialFieldofView;
 	float zoomedFieldOfView = 45.0f;
@@ -99,6 +127,7 @@ protected:
 	void Aim();
 	void StopAim();
 	void Shoot();
+	void StopShooting();
 	void Switch();
 	void StartCrouching();
 	void EndCrouching();

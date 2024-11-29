@@ -73,17 +73,24 @@ void AAnimalController::CreatePerceptionSystem()
 	{
 		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
 
-		SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-		SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
-		SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
-
 		GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+		GetPerceptionComponent()->ConfigureSense(*SightConfig);
 		GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAnimalController::OnTargetDetected);
+	}
+
+	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("Hearing Config"));
+	if(HearingConfig)
+	{
+		GetPerceptionComponent()->ConfigureSense(*HearingConfig);
 	}
 }
 
 void AAnimalController::SetupPerceptionSystem()
 {
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+
 	SightConfig->SightRadius = ControlledAnimal->SightRadius;
 	SightConfig->LoseSightRadius = ControlledAnimal->LoseSightRadius;
 	SightConfig->PeripheralVisionAngleDegrees = ControlledAnimal->PeripheralVisionAngleDegrees;
@@ -91,12 +98,28 @@ void AAnimalController::SetupPerceptionSystem()
 	SightConfig->AutoSuccessRangeFromLastSeenLocation = ControlledAnimal->AutoSuccessRangeFromLastSeenLocation;
 
 	GetPerceptionComponent()->ConfigureSense(*SightConfig);
+
+	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
+	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
+
+	HearingConfig->HearingRange = ControlledAnimal->HearingRange;
+	HearingConfig->SetMaxAge(ControlledAnimal->HearingMaxAge);
+
+	GetPerceptionComponent()->ConfigureSense(*HearingConfig);
 }
 
 void AAnimalController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	if(auto* const ch = Cast<APlayerCharacter>(Actor))
 	{
-		GetBlackboardComponent()->SetValueAsBool("bSawPlayer", Stimulus.WasSuccessfullySensed());
+		if (Stimulus.Type == SightConfig->GetSenseID())
+		{
+			GetBlackboardComponent()->SetValueAsBool("bSawPlayer", Stimulus.WasSuccessfullySensed());
+		}
+		else if (Stimulus.Type == HearingConfig->GetSenseID())
+		{
+			GetBlackboardComponent()->SetValueAsBool("bHeardPlayer", Stimulus.WasSuccessfullySensed());
+		}
 	}
 }

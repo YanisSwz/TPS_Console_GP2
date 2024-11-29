@@ -36,9 +36,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Sight", meta = (AllowPrivateAccess = "true"))
 	float AutoSuccessRangeFromLastSeenLocation;
 
-protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Hearing", meta = (AllowPrivateAccess = "true"))
+	float HearingRange;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Hearing", meta = (AllowPrivateAccess = "true"))
+	float HearingMaxAge;
+
+protected:
 
 	int health;
 	float pointValue;

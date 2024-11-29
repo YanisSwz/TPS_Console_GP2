@@ -30,7 +30,7 @@ void UGrabbableComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 {
-	GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), socketName);
+	GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), socketName);
 
 	FVector socketPos = parent->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(socketName);
 
