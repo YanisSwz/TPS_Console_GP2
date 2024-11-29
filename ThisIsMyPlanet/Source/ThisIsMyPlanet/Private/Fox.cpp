@@ -79,7 +79,9 @@ void AFox::Flee()
 		playerLocation = player2Location;
 	}
 	targetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
-	Jump();
+
+	float deltaTime = GetWorld()->GetDeltaSeconds();
+	if (FMath::RandRange(0, FMath::FloorToInt(jumpingInverseFrequency * deltaTime)) == 1) Jump();
 }
 
 void AFox::ApplyEffect()
