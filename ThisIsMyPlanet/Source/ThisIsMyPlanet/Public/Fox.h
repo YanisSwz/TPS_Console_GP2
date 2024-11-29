@@ -16,11 +16,9 @@ class THISISMYPLANET_API AFox : public AAnimal
 	GENERATED_BODY()
 
 protected:
-	bool bIsChasing;
 	float scoutStepAngle;
 	bool bIsTurningLeft;
 	AChicken* chasedChicken;
-	bool bCanJump;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
 	float turningSpeed;

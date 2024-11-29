@@ -11,22 +11,27 @@ void AFox::BeginPlay()
 void AFox::Tick(float DeltaTime)
 {
 	
-	if (bIsTurningLeft)
-	{
-		scoutStepAngle += turningSpeed * DeltaTime;
-	}
-	else
-	{
-		scoutStepAngle -= turningSpeed * DeltaTime;
-	}
-	if (FMath::RandRange(0, FMath::FloorToInt(turningInverseFrequency * DeltaTime)) == 1) bIsTurningLeft = !bIsTurningLeft;
-	if (FMath::RandRange(0, FMath::FloorToInt(jumpingInverseFrequency * DeltaTime)) == 1 && bCanJump) Jump();
+	
 }
 
 void AFox::Survive()
 {
 	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am survivig"));*/
+
+	float deltaTime = GetWorld()->GetDeltaSeconds();
+
+	if (bIsTurningLeft)
+	{
+		scoutStepAngle += turningSpeed * deltaTime;
+		
+	}
+	else
+	{
+		scoutStepAngle -= turningSpeed * deltaTime;
+	}
+	if (FMath::RandRange(0, FMath::FloorToInt(turningInverseFrequency * deltaTime)) == 1) bIsTurningLeft = !bIsTurningLeft;
+	if (FMath::RandRange(0, FMath::FloorToInt(jumpingInverseFrequency * deltaTime)) == 1) Jump();
 
 	TArray<AActor*> chickenList;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
@@ -35,7 +40,7 @@ void AFox::Survive()
 	if (nearestChicken == nullptr)
 	{
 		targetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(scoutStepAngle, FVector::UpVector);
-		bCanJump = true;
+		
 	}
 	else if ((nearestChicken->GetActorLocation() - GetActorLocation()).Length() < 3000.0f)
 	{
@@ -44,22 +49,20 @@ void AFox::Survive()
 		{
 			// TODO: ATTACC
 			nearestChicken->Destroy();
-			bIsChasing = false;
 		}
-		bCanJump = true;
 	}
 	else
 	{
 		targetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(scoutStepAngle, FVector::UpVector);
-		bCanJump = true;
 	}
+	
 }
 
 void AFox::Flee()
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am fleeig"));
-	bCanJump = true;
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am fleeig"));*/
+
 	FVector playerLocation;
 	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 	FVector player2Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 1)->GetActorLocation();
@@ -72,13 +75,7 @@ void AFox::Flee()
 		playerLocation = player2Location;
 	}
 	targetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
-}
-
-void AFox::Sleep()
-{
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am honk mimimiming"));
-	bCanJump = false;
+	Jump();
 }
 
 void AFox::ApplyEffect()

@@ -14,11 +14,7 @@ void AChicken::BeginPlay()
 
 void AChicken::Tick(float DeltaTime)
 {
-	eatingTimer -= DeltaTime;
-	if (eatingTimer < 0.0f)
-	{
-		eatingTimer = 0.0f;
-	}
+	
 }
 
 void AChicken::Survive()
@@ -26,6 +22,12 @@ void AChicken::Survive()
 	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am survivig"));*/
 
+	float deltaTime = GetWorld()->GetDeltaSeconds();
+	eatingTimer -= deltaTime;
+	if (eatingTimer < 0.0f)
+	{
+		eatingTimer = 0.0f;
+	}
 
 	if (bIsLookingForSpot)
 	{
@@ -53,8 +55,8 @@ void AChicken::Survive()
 
 void AChicken::Flee()
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am fleeig"));
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am fleeig"));*/
 
 	FVector playerLocation;
 	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
@@ -68,12 +70,6 @@ void AChicken::Flee()
 		playerLocation = player2Location;
 	}
 	targetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
-}
-
-void AChicken::Sleep()
-{
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am honk mimimiming"));
 }
 
 void AChicken::ApplyEffect()
