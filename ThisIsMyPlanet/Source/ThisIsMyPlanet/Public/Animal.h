@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "NavigationSystem.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -15,8 +17,6 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 	GENERATED_BODY()
 
 public:
-	bool bIsSleeping;
-	FVector targetLocation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
 	float Speed;
@@ -42,11 +42,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Hearing", meta = (AllowPrivateAccess = "true"))
 	float HearingMaxAge;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
+	float SleepDuration;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
+	bool bIsSleeping;
+
+	FVector TargetLocation;
+
 protected:
 
-	int health;
-	float pointValue;
-	float sleepTimer;
+	int Health;
+	float PointValue;
+	float SleepTimer;
 	
 	
 	

@@ -32,8 +32,6 @@ public:
 
 	void Flee() override;
 
-	void Sleep() override;
-
 	void ApplyEffect() override;
 	
 };

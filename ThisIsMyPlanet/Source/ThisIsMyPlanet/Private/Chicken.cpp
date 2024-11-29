@@ -10,6 +10,7 @@ void AChicken::BeginPlay()
 	bIsLookingForSpot = true;
 	bIsEating = false;
 	eatingTimer = 0.0f;
+	SleepTimer = SleepDuration;
 }
 
 void AChicken::Tick(float DeltaTime)
@@ -35,10 +36,10 @@ void AChicken::Survive()
 
 		FNavLocation targetFNavLocation;
 		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), seedSearchingRadius, targetFNavLocation);
-		targetLocation = targetFNavLocation.Location;
+		TargetLocation = targetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
-	if ((GetActorLocation() - targetLocation).Length() <= 160.0f && !bIsEating)
+	if ((GetActorLocation() - TargetLocation).Length() <= 160.0f && !bIsEating)
 	{
 		
 		bIsEating = true;
@@ -67,13 +68,7 @@ void AChicken::Flee()
 	{
 		playerLocation = player2Location;
 	}
-	targetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
-}
-
-void AChicken::Sleep()
-{
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am honk mimimiming"));
+	TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
 }
 
 void AChicken::ApplyEffect()
