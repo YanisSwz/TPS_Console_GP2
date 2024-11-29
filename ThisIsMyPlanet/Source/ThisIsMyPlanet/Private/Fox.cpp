@@ -6,7 +6,6 @@
 void AFox::BeginPlay()
 {
 	Super::BeginPlay();
-	SleepTimer = SleepDuration;
 }
 
 void AFox::Tick(float DeltaTime)

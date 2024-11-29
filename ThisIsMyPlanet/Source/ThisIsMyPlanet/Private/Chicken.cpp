@@ -10,7 +10,6 @@ void AChicken::BeginPlay()
 	bIsLookingForSpot = true;
 	bIsEating = false;
 	eatingTimer = 0.0f;
-	SleepTimer = SleepDuration;
 }
 
 void AChicken::Tick(float DeltaTime)

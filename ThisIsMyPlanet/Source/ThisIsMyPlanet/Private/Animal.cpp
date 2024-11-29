@@ -14,7 +14,7 @@ AAnimal::AAnimal()
 void AAnimal::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	SleepTimer = SleepDuration;
 }
 
 // Called every frame
