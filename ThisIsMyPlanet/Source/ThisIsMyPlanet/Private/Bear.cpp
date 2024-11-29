@@ -10,7 +10,18 @@ void ABear::BeginPlay()
 
 void ABear::Tick(float DeltaTime)
 {
+	eatingTimer -= DeltaTime;
+	if (eatingTimer < 0.0f)
+	{
+		eatingTimer = 0.0f;
+	}
 
+	sleepTimer -= DeltaTime;
+	if (sleepTimer <= 0.0f)
+	{
+		sleepTimer = 0.0f;
+		berryCount = 0;
+	}
 
 }
 
@@ -18,22 +29,11 @@ void ABear::Survive()
 {
 	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("BEAR"));*/
-
-	float deltaTime = GetWorld()->GetDeltaSeconds();
-	eatingTimer -= deltaTime;
-	if (eatingTimer < 0.0f)
-	{
-		eatingTimer = 0.0f;
-	}
+	
 
 	if (sleepTimer > 0.0f)
 	{
-		sleepTimer -= GetWorld()->GetDeltaSeconds();
-		if (sleepTimer <= 0.0f)
-		{
-			sleepTimer = 0.0f;
-			berryCount = 0;
-		}
+		// honk mimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimi
 	}
 	else
 	{

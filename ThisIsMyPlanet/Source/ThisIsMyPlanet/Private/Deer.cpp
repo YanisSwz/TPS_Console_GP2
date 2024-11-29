@@ -10,20 +10,18 @@ void ADeer::BeginPlay()
 
 void ADeer::Tick(float DeltaTime)
 {
-
+	eatingTimer -= DeltaTime;
+	if (eatingTimer < 0.0f)
+	{
+		eatingTimer = 0.0f;
+	}
 }
 
 void ADeer::Survive()
 {
 	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("AREYOUADEERSNIFFSNIFFSNIFFSNIFF"));*/
-
-	float deltaTime = GetWorld()->GetDeltaSeconds();
-	eatingTimer -= deltaTime;
-	if (eatingTimer < 0.0f)
-	{
-		eatingTimer = 0.0f;
-	}
+	
 
 	if (bIsLookingForSpot)
 	{
