@@ -84,7 +84,7 @@ void AFox::Flee()
 	if (FMath::RandRange(0, FMath::FloorToInt(jumpingInverseFrequency * deltaTime)) == 1) Jump();
 }
 
-void AFox::ApplyEffect()
+void AFox::ApplyEffect(APawn* player)
 {
 
 }

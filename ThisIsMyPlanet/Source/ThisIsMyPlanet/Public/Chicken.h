@@ -34,6 +34,6 @@ public:
 
 	//void Sleep() override;
 
-	void ApplyEffect() override;
+	void ApplyEffect(APawn* player) override;
 	
 };

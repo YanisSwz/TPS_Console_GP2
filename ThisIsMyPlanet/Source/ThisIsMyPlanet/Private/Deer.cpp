@@ -1,23 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Bear.h"
+#include "Deer.h"
 
-void ABear::BeginPlay()
+void ADeer::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void ABear::Tick(float DeltaTime)
+void ADeer::Tick(float DeltaTime)
 {
-
 
 }
 
-void ABear::Survive()
+void ADeer::Survive()
 {
 	/*if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("BEAR"));*/
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("AREYOUADEERSNIFFSNIFFSNIFFSNIFF"));*/
 
 	float deltaTime = GetWorld()->GetDeltaSeconds();
 	eatingTimer -= deltaTime;
@@ -51,7 +50,7 @@ void ABear::Survive()
 	bHasAttacked = false;
 }
 
-void ABear::Flee()
+void ADeer::Flee()
 {
 	FVector playerLocation;
 	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
@@ -70,7 +69,6 @@ void ABear::Flee()
 
 	if (!bHasAttacked)
 	{
-
 		targetLocation = playerLocation;
 		if ((GetActorLocation() - targetLocation).Length() <= 160.0f)
 		{
@@ -84,8 +82,8 @@ void ABear::Flee()
 	}
 }
 
-void ABear::ApplyEffect(APawn* player)
+void ADeer::ApplyEffect(APawn* player)
 {
-	// TODO: BIG AHH RAGDOLL
-	Cast<ACharacter>(player)->LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 15.0f + FVector(0.0f, 0.0f, 1000.0f), false, false);
+	// TODO: BIG AHH STUN
+	Cast<ACharacter>(player)->LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 5.0f + FVector(0.0f, 0.0f, 300.0f), false, false);
 }

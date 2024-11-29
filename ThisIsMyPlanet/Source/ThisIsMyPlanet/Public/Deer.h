@@ -4,23 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "Animal.h"
-#include "Bear.generated.h"
+#include "Deer.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class THISISMYPLANET_API ABear : public AAnimal
+class THISISMYPLANET_API ADeer : public AAnimal
 {
 	GENERATED_BODY()
 
 protected:
 	bool bIsLookingForSpot = true;
 	float eatingTimer = 0.0f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float eatingTime;
 	bool bIsEating = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float berrySearchingRadius;
 	bool bHasAttacked;
 

@@ -39,7 +39,7 @@ void AAnimal::Sleep()
 
 }
 
-void AAnimal::ApplyEffect()
+void AAnimal::ApplyEffect(APawn* player)
 {
 
 }
