@@ -37,7 +37,6 @@ ABullet::ABullet()
 	ProjectileMovement->AddForce(inpulse);*/
 
 	InitialLifeSpan = 5.0f;
-
 }
 
 void ABullet::FireInDirection(FVector ShootDirection)
