@@ -74,7 +74,7 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	bool bIsLaunchingRight = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
-	AWeapon* Weapon;
+	UWeapon* Weapon;
 
 public:
 	// Sets default values for this character's properties
@@ -100,7 +100,7 @@ protected:
 	void EndJumping(const FInputActionValue& Value);
 
 
-public:	
+private:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

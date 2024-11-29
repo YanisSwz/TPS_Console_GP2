@@ -8,18 +8,25 @@
 #include "Weapon.generated.h"
 
 UCLASS()
-class THISISMYPLANET_API AWeapon : public APawn
+class THISISMYPLANET_API UWeapon : public UActorComponent
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-	TSubclassOf<class ABullet> bullet;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ABullet> bullet;
+
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile, meta = (AllowPrivateAccess = "true"))
+	TArray<class ABullet*> bullets;*/
+
+	UPROPERTY(EditAnywhere)
+	FVector MuzzleOffset;
 
 public:
 	// Sets default values for this pawn's properties
-	AWeapon();
+	UWeapon();
 
 	bool bCanShoot = true;
+	float reloadTimer = 0;
 
 	float shootingStrenght = 20;
 
@@ -32,6 +39,6 @@ protected:
 
 private:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 
 };

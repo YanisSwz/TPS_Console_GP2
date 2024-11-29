@@ -28,7 +28,7 @@ APlayerCharacter::APlayerCharacter()
 
 	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
 
-	//Weapon = CreateDefaultSubobject<UActorComponent>(TEXT("Weapon"));
+	Weapon = CreateDefaultSubobject<UWeapon>(TEXT("Weapon"));
 }
 
 // Called when the game starts or when spawned
@@ -136,6 +136,7 @@ void APlayerCharacter::Shoot()
 	if (bIsShooting)
 	{
 		Weapon->Fire();
+
 		if (GEngine != nullptr)
 			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
 	}
