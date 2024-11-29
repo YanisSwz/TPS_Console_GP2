@@ -21,7 +21,7 @@ protected:
 	float eatingTime;
 	bool bIsEating = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
-	float berrySearchingRadius;
+	float grassSearchingRadius;
 	bool bHasAttacked;
 
 protected:

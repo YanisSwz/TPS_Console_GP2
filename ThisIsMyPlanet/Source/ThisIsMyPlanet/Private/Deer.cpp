@@ -29,8 +29,24 @@ void ADeer::Survive()
 		if (!NavSystem)
 			return;
 
+		TArray<AActor*> deerList;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADeer::StaticClass(), deerList);
+		float dist = 1000.0f;
+		AActor* nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), deerList, dist);
+		deerList.RemoveSingle(nearestDeer);
+		nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), deerList, dist);
+
+
 		FNavLocation targetFNavLocation;
-		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), berrySearchingRadius, targetFNavLocation);
+		if (nearestDeer == nullptr)
+		{
+			NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), grassSearchingRadius, targetFNavLocation);
+		}
+		else
+		{
+			NavSystem->GetRandomReachablePointInRadius(nearestDeer->GetActorLocation(), grassSearchingRadius, targetFNavLocation);
+		}
+		
 		targetLocation = targetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
