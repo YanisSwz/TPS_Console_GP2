@@ -19,6 +19,7 @@ protected:
 	float scoutStepAngle;
 	bool bIsTurningLeft;
 	AChicken* chasedChicken;
+	float hungerTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
 	float turningSpeed;
@@ -26,6 +27,8 @@ protected:
 	float turningInverseFrequency;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
 	float jumpingInverseFrequency;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
+	float hungerTime;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,7 +40,7 @@ public:
 
 	void Flee() override;
 
-	void Sleep() override;
+	//void Sleep() override;
 
 	void ApplyEffect() override;
 };

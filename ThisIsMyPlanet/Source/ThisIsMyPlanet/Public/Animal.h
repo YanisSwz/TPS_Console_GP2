@@ -62,7 +62,7 @@ public:
 
 	virtual void Flee();
 
-	virtual void Sleep();
+	void Sleep();
 
 	virtual void ApplyEffect();
 
