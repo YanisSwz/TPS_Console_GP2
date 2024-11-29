@@ -23,6 +23,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
 	float berrySearchingRadius;
 	bool bHasAttacked;
+	int berryCount;
+	float napTimer;
 
 protected:
 	// Called when the game starts or when spawned

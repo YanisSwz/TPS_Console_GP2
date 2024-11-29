@@ -26,28 +26,47 @@ void ABear::Survive()
 		eatingTimer = 0.0f;
 	}
 
-	if (bIsLookingForSpot)
+	if (sleepTimer > 0.0f)
 	{
-		UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
-		if (!NavSystem)
-			return;
+		sleepTimer -= GetWorld()->GetDeltaSeconds();
+		if (sleepTimer <= 0.0f)
+		{
+			sleepTimer = 0.0f;
+			berryCount = 0;
+		}
+	}
+	else
+	{
+		if (bIsLookingForSpot)
+		{
+			UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
+			if (!NavSystem)
+				return;
 
-		FNavLocation targetFNavLocation;
-		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), berrySearchingRadius, targetFNavLocation);
-		targetLocation = targetFNavLocation.Location;
-		bIsLookingForSpot = false;
-	}
-	if ((GetActorLocation() - targetLocation).Length() <= 160.0f && !bIsEating)
-	{
+			FNavLocation targetFNavLocation;
+			NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), berrySearchingRadius, targetFNavLocation);
+			targetLocation = targetFNavLocation.Location;
+			bIsLookingForSpot = false;
+		}
+		if ((GetActorLocation() - targetLocation).Length() <= 160.0f && !bIsEating)
+		{
 
-		bIsEating = true;
-		eatingTimer = eatingTime;
+			bIsEating = true;
+			eatingTimer = eatingTime;
+		}
+		if (bIsEating && eatingTimer <= 0.0f)
+		{
+			bIsEating = false;
+			bIsLookingForSpot = true;
+			++berryCount;
+		}
+		if (berryCount >= 5)
+		{
+			sleepTimer = 15.0f;
+		}
 	}
-	if (bIsEating && eatingTimer <= 0.0f)
-	{
-		bIsEating = false;
-		bIsLookingForSpot = true;
-	}
+	
+	
 	bHasAttacked = false;
 }
 
