@@ -29,6 +29,8 @@ protected:
 	float jumpingInverseFrequency;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
 	float hungerTime;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Fox", meta = (AllowPrivateAccess = "true"))
+	float StunTime;
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,5 +44,5 @@ public:
 
 	//void Sleep() override;
 
-	void ApplyEffect() override;
+	void ApplyEffect(APlayerCharacter* player) override;
 };

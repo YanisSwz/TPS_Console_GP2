@@ -8,14 +8,14 @@ AAnimal::AAnimal()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
 void AAnimal::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	OnActorHit.AddDynamic(this, &AAnimal::OnAnimalHit);
 }
 
 // Called every frame
@@ -39,7 +39,31 @@ void AAnimal::Sleep()
 
 }
 
-void AAnimal::ApplyEffect()
+void AAnimal::ApplyEffect(APlayerCharacter* player)
 {
 
+}
+
+void AAnimal::UntouchGround()
+{
+	bHasTouchedGround = false;
+}
+
+void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit)
+{
+	if (!bHasTouchedGround && _OtherActor != nullptr)
+	{
+		APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
+
+		if (player != nullptr)
+		{
+			ApplyEffect(player);
+		}
+
+		if (_OtherActor->Tags.Contains("Ground"))
+		{
+			bHasTouchedGround = true;
+		}
+	}
+	
 }

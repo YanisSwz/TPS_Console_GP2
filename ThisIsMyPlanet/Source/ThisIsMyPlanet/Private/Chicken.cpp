@@ -72,7 +72,7 @@ void AChicken::Flee()
 	targetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
 }
 
-void AChicken::ApplyEffect()
+void AChicken::ApplyEffect(APlayerCharacter* player)
 {
 
 }

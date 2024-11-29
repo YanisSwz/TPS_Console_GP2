@@ -3,6 +3,7 @@
 
 #include "GrabbableComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Animal.h"
 
 // Sets default values for this component's properties
 UGrabbableComponent::UGrabbableComponent()
@@ -53,4 +54,9 @@ void UGrabbableComponent::Launch(FVector dir, float power)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, dir.ToString());
 
 	GetOwner()->GetComponentByClass<UCapsuleComponent>()->AddImpulse(dir * power, NAME_None, true);
+
+	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
+
+	if (own != nullptr)
+		own->UntouchGround();
 }

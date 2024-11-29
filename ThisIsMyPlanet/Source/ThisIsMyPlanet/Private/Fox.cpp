@@ -84,7 +84,10 @@ void AFox::Flee()
 	if (FMath::RandRange(0, FMath::FloorToInt(jumpingInverseFrequency * deltaTime)) == 1) Jump();
 }
 
-void AFox::ApplyEffect()
+void AFox::ApplyEffect(APlayerCharacter* player)
 {
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am bonkig"));
 
+	player->Stun(StunTime);
 }

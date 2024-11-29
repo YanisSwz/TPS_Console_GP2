@@ -54,6 +54,8 @@ void APlayerCharacter::BeginPlay()
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
+	if (bIsStun)
+		return;
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
@@ -126,20 +128,22 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::StartCrouching()
 {
+	if (bIsStun)
+		return;
 	Crouch();
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Oui");
 }
 
 void APlayerCharacter::EndCrouching()
 {
+	if (bIsStun)
+		return;
 	UnCrouch();
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Non");
 }
 
 void APlayerCharacter::Aim()
 {
+	if (bIsStun)
+		return;
 	if (bIsShooting)
 	{
 		if (GEngine != nullptr)
@@ -166,6 +170,8 @@ void APlayerCharacter::Aim()
 
 void APlayerCharacter::StopAim()
 {
+	if (bIsStun)
+		return;
 	if (bIsShooting)
 	{
 		if (GEngine != nullptr)
@@ -187,6 +193,8 @@ void APlayerCharacter::StopAim()
 
 void APlayerCharacter::Shoot()
 {
+	if (bIsStun)
+		return;
 	if (bIsShooting)
 	{
 		//Weapon->Shoot;
@@ -209,6 +217,8 @@ void APlayerCharacter::Shoot()
 
 void APlayerCharacter::StopShooting()
 {
+	if (bIsStun)
+		return;
 	if (!bIsShooting)
 	{
 		if (bIsLaunchingRight && isAiming == ANIMAL_RIGHT)
@@ -228,11 +238,15 @@ void APlayerCharacter::Switch()
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
 {
+	if (bIsStun)
+		return;
 	ACharacter::Jump();
 }
 
 void APlayerCharacter::EndJumping(const FInputActionValue& Value)
 {
+	if (bIsStun)
+		return;
 	ACharacter::StopJumping();
 }
 
@@ -240,6 +254,17 @@ void APlayerCharacter::EndJumping(const FInputActionValue& Value)
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bIsStun)
+	{
+		StunTimer -= GetWorld()->DeltaTimeSeconds;
+
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(StunTimer));
+
+		if (StunTimer <= 0.f)
+			bIsStun = false;
+	}
 
 	switch (isAiming)
 	{
@@ -307,5 +332,12 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(SwitchAction, ETriggerEvent::Started, this, &APlayerCharacter::Switch);
 	}
 
+}
+
+void APlayerCharacter::Stun(float _time)
+{
+	StunTimer = _time;
+	bIsStun = true;
+	isAiming = NONE;
 }
 
