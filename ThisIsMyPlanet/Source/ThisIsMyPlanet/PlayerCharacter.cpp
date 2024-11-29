@@ -48,6 +48,7 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	initialFieldofView = FollowCamera->FieldOfView;
+	BaseCameraPos = FollowCamera->GetRelativeLocation();
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -228,16 +229,20 @@ void APlayerCharacter::Tick(float DeltaTime)
 	switch (isAiming)
 	{
 	case APlayerCharacter::NONE:
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, initialFieldofView, 0.3f);
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, initialFieldofView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
 		break;
 	case APlayerCharacter::WEAPON:
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.3f);
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
 		break;
 	case APlayerCharacter::ANIMAL_LEFT:
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.3f);
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), FVector(CameraZoomGrabPosition.X, -CameraZoomGrabPosition.Y, CameraZoomGrabPosition.Z), CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
 		break;
 	case APlayerCharacter::ANIMAL_RIGHT:
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.3f);
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), CameraZoomGrabPosition, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
 		break;
 	default:
 		break;

@@ -77,6 +77,14 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	float baseLaunchPower = 100;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	FVector CameraZoomGrabPosition = FVector(60, 80, 80);
+
+	FVector BaseCameraPos;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	float CameraZoomSpeed = 0.3f;
+
 	// Grab/Shoot
 	bool bIsShooting = true;
 
