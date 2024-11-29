@@ -38,12 +38,12 @@ void UGrabberComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 bool UGrabberComponent::Grab(bool bIsRightHand)
 {
 	FVector start = owner->GetActorLocation();
-	FVector forward = owner->GetActorForwardVector();
+	FVector forward = owner->GetActorForwardVector() * HalfSize.X;
 
 	TArray<AActor*> Ignore;
 	TArray<FHitResult> Hits;
 
-	if (UKismetSystemLibrary::BoxTraceMultiForObjects(GetWorld(), start, start, HalfSize, owner->GetActorRotation(), Actors, false, Ignore, EDrawDebugTrace::ForDuration, Hits, true))
+	if (UKismetSystemLibrary::BoxTraceMultiForObjects(GetWorld(), start + forward, start + forward, HalfSize, owner->GetActorRotation(), Actors, false, Ignore, EDrawDebugTrace::ForDuration, Hits, true))
 	{
 		for (size_t i = 0; i < Hits.Num(); i++)
 		{
