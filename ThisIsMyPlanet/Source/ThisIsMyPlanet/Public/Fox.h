@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animal.h"
+#include "Chicken.h"
 #include "Fox.generated.h"
 
 /**
@@ -13,6 +14,21 @@ UCLASS()
 class THISISMYPLANET_API AFox : public AAnimal
 {
 	GENERATED_BODY()
+
+protected:
+	bool bIsChasing;
+	float scoutStepAngle;
+	bool bIsTurningLeft;
+	AChicken* chasedChicken;
+	bool bCanJump;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
+	float turningSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
+	float turningInverseFrequency;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
+	float jumpingInverseFrequency;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
