@@ -55,19 +55,7 @@ void AChicken::Flee()
 {
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am fleeig"));
-
-	FVector playerLocation;
-	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
-	FVector player2Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 1)->GetActorLocation();
-	if ((player1Location - GetActorLocation()).Length() < (player2Location - GetActorLocation()).Length())
-	{
-		playerLocation = player1Location;
-	}
-	else
-	{
-		playerLocation = player2Location;
-	}
-	TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
+	TargetLocation = GetActorLocation() - (ClosestPlayer->GetActorLocation() - GetActorLocation());
 }
 
 void AChicken::ApplyEffect()

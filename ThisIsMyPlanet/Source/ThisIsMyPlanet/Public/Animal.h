@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../PlayerCharacter.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -49,6 +50,8 @@ public:
 	bool bIsSleeping;
 
 	FVector TargetLocation;
+
+	APlayerCharacter* ClosestPlayer;
 
 protected:
 

@@ -121,6 +121,15 @@ void AAnimalController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	if(auto* const ch = Cast<APlayerCharacter>(Actor))
 	{
+		if (ControlledAnimal->ClosestPlayer == nullptr)
+		{
+			ControlledAnimal->ClosestPlayer = ch;
+		}
+		else if(FVector::Dist(ControlledAnimal->GetActorLocation(), ch->GetActorLocation()) < FVector::Dist(ControlledAnimal->GetActorLocation(), ControlledAnimal->ClosestPlayer->GetActorLocation()))
+		{
+			ControlledAnimal->ClosestPlayer = ch;
+		}
+
 		if (Stimulus.Type == SightConfig->GetSenseID())
 		{
 			GetBlackboardComponent()->SetValueAsBool("bSawPlayer", Stimulus.WasSuccessfullySensed());

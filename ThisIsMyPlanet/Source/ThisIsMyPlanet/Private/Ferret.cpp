@@ -45,6 +45,11 @@ void AFerret::Survive()
 
 void AFerret::Flee()
 {
+	TargetLocation = Burrow->GetActorLocation();
+	if (FVector::Dist(GetActorLocation(), TargetLocation) <= GetCapsuleComponent()->GetScaledCapsuleHalfHeight() + 5.f)
+	{
+		Destroy();
+	}
 }
 
 void AFerret::ApplyEffect()
