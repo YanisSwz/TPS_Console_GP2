@@ -89,6 +89,9 @@ void AFerret::Flee()
 
 			FVector RotateValue = FVector(RotationDistance, 0.f, 0.f).RotateAngleAxis(AngleAxis, AxisVector);
 
+			FRotator Rotation = FRotator(0.f, AngleAxis + 90.f, 0.f);
+			SetActorRotation(Rotation);
+
 			NewLocation.X += RotateValue.X;
 			NewLocation.Y += RotateValue.Y;
 			NewLocation.Z += RotateValue.Z;

@@ -148,6 +148,9 @@ private:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void Flash(float Duration);
+
 	void Stun(float Duration);
 	void Snare(float Duration, float SlowAmount);
 	float InitialSpeed;

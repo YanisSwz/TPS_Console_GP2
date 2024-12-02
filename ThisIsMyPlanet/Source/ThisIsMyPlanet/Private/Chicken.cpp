@@ -60,5 +60,5 @@ void AChicken::Flee()
 
 void AChicken::ApplyEffect(APlayerCharacter* player)
 {
-
+	player->Flash(4.f);
 }
