@@ -4,30 +4,41 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Bullet.h"
 #include "Weapon.generated.h"
 
 UCLASS()
-class THISISMYPLANET_API AWeapon : public APawn
+class THISISMYPLANET_API UWeapon : public UActorComponent
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ABullet> bullet;
+
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile, meta = (AllowPrivateAccess = "true"))
+	TArray<class ABullet*> bullets;*/
+
+	UPROPERTY(EditAnywhere)
+	FVector MuzzleOffset;
+
 public:
 	// Sets default values for this pawn's properties
-	AWeapon();
+	UWeapon();
 
 	bool bCanShoot = true;
+	float reloadTimer = 0;
 
-	void Fire();
+	float shootingStrenght = 20;
+
+	void Fire(FVector LaunchDirection);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+private:	
+	// Called every frame
+	//virtual void Tick(float DeltaTime) override;
 
 };

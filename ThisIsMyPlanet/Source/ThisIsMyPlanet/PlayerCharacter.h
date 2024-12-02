@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "GrabberComponent.h"
 #include "Weapon.h"
@@ -42,7 +41,7 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UCameraComponent* FollowCamera;
 
 	/** Grabber Component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	UGrabberComponent* GrabComp;
 
 	/** MappingContext */
@@ -97,8 +96,9 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	// Grab/Launch
 	bool bIsLaunchingLeft = false;
 	bool bIsLaunchingRight = false;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	AWeapon* Weapon;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	UWeapon* Weapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds", meta = (AllowPrivateAccess = "true"))
 	USoundBase* Footsteps;
@@ -138,13 +138,14 @@ protected:
 	void EndJumping(const FInputActionValue& Value);
 
 
-public:	
+private:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
 	void Stun(float _time);
 
 };

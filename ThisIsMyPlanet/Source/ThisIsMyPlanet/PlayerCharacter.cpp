@@ -39,11 +39,10 @@ APlayerCharacter::APlayerCharacter()
 
 	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
 
+	Weapon = CreateDefaultSubobject<UWeapon>(TEXT("Weapon"));
 	SetupStimulusSource();
 	if (CrouchNoiseReduction <= 0.f)
 		CrouchNoiseReduction = 1.f;
-
-	//Weapon = CreateDefaultSubobject<UActorComponent>(TEXT("Weapon"));
 }
 
 // Called when the game starts or when spawned
@@ -118,7 +117,7 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 			FRotator ControlRotation = Controller->GetControlRotation();
 
-			// Conserver uniquement le Yaw (axe horizontal) pour éviter les inclinaisons
+			// Conserver uniquement le Yaw (axe horizontal) pour ï¿½viter les inclinaisons
 			FRotator NewRotation = FRotator(0.0f, ControlRotation.Yaw, 0.0f);
 
 			// Appliquer cette rotation au personnage
@@ -200,7 +199,8 @@ void APlayerCharacter::Shoot()
 		return;
 	if (bIsShooting)
 	{
-		//Weapon->Shoot;
+		Weapon->Fire(FollowCamera->GetForwardVector());
+
 		if (GEngine != nullptr)
 			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
 	}
