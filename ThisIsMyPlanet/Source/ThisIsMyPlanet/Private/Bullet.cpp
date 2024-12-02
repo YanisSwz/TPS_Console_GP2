@@ -13,7 +13,7 @@ ABullet::ABullet()
 	CollisionComp->InitSphereRadius(5.0f);
 
 	//cree le collision profil
-	//CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
+	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
 
 	CollisionComp->OnComponentHit.AddDynamic(this, &ABullet::OnHit);
 
@@ -29,7 +29,7 @@ ABullet::ABullet()
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 	ProjectileMovement->Bounciness = 0.3f;
-	ProjectileMovement->ProjectileGravityScale = 1.0f;
+	ProjectileMovement->ProjectileGravityScale = 0.1f;
 
 
 	/*FVector inpulse = FVector(100.0f, 0.f, 0.f);
@@ -49,7 +49,7 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 {
 
 	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Hit");
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, "Hit");
 
 	//endormir les animeaux
 	Destroy();
