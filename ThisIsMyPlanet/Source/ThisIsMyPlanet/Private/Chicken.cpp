@@ -14,20 +14,18 @@ void AChicken::BeginPlay()
 
 void AChicken::Tick(float DeltaTime)
 {
-	
+	eatingTimer -= DeltaTime;
+	if (eatingTimer < 0.0f)
+	{
+		eatingTimer = 0.0f;
+	}
 }
 
 void AChicken::Survive()
 {
 	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am survivig"));*/
-
-	float deltaTime = GetWorld()->GetDeltaSeconds();
-	eatingTimer -= deltaTime;
-	if (eatingTimer < 0.0f)
-	{
-		eatingTimer = 0.0f;
-	}
+	
 
 	if (bIsLookingForSpot)
 	{
@@ -37,10 +35,10 @@ void AChicken::Survive()
 
 		FNavLocation targetFNavLocation;
 		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), seedSearchingRadius, targetFNavLocation);
-		targetLocation = targetFNavLocation.Location;
+		TargetLocation = targetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
-	if ((GetActorLocation() - targetLocation).Length() <= 160.0f && !bIsEating)
+	if ((GetActorLocation() - TargetLocation).Length() <= 160.0f && !bIsEating)
 	{
 		
 		bIsEating = true;
@@ -57,19 +55,7 @@ void AChicken::Flee()
 {
 	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am fleeig"));*/
-
-	FVector playerLocation;
-	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
-	FVector player2Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 1)->GetActorLocation();
-	if ((player1Location - GetActorLocation()).Length() < (player2Location - GetActorLocation()).Length())
-	{
-		playerLocation = player1Location;
-	}
-	else
-	{
-		playerLocation = player2Location;
-	}
-	targetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
+	TargetLocation = GetActorLocation() - (ClosestPlayer->GetActorLocation() - GetActorLocation());
 }
 
 void AChicken::ApplyEffect(APlayerCharacter* player)

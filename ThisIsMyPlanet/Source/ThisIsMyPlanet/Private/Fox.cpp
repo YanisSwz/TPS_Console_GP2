@@ -10,7 +10,20 @@ void AFox::BeginPlay()
 
 void AFox::Tick(float DeltaTime)
 {
-	
+	if (bIsTurningLeft)
+	{
+		scoutStepAngle += turningSpeed * DeltaTime;
+
+	}
+	else
+	{
+		scoutStepAngle -= turningSpeed * DeltaTime;
+	}
+	if (FMath::RandRange(0, FMath::FloorToInt(turningInverseFrequency * DeltaTime)) == 1) bIsTurningLeft = !bIsTurningLeft;
+	if (FMath::RandRange(0, FMath::FloorToInt(jumpingInverseFrequency * DeltaTime)) == 1 && !bIsSleeping) Jump();
+
+	hungerTimer -= DeltaTime;
+	if (hungerTimer <= 0.0f) hungerTimer = 0.0f;
 	
 }
 
@@ -19,22 +32,7 @@ void AFox::Survive()
 	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am survivig"));*/
 
-	float deltaTime = GetWorld()->GetDeltaSeconds();
-
-	if (bIsTurningLeft)
-	{
-		scoutStepAngle += turningSpeed * deltaTime;
-		
-	}
-	else
-	{
-		scoutStepAngle -= turningSpeed * deltaTime;
-	}
-	if (FMath::RandRange(0, FMath::FloorToInt(turningInverseFrequency * deltaTime)) == 1) bIsTurningLeft = !bIsTurningLeft;
-	if (FMath::RandRange(0, FMath::FloorToInt(jumpingInverseFrequency * deltaTime)) == 1) Jump();
-
-	hungerTimer -= deltaTime;
-	if (hungerTimer <= 0.0f) hungerTimer = 0.0f;
+	
 
 	TArray<AActor*> chickenList;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
@@ -42,13 +40,13 @@ void AFox::Survive()
 	AActor* nearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), chickenList, dist);
 	if (nearestChicken == nullptr)
 	{
-		targetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(scoutStepAngle, FVector::UpVector);
+		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(scoutStepAngle, FVector::UpVector);
 		
 	}
 	else if ((nearestChicken->GetActorLocation() - GetActorLocation()).Length() < 3000.0f && hungerTimer <= 0.0f)
 	{
-		targetLocation = nearestChicken->GetActorLocation();
-		if ((targetLocation - GetActorLocation()).Length() < 100.0f)
+		TargetLocation = nearestChicken->GetActorLocation();
+		if ((TargetLocation - GetActorLocation()).Length() < 100.0f)
 		{
 			// TODO: ATTACC
 			nearestChicken->Destroy();
@@ -57,7 +55,7 @@ void AFox::Survive()
 	}
 	else
 	{
-		targetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(scoutStepAngle, FVector::UpVector);
+		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(scoutStepAngle, FVector::UpVector);
 	}
 	
 }
@@ -78,10 +76,7 @@ void AFox::Flee()
 	{
 		playerLocation = player2Location;
 	}
-	targetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
-
-	float deltaTime = GetWorld()->GetDeltaSeconds();
-	if (FMath::RandRange(0, FMath::FloorToInt(jumpingInverseFrequency * deltaTime)) == 1) Jump();
+	TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
 }
 
 void AFox::ApplyEffect(APlayerCharacter* player)

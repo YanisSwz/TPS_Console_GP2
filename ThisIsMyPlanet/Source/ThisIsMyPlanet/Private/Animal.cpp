@@ -16,6 +16,7 @@ void AAnimal::BeginPlay()
 	Super::BeginPlay();
 
 	OnActorHit.AddDynamic(this, &AAnimal::OnAnimalHit);
+	SleepTimer = SleepDuration;
 }
 
 // Called every frame
@@ -36,7 +37,18 @@ void AAnimal::Flee()
 
 void AAnimal::Sleep()
 {
-
+	SleepTimer -= GetWorld()->DeltaTimeSeconds;
+	if (SleepTimer <= 0.f)
+	{
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("woke up!"));
+		GetCapsuleComponent()->SetSimulatePhysics(false);
+		GetMesh()->SetSimulatePhysics(false);
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		SleepTimer = SleepDuration;
+		bIsSleeping = false;
+	}
+	
 }
 
 void AAnimal::ApplyEffect(APlayerCharacter* player)
@@ -65,5 +77,4 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 			bHasTouchedGround = true;
 		}
 	}
-	
 }

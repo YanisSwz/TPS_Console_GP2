@@ -46,7 +46,15 @@ void AAnimalController::Tick(float DeltaTime)
 	
 	if (!ControlledAnimal->bIsSleeping)
 	{
-		EPathFollowingRequestResult::Type result = MoveToLocation(ControlledAnimal->targetLocation, 40.0f);
+		EPathFollowingRequestResult::Type result = MoveToLocation(ControlledAnimal->TargetLocation, 5.f);
+
+		if (GetBlackboardComponent()->GetValueAsBool("bIsSleeping"))
+			GetBlackboardComponent()->SetValueAsBool("bIsSleeping", false);
+	}
+	else
+	{
+		if (!GetBlackboardComponent()->GetValueAsBool("bIsSleeping"))
+			GetBlackboardComponent()->SetValueAsBool("bIsSleeping", true);
 	}
 	
 }
@@ -113,6 +121,15 @@ void AAnimalController::OnTargetDetected(AActor* Actor, FAIStimulus Stimulus)
 {
 	if(auto* const ch = Cast<APlayerCharacter>(Actor))
 	{
+		if (ControlledAnimal->ClosestPlayer == nullptr)
+		{
+			ControlledAnimal->ClosestPlayer = ch;
+		}
+		else if(FVector::Dist(ControlledAnimal->GetActorLocation(), ch->GetActorLocation()) < FVector::Dist(ControlledAnimal->GetActorLocation(), ControlledAnimal->ClosestPlayer->GetActorLocation()))
+		{
+			ControlledAnimal->ClosestPlayer = ch;
+		}
+
 		if (Stimulus.Type == SightConfig->GetSenseID())
 		{
 			GetBlackboardComponent()->SetValueAsBool("bSawPlayer", Stimulus.WasSuccessfullySensed());

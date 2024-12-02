@@ -40,6 +40,9 @@ APlayerCharacter::APlayerCharacter()
 	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
 
 	SetupStimulusSource();
+	if (CrouchNoiseReduction <= 0.f)
+		CrouchNoiseReduction = 1.f;
+
 	//Weapon = CreateDefaultSubobject<UActorComponent>(TEXT("Weapon"));
 }
 
@@ -87,7 +90,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 
 		if (Footsteps->CurrentPlayCount.Num() == 0)
 		{
-			if (!bIsCrouched || CrouchNoiseReduction <= 0.f)
+			if (!bIsCrouched)
 			{
 				UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f);
 				UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f, this, FootstepsRange);

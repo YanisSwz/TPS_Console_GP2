@@ -41,8 +41,5 @@ public:
 	void Survive() override;
 
 	void Flee() override;
-
-	//void Sleep() override;
-
 	void ApplyEffect(APlayerCharacter* player) override;
 };
