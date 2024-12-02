@@ -15,6 +15,7 @@ void ADeer::Tick(float DeltaTime)
 	{
 		eatingTimer = 0.0f;
 	}
+	if (FMath::RandRange(0, FMath::FloorToInt(turningInverseFrequency * DeltaTime)) == 1 && !bIsSleeping) bIsTurningLeft = !bIsTurningLeft;
 }
 
 void ADeer::Survive()
@@ -92,7 +93,16 @@ void ADeer::Flee()
 	}
 	else
 	{
-		TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
+
+		if (bIsTurningLeft)
+		{
+			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation()).RotateAngleAxis(-45.0f, FVector(0.0f, 0.0f, 1.0f));
+		}
+		else
+		{
+			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation()).RotateAngleAxis(45.0f, FVector(0.0f, 0.0f, 1.0f));
+		}
+
 	}
 }
 

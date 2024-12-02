@@ -23,6 +23,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float grassSearchingRadius;
 	bool bHasAttacked;
+	bool bIsTurningLeft;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
+	float turningInverseFrequency;
 
 protected:
 	// Called when the game starts or when spawned
