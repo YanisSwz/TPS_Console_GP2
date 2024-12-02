@@ -26,6 +26,9 @@ class THISISMYPLANET_API AFerret : public AAnimal
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Patrol", meta = (AllowPrivateAccess = "true"))
 	float WaitDuration;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Patrol", meta = (AllowPrivateAccess = "true"))
+	float MaxAggroRange;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Rotation", meta = (AllowPrivateAccess = "true"))
 	float RotationSpeed;
 

@@ -58,6 +58,9 @@ void AFerret::Survive()
 
 void AFerret::Flee()
 {
+	if (FVector::Dist(GetActorLocation(), Burrow->GetActorLocation()) >= MaxAggroRange)
+		RotationCount = NumberOfRotations;
+
 	if (RotationCount < NumberOfRotations)
 	{
 		if (FVector::Dist(GetActorLocation(), ClosestPlayer->GetActorLocation()) > RotationDistance && !bIsTurning)
