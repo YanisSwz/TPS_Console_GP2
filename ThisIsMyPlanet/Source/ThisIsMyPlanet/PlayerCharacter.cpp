@@ -197,7 +197,7 @@ void APlayerCharacter::Shoot()
 {
 	if (bIsStun)
 		return;
-	if (bIsShooting)
+	if (bIsShooting && isAiming == WEAPON)
 	{
 		Weapon->Fire(FollowCamera->GetForwardVector());
 
