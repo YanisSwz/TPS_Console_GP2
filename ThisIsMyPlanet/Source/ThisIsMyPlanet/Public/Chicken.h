@@ -31,7 +31,6 @@ public:
 	void Survive() override;
 
 	void Flee() override;
-
-	void ApplyEffect() override;
+	void ApplyEffect(APawn* player) override;
 	
 };

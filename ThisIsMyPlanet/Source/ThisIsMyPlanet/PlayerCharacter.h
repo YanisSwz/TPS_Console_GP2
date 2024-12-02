@@ -25,6 +25,14 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	enum Aiming
+	{
+		NONE,
+		WEAPON,
+		ANIMAL_LEFT,
+		ANIMAL_RIGHT
+	};
+
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
@@ -72,6 +80,14 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	float baseLaunchPower = 100;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	FVector CameraZoomGrabPosition = FVector(60, 80, 80);
+
+	FVector BaseCameraPos;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	float CameraZoomSpeed = 0.3f;
+
 	// Grab/Shoot
 	bool bIsShooting = true;
 
@@ -99,7 +115,7 @@ public:
 	APlayerCharacter();
 
 protected:
-	bool bIsAiming = false;
+	Aiming isAiming = NONE;
 
 	float initialFieldofView;
 	float zoomedFieldOfView = 45.0f;
@@ -111,6 +127,7 @@ protected:
 	void Aim();
 	void StopAim();
 	void Shoot();
+	void StopShooting();
 	void Switch();
 	void StartCrouching();
 	void EndCrouching();

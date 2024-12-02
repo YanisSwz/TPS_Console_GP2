@@ -52,6 +52,7 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	initialFieldofView = FollowCamera->FieldOfView;
+	BaseCameraPos = FollowCamera->GetRelativeLocation();
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -72,7 +73,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		if (bIsAiming)
+		if (isAiming)
 		{
 			GetCharacterMovement()->bOrientRotationToMovement = false;
 		}
@@ -109,7 +110,7 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		if (bIsAiming)
+		if (isAiming)
 		{
 			//this->GetActorForwardVector().X = FollowCamera->GetForwardVector().X;
 
@@ -142,22 +143,49 @@ void APlayerCharacter::EndCrouching()
 
 void APlayerCharacter::Aim()
 {
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Aim");
-	
-	bIsAiming = true;
-	//FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.1f);
+	if (bIsShooting)
+	{
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Aim");
 
-	Look(0);
+		isAiming = WEAPON;
+		//FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.1f);
+
+		Look(0);
+	}
+	else
+	{
+		if (!bIsLaunchingLeft && isAiming == NONE)
+		{
+			if (GrabComp->Grab(false))
+				bIsLaunchingLeft = true;
+		}
+		else if (isAiming == NONE)
+		{
+			isAiming = ANIMAL_LEFT;
+		}
+	}
 }
 
 void APlayerCharacter::StopAim()
 {
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Stop");
+	if (bIsShooting)
+	{
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Stop");
 
-	bIsAiming = false;
-	//FollowCamera->FieldOfView = initialFieldofView;
+		isAiming = NONE;
+		//FollowCamera->FieldOfView = initialFieldofView;
+	}
+	else
+	{
+		if (bIsLaunchingLeft && isAiming == ANIMAL_LEFT)
+		{
+			GrabComp->Launch(false, baseLaunchPower);
+			bIsLaunchingLeft = false;
+			isAiming = NONE;
+		}
+	}
 }
 
 void APlayerCharacter::Shoot()
@@ -168,17 +196,29 @@ void APlayerCharacter::Shoot()
 		if (GEngine != nullptr)
 			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
 	}
-	else
+	else 
 	{
-		if (!bIsLaunchingRight)
+		if (!bIsLaunchingRight && isAiming == NONE)
 		{
 			if (GrabComp->Grab(true))
 				bIsLaunchingRight = true;
 		}
-		else
+		else if(isAiming == NONE)
+		{
+			isAiming = ANIMAL_RIGHT;
+		}
+	}
+}
+
+void APlayerCharacter::StopShooting()
+{
+	if (!bIsShooting)
+	{
+		if (bIsLaunchingRight && isAiming == ANIMAL_RIGHT)
 		{
 			GrabComp->Launch(true, baseLaunchPower);
 			bIsLaunchingRight = false;
+			isAiming = NONE;
 		}
 	}
 }
@@ -186,6 +226,7 @@ void APlayerCharacter::Shoot()
 void APlayerCharacter::Switch()
 {
 	bIsShooting = !bIsShooting;
+	isAiming = NONE;
 }
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
@@ -203,10 +244,27 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(bIsAiming)
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.3f);
-	else
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, initialFieldofView, 0.3f);
+	switch (isAiming)
+	{
+	case APlayerCharacter::NONE:
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, initialFieldofView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
+		break;
+	case APlayerCharacter::WEAPON:
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
+		break;
+	case APlayerCharacter::ANIMAL_LEFT:
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), FVector(CameraZoomGrabPosition.X, -CameraZoomGrabPosition.Y, CameraZoomGrabPosition.Z), CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
+		break;
+	case APlayerCharacter::ANIMAL_RIGHT:
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), CameraZoomGrabPosition, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
+		break;
+	default:
+		break;
+	}
 }
 
 // Called to bind functionality to input
@@ -247,6 +305,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		// Shoot
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &APlayerCharacter::Shoot);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, this, &APlayerCharacter::StopShooting);
 
 		EnhancedInputComponent->BindAction(SwitchAction, ETriggerEvent::Started, this, &APlayerCharacter::Switch);
 	}

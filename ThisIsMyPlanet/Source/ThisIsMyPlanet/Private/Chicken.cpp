@@ -25,7 +25,7 @@ void AChicken::Survive()
 {
 	/*if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am survivig"));*/
-
+	
 
 	if (bIsLookingForSpot)
 	{
@@ -53,12 +53,13 @@ void AChicken::Survive()
 
 void AChicken::Flee()
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am fleeig"));
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am fleeig"));*/
 	TargetLocation = GetActorLocation() - (ClosestPlayer->GetActorLocation() - GetActorLocation());
 }
 
-void AChicken::ApplyEffect()
+
+void AChicken::ApplyEffect(APawn* player)
 {
 
 }
