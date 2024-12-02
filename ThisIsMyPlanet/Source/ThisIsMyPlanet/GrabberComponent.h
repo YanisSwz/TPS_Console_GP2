@@ -46,5 +46,5 @@ public:
 
 	bool Grab(bool bIsRightHand);
 
-	void Launch(bool bIsRightHand, float launchPower);
+	void Launch(bool bIsRightHand, float BaseLaunchPower);
 };

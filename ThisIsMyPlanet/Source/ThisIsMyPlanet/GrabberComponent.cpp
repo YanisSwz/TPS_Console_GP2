@@ -72,20 +72,20 @@ bool UGrabberComponent::Grab(bool bIsRightHand)
 	return false;
 }
 
-void UGrabberComponent::Launch(bool bIsRightHand, float launchPower)
+void UGrabberComponent::Launch(bool bIsRightHand, float BaseLaunchPower)
 {
 	if (bIsRightHand)
 	{
 		if (rightGrabbedComp == nullptr)
 		{
 			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "nullptr is not launchable!");
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "nullptr is not launchable!");
 			return;
 		}
 
-		FVector launch = owner->GetComponentByClass<UCameraComponent>()->GetForwardVector() * launchPower + owner->GetVelocity();
+		FVector launch = owner->GetComponentByClass<UCameraComponent>()->GetForwardVector() * BaseLaunchPower + owner->GetVelocity();
 
-		rightGrabbedComp->Launch(launch, 1);
+		rightGrabbedComp->Launch(launch);
 
 		rightGrabbedComp = nullptr;
 	}
@@ -94,13 +94,13 @@ void UGrabberComponent::Launch(bool bIsRightHand, float launchPower)
 		if (leftGrabbedComp == nullptr)
 		{
 			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "nullptr is not launchable!");
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "nullptr is not launchable!");
 			return;
 		}
 
-		FVector launch = owner->GetComponentByClass<UCameraComponent>()->GetForwardVector() * launchPower + owner->GetVelocity();
+		FVector launch = owner->GetComponentByClass<UCameraComponent>()->GetForwardVector() * BaseLaunchPower + owner->GetVelocity();
 
-		leftGrabbedComp->Launch(launch, 1);
+		leftGrabbedComp->Launch(launch);
 
 		leftGrabbedComp = nullptr;
 	}

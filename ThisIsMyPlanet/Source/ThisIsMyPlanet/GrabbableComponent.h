@@ -12,7 +12,8 @@ class THISISMYPLANET_API UGrabbableComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	float LaunchPowerMult = 1;
 
 public:	
 	// Sets default values for this component's properties
@@ -28,5 +29,5 @@ public:
 
 	void AttachTo(AActor* parent, FName socketName);
 
-	void Launch(FVector dir, float power);
+	void Launch(FVector dir);
 };
