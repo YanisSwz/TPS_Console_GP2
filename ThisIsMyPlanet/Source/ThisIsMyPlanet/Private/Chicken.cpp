@@ -9,15 +9,15 @@ void AChicken::BeginPlay()
 	Super::BeginPlay();
 	bIsLookingForSpot = true;
 	bIsEating = false;
-	eatingTimer = 0.0f;
+	EatingTimer = 0.0f;
 }
 
 void AChicken::Tick(float DeltaTime)
 {
-	eatingTimer -= DeltaTime;
-	if (eatingTimer < 0.0f)
+	EatingTimer -= DeltaTime;
+	if (EatingTimer < 0.0f)
 	{
-		eatingTimer = 0.0f;
+		EatingTimer = 0.0f;
 	}
 }
 
@@ -34,7 +34,7 @@ void AChicken::Survive()
 			return;
 
 		FNavLocation targetFNavLocation;
-		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), seedSearchingRadius, targetFNavLocation);
+		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), SeedSearchingRadius, targetFNavLocation);
 		TargetLocation = targetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
@@ -42,9 +42,9 @@ void AChicken::Survive()
 	{
 		
 		bIsEating = true;
-		eatingTimer = eatingTime;
+		EatingTimer = EatingTime;
 	}
-	if (bIsEating && eatingTimer <= 0.0f)
+	if (bIsEating && EatingTimer <= 0.0f)
 	{
 		bIsEating = false;
 		bIsLookingForSpot = true;

@@ -16,16 +16,16 @@ class THISISMYPLANET_API ADeer : public AAnimal
 
 protected:
 	bool bIsLookingForSpot = true;
-	float eatingTimer = 0.0f;
+	float EatingTimer = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
-	float eatingTime;
+	float EatingTime;
 	bool bIsEating = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
-	float grassSearchingRadius;
+	float GrassSearchingRadius;
 	bool bHasAttacked;
 	bool bIsTurningLeft;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
-	float turningInverseFrequency;
+	float TurningInverseFrequency;
 
 protected:
 	// Called when the game starts or when spawned

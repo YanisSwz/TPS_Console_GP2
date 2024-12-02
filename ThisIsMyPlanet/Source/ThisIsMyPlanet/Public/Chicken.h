@@ -16,12 +16,12 @@ class THISISMYPLANET_API AChicken : public AAnimal
 	GENERATED_BODY()
 protected:
 	bool bIsLookingForSpot = true;
-	float eatingTimer = 0.0f;
+	float EatingTimer = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
-	float eatingTime;
+	float EatingTime;
 	bool bIsEating = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
-	float seedSearchingRadius;
+	float SeedSearchingRadius;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

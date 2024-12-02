@@ -10,12 +10,12 @@ void ADeer::BeginPlay()
 
 void ADeer::Tick(float DeltaTime)
 {
-	eatingTimer -= DeltaTime;
-	if (eatingTimer < 0.0f)
+	EatingTimer -= DeltaTime;
+	if (EatingTimer < 0.0f)
 	{
-		eatingTimer = 0.0f;
+		EatingTimer = 0.0f;
 	}
-	if (FMath::RandRange(0, FMath::FloorToInt(turningInverseFrequency * DeltaTime)) == 1 && !bIsSleeping) bIsTurningLeft = !bIsTurningLeft;
+	if (FMath::RandRange(0, FMath::FloorToInt(TurningInverseFrequency * DeltaTime)) == 1 && !bIsSleeping) bIsTurningLeft = !bIsTurningLeft;
 }
 
 void ADeer::Survive()
@@ -41,11 +41,11 @@ void ADeer::Survive()
 		FNavLocation targetFNavLocation;
 		if (nearestDeer == nullptr)
 		{
-			NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), grassSearchingRadius, targetFNavLocation);
+			NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), GrassSearchingRadius, targetFNavLocation);
 		}
 		else
 		{
-			NavSystem->GetRandomReachablePointInRadius(nearestDeer->GetActorLocation(), grassSearchingRadius, targetFNavLocation);
+			NavSystem->GetRandomReachablePointInRadius(nearestDeer->GetActorLocation(), GrassSearchingRadius, targetFNavLocation);
 		}
 		
 		TargetLocation = targetFNavLocation.Location;
@@ -55,9 +55,9 @@ void ADeer::Survive()
 	{
 
 		bIsEating = true;
-		eatingTimer = eatingTime;
+		EatingTimer = EatingTime;
 	}
-	if (bIsEating && eatingTimer <= 0.0f)
+	if (bIsEating && EatingTimer <= 0.0f)
 	{
 		bIsEating = false;
 		bIsLookingForSpot = true;
@@ -96,11 +96,11 @@ void ADeer::Flee()
 
 		if (bIsTurningLeft)
 		{
-			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation()).RotateAngleAxis(-45.0f, FVector(0.0f, 0.0f, 1.0f));
+			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation()).RotateAngleAxis(-45.0f, FVector::UpVector);
 		}
 		else
 		{
-			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation()).RotateAngleAxis(45.0f, FVector(0.0f, 0.0f, 1.0f));
+			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation()).RotateAngleAxis(45.0f, FVector::UpVector);
 		}
 
 	}

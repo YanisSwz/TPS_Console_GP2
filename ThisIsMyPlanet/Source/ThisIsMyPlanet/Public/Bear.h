@@ -16,15 +16,15 @@ class THISISMYPLANET_API ABear : public AAnimal
 
 protected:
 	bool bIsLookingForSpot = true;
-	float eatingTimer = 0.0f;
+	float EatingTimer = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
-	float eatingTime;
+	float EatingTime;
 	bool bIsEating = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
-	float berrySearchingRadius;
+	float BerrySearchingRadius;
 	bool bHasAttacked;
-	int berryCount;
-	float napTimer;
+	int BerryCount;
+	float NapTimer;
 
 protected:
 	// Called when the game starts or when spawned

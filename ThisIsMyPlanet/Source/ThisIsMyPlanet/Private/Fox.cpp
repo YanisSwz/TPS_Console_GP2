@@ -12,18 +12,18 @@ void AFox::Tick(float DeltaTime)
 {
 	if (bIsTurningLeft)
 	{
-		scoutStepAngle += turningSpeed * DeltaTime;
+		ScoutStepAngle += TurningSpeed * DeltaTime;
 
 	}
 	else
 	{
-		scoutStepAngle -= turningSpeed * DeltaTime;
+		ScoutStepAngle -= TurningSpeed * DeltaTime;
 	}
-	if (FMath::RandRange(0, FMath::FloorToInt(turningInverseFrequency * DeltaTime)) == 1) bIsTurningLeft = !bIsTurningLeft;
-	if (FMath::RandRange(0, FMath::FloorToInt(jumpingInverseFrequency * DeltaTime)) == 1 && !bIsSleeping) Jump();
+	if (FMath::RandRange(0, FMath::FloorToInt(TurningInverseFrequency * DeltaTime)) == 1) bIsTurningLeft = !bIsTurningLeft;
+	if (FMath::RandRange(0, FMath::FloorToInt(JumpingInverseFrequency * DeltaTime)) == 1 && !bIsSleeping) Jump();
 
-	hungerTimer -= DeltaTime;
-	if (hungerTimer <= 0.0f) hungerTimer = 0.0f;
+	HungerTimer -= DeltaTime;
+	if (HungerTimer <= 0.0f) HungerTimer = 0.0f;
 	
 }
 
@@ -40,22 +40,22 @@ void AFox::Survive()
 	AActor* nearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), chickenList, dist);
 	if (nearestChicken == nullptr)
 	{
-		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(scoutStepAngle, FVector::UpVector);
+		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
 		
 	}
-	else if ((nearestChicken->GetActorLocation() - GetActorLocation()).Length() < 3000.0f && hungerTimer <= 0.0f)
+	else if ((nearestChicken->GetActorLocation() - GetActorLocation()).Length() < 3000.0f && HungerTimer <= 0.0f)
 	{
 		TargetLocation = nearestChicken->GetActorLocation();
 		if ((TargetLocation - GetActorLocation()).Length() < 100.0f)
 		{
 			// TODO: ATTACC
 			nearestChicken->Destroy();
-			hungerTimer = hungerTime;
+			HungerTimer = HungerTime;
 		}
 	}
 	else
 	{
-		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(scoutStepAngle, FVector::UpVector);
+		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
 	}
 	
 }

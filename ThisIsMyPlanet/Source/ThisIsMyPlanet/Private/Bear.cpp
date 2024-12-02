@@ -10,17 +10,17 @@ void ABear::BeginPlay()
 
 void ABear::Tick(float DeltaTime)
 {
-	eatingTimer -= DeltaTime;
-	if (eatingTimer < 0.0f)
+	EatingTimer -= DeltaTime;
+	if (EatingTimer < 0.0f)
 	{
-		eatingTimer = 0.0f;
+		EatingTimer = 0.0f;
 	}
 
 	SleepTimer -= DeltaTime;
 	if (SleepTimer <= 0.0f)
 	{
 		SleepTimer = 0.0f;
-		berryCount = 0;
+		BerryCount = 0;
 	}
 
 }
@@ -44,7 +44,7 @@ void ABear::Survive()
 				return;
 
 			FNavLocation targetFNavLocation;
-			NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), berrySearchingRadius, targetFNavLocation);
+			NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), BerrySearchingRadius, targetFNavLocation);
 			TargetLocation = targetFNavLocation.Location;
 			bIsLookingForSpot = false;
 		}
@@ -52,15 +52,15 @@ void ABear::Survive()
 		{
 
 			bIsEating = true;
-			eatingTimer = eatingTime;
+			EatingTimer = EatingTime;
 		}
-		if (bIsEating && eatingTimer <= 0.0f)
+		if (bIsEating && EatingTimer <= 0.0f)
 		{
 			bIsEating = false;
 			bIsLookingForSpot = true;
-			++berryCount;
+			++BerryCount;
 		}
-		if (berryCount >= 5)
+		if (BerryCount >= 5)
 		{
 			SleepTimer = 15.0f;
 		}

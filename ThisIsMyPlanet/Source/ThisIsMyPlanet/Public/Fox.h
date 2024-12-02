@@ -16,19 +16,19 @@ class THISISMYPLANET_API AFox : public AAnimal
 	GENERATED_BODY()
 
 protected:
-	float scoutStepAngle;
+	float ScoutStepAngle;
 	bool bIsTurningLeft;
-	AChicken* chasedChicken;
-	float hungerTimer;
+	AChicken* ChasedChicken;
+	float HungerTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
-	float turningSpeed;
+	float TurningSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
-	float turningInverseFrequency;
+	float TurningInverseFrequency;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
-	float jumpingInverseFrequency;
+	float JumpingInverseFrequency;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
-	float hungerTime;
+	float HungerTime;
 
 protected:
 	// Called when the game starts or when spawned
