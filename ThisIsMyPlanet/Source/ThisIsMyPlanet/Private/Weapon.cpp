@@ -9,9 +9,8 @@ UWeapon::UWeapon()
 {
 }
 
-void UWeapon::Fire()
+void UWeapon::Fire(FVector LaunchDirection)
 {
-
 	UWorld* World = GetWorld();
 	if (World != nullptr)
 	{
@@ -37,15 +36,15 @@ void UWeapon::Fire()
 		FRotator MuzzleRotation = CameraRotation;
 		MuzzleRotation.Pitch += 10.0f;
 
-		//World->SpawnActor<ABullet>(ABullet::StaticClass(), spawnPos, ActorSpawnParams);
-		ABullet* b = World->SpawnActor<ABullet>(bullet, MuzzleLocation, MuzzleRotation,ActorSpawnParams);
-
-		if (b)
-		{
-			// Set the projectile's initial trajectory.
-			FVector LaunchDirection = GetOwner()->GetActorForwardVector();
+		//World->SpawnActor<ABullet>(ABullet::StaticClass(),  MuzzleLocation, MuzzleRotation, ActorSpawnParams);
+		ABullet* b = World->SpawnActor<ABullet>(bullet, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
+		if(b)
 			b->FireInDirection(LaunchDirection * 4000);
-		}
+	}
+	else
+	{
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "World is nullptr");
 	}
 
 	//changer de place (dans le player)

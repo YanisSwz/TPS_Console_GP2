@@ -30,7 +30,7 @@ public:
 
 	float shootingStrenght = 20;
 
-	void Fire();
+	void Fire(FVector LaunchDirection);
 
 protected:
 	// Called when the game starts or when spawned
