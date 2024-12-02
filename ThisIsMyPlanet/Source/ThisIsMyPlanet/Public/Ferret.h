@@ -18,22 +18,29 @@ class THISISMYPLANET_API AFerret : public AAnimal
 	AActor* Burrow;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret", meta = (AllowPrivateAccess = "true"))
+	float BuryDuration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Patrol", meta = (AllowPrivateAccess = "true"))
 	float PatrolRadius;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Patrol", meta = (AllowPrivateAccess = "true"))
 	float WaitDuration;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Rotation", meta = (AllowPrivateAccess = "true"))
 	float RotationSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Rotation", meta = (AllowPrivateAccess = "true"))
 	float RotationDistance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Rotation", meta = (AllowPrivateAccess = "true"))
 	int NumberOfRotations;
 
-	bool bIsLookingForSpot;
-	float WaitTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Snare", meta = (AllowPrivateAccess = "true"))
+	float SnareDuration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Snare", meta = (AllowPrivateAccess = "true"))
+	float SlowAmount;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -47,8 +54,17 @@ public:
 
 	void ApplyEffect(APlayerCharacter* Player) override;
 
+	void Bury();
+
+	void Emerge();
+
 private:
+	bool bIsLookingForSpot;
+	bool bAppliedSnare;
+	bool bIsBuried;
 	bool bIsTurning;
+	float WaitTimer;
+	float BuryTimer;
 	float AngleAxis;
 	FVector AxisVector;
 	int RotationCount;

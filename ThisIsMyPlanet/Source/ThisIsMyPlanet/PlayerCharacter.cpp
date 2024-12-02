@@ -40,6 +40,7 @@ APlayerCharacter::APlayerCharacter()
 	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
 
 	Weapon = CreateDefaultSubobject<UWeapon>(TEXT("Weapon"));
+
 	SetupStimulusSource();
 	if (CrouchNoiseReduction <= 0.f)
 		CrouchNoiseReduction = 1.f;
@@ -52,11 +53,13 @@ void APlayerCharacter::BeginPlay()
 	
 	initialFieldofView = FollowCamera->FieldOfView;
 	BaseCameraPos = FollowCamera->GetRelativeLocation();
+	InitialSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	InitialSpeedCrouched = GetCharacterMovement()->MaxWalkSpeedCrouched;
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	if (bIsStun)
+	if (bIsStunned)
 		return;
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -130,21 +133,21 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::StartCrouching()
 {
-	if (bIsStun)
+	if (bIsStunned)
 		return;
 	Crouch();
 }
 
 void APlayerCharacter::EndCrouching()
 {
-	if (bIsStun)
+	if (bIsStunned)
 		return;
 	UnCrouch();
 }
 
 void APlayerCharacter::Aim()
 {
-	if (bIsStun)
+	if (bIsStunned)
 		return;
 	if (bIsShooting)
 	{
@@ -172,7 +175,7 @@ void APlayerCharacter::Aim()
 
 void APlayerCharacter::StopAim()
 {
-	if (bIsStun)
+	if (bIsStunned)
 		return;
 	if (bIsShooting)
 	{
@@ -195,7 +198,7 @@ void APlayerCharacter::StopAim()
 
 void APlayerCharacter::Shoot()
 {
-	if (bIsStun)
+	if (bIsStunned)
 		return;
 	if (bIsShooting)
 	{
@@ -220,7 +223,7 @@ void APlayerCharacter::Shoot()
 
 void APlayerCharacter::StopShooting()
 {
-	if (bIsStun)
+	if (bIsStunned)
 		return;
 	if (!bIsShooting)
 	{
@@ -241,14 +244,14 @@ void APlayerCharacter::Switch()
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
 {
-	if (bIsStun)
+	if (bIsStunned)
 		return;
 	ACharacter::Jump();
 }
 
 void APlayerCharacter::EndJumping(const FInputActionValue& Value)
 {
-	if (bIsStun)
+	if (bIsStunned)
 		return;
 	ACharacter::StopJumping();
 }
@@ -258,7 +261,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bIsStun)
+	if (bIsStunned)
 	{
 		StunTimer -= GetWorld()->DeltaTimeSeconds;
 
@@ -266,7 +269,19 @@ void APlayerCharacter::Tick(float DeltaTime)
 			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(StunTimer));
 
 		if (StunTimer <= 0.f)
-			bIsStun = false;
+			bIsStunned = false;
+	}
+
+	if(bIsSnared)
+	{
+		SnareTimer -= GetWorld()->DeltaTimeSeconds;
+
+		if(SnareTimer <= 0.f)
+		{
+			GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
+			GetCharacterMovement()->MaxWalkSpeedCrouched = InitialSpeedCrouched;
+			bIsSnared = false;
+		}
 	}
 
 	switch (isAiming)
@@ -337,10 +352,20 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
-void APlayerCharacter::Stun(float _time)
+void APlayerCharacter::Stun(float Duration)
 {
-	StunTimer = _time;
-	bIsStun = true;
+	StunTimer = Duration;
+	bIsStunned = true;
 	isAiming = NONE;
+}
+
+void APlayerCharacter::Snare(float Duration, float SlowAmount)
+{
+	if (SlowAmount <= 0.f)
+		return;
+	SnareTimer = Duration;
+	GetCharacterMovement()->MaxWalkSpeed /= SlowAmount;
+	GetCharacterMovement()->MaxWalkSpeedCrouched /= SlowAmount;
+	bIsSnared = true;
 }
 

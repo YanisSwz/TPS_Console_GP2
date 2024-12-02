@@ -10,11 +10,21 @@ void AFerret::BeginPlay()
 	AxisVector = FVector(0.f, 0.f, 1.f);
 	RotationCount = 0.f;
 	bIsLookingForSpot = true;
+	bAppliedSnare = false;
+	bIsTurning = false;
+	BuryTimer = 0.f;
 }
 
 void AFerret::Tick(float DeltaTime)
 {
 	WaitTimer -= GetWorld()->DeltaRealTimeSeconds;
+
+	if(bIsBuried)
+	{
+		BuryTimer -= GetWorld()->DeltaRealTimeSeconds;
+		if (BuryTimer <= 0.f)
+			Emerge();
+	}
 }
 
 void AFerret::Survive()
@@ -50,10 +60,20 @@ void AFerret::Flee()
 {
 	if (RotationCount < NumberOfRotations)
 	{
-		if (FVector::Dist(GetActorLocation(), TargetLocation) > RotationDistance)
+		if (FVector::Dist(GetActorLocation(), ClosestPlayer->GetActorLocation()) > RotationDistance && !bIsTurning)
+		{
 			TargetLocation = ClosestPlayer->GetActorLocation();
+		}
 		else
 		{
+			if (!bIsTurning)
+				bIsTurning = true;
+			if (!bAppliedSnare) 
+			{
+				ApplyEffect(ClosestPlayer);
+				bAppliedSnare = true;
+			}
+
 			FVector NewLocation = ClosestPlayer->GetActorLocation();
 
 			AngleAxis += GetWorld()->GetDeltaSeconds() * RotationSpeed;
@@ -76,14 +96,34 @@ void AFerret::Flee()
 	}
 	else
 	{
+		bIsTurning = false;
 		TargetLocation = Burrow->GetActorLocation();
-		if (FVector::Dist(GetActorLocation(), TargetLocation) <= GetCapsuleComponent()->GetScaledCapsuleHalfHeight() + 5.f)
+		if (FVector::Dist(GetActorLocation(), TargetLocation) <= GetCapsuleComponent()->GetScaledCapsuleHalfHeight() + 5.f && !bIsBuried)
 		{
-			Destroy();
+			Bury();
 		}
 	}
 }
 
 void AFerret::ApplyEffect(APlayerCharacter* player)
 {
+	player->Snare(SnareDuration, SlowAmount);
+}
+
+void AFerret::Bury()
+{
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	BuryTimer = BuryDuration;
+	bIsBuried = true;
+}
+
+void AFerret::Emerge()
+{
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
+	bIsBuried = false;
+	RotationCount = 0;
+	WaitTimer = 0.f;
+	bAppliedSnare = false;
 }

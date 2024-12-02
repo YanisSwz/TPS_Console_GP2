@@ -88,7 +88,9 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	float CameraZoomSpeed = 0.3f;
 
 	float StunTimer = 0.f;
-	bool bIsStun = false;
+	bool bIsStunned = false;
+	float SnareTimer = 0.f;
+	bool bIsSnared = false;
 
 	// Grab/Shoot
 	bool bIsShooting = true;
@@ -146,6 +148,8 @@ private:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-	void Stun(float _time);
-
+	void Stun(float Duration);
+	void Snare(float Duration, float SlowAmount);
+	float InitialSpeed;
+	float InitialSpeedCrouched;
 };
