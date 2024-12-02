@@ -113,4 +113,5 @@ void ABear::ApplyEffect(APlayerCharacter* player)
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Bonjours"));
 	Cast<ACharacter>(player)->LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 15.0f + FVector(0.0f, 0.0f, 1000.0f), false, false);
+	player->Stun(StunTime);
 }

@@ -25,6 +25,8 @@ protected:
 	bool bHasAttacked;
 	int BerryCount;
 	float NapTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float StunTime;
 
 protected:
 	// Called when the game starts or when spawned
