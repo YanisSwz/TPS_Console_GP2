@@ -36,6 +36,6 @@ public:
 
 	void Flee() override;
 
-	void ApplyEffect(APawn* Player) override;
+	void ApplyEffect(APlayerCharacter* player) override;
 };
 	

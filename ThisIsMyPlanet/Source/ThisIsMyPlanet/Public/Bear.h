@@ -38,6 +38,6 @@ public:
 
 	//void Sleep() override;
 
-	void ApplyEffect(APawn* player) override;
+	void ApplyEffect(APlayerCharacter* player) override;
 	
 };

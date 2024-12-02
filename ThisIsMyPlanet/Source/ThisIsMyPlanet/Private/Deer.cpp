@@ -87,8 +87,12 @@ void ADeer::Flee()
 		TargetLocation = playerLocation;
 		if ((GetActorLocation() - TargetLocation).Length() <= 160.0f)
 		{
-			ApplyEffect(nearestPlayer);
-			bHasAttacked = true;
+			APlayerCharacter* p = Cast<APlayerCharacter>(nearestPlayer);
+			if (p != nullptr)
+			{
+				ApplyEffect(p);
+				bHasAttacked = true;
+			}
 		}
 	}
 	else
@@ -106,7 +110,7 @@ void ADeer::Flee()
 	}
 }
 
-void ADeer::ApplyEffect(APawn* player)
+void ADeer::ApplyEffect(APlayerCharacter* player)
 {
 	// TODO: BIG AHH STUN
 	Cast<ACharacter>(player)->LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 5.0f + FVector(0.0f, 0.0f, 300.0f), false, false);

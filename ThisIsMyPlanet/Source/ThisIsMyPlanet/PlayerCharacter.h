@@ -88,6 +88,9 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	float CameraZoomSpeed = 0.3f;
 
+	float StunTimer = 0.f;
+	bool bIsStun = false;
+
 	// Grab/Shoot
 	bool bIsShooting = true;
 
@@ -141,5 +144,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void Stun(float _time);
 
 };

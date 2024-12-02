@@ -14,6 +14,8 @@ AAnimal::AAnimal()
 void AAnimal::BeginPlay()
 {
 	Super::BeginPlay();
+
+	OnActorHit.AddDynamic(this, &AAnimal::OnAnimalHit);
 	SleepTimer = SleepDuration;
 }
 
@@ -49,7 +51,30 @@ void AAnimal::Sleep()
 	
 }
 
-void AAnimal::ApplyEffect(APawn* player)
+void AAnimal::ApplyEffect(APlayerCharacter* player)
 {
 
+}
+
+void AAnimal::UntouchGround()
+{
+	bHasTouchedGround = false;
+}
+
+void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit)
+{
+	if (!bHasTouchedGround && _OtherActor != nullptr)
+	{
+		APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
+
+		if (player != nullptr)
+		{
+			ApplyEffect(player);
+		}
+
+		if (_OtherActor->Tags.Contains("Ground"))
+		{
+			bHasTouchedGround = true;
+		}
+	}
 }

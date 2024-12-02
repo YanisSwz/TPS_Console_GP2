@@ -79,7 +79,10 @@ void AFox::Flee()
 	TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
 }
 
-void AFox::ApplyEffect(APawn* player)
+void AFox::ApplyEffect(APlayerCharacter* player)
 {
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am bonkig"));
 
+	player->Stun(StunTime);
 }

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "../PlayerCharacter.h"
-#include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "NavigationSystem.h"
@@ -17,10 +16,16 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 {
 	GENERATED_BODY()
 
+	UFUNCTION()
+	void OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit);
+
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
 	float Speed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
+	float MinEffectVelocity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Sight", meta = (AllowPrivateAccess = "true"))
 	float SightRadius;
@@ -58,6 +63,7 @@ protected:
 	int Health;
 	float PointValue;
 	float SleepTimer;
+	bool bHasTouchedGround;
 	
 	
 	
@@ -79,6 +85,7 @@ public:
 
 	void Sleep();
 
-	virtual void ApplyEffect(APawn* player);
+	virtual void ApplyEffect(APlayerCharacter* player);
 
+	void UntouchGround();
 };

@@ -93,8 +93,12 @@ void ABear::Flee()
 		TargetLocation = playerLocation;
 		if ((GetActorLocation() - TargetLocation).Length() <= 160.0f)
 		{
-			ApplyEffect(nearestPlayer);
-			bHasAttacked = true;
+			APlayerCharacter* p = Cast<APlayerCharacter>(nearestPlayer);
+			if (p != nullptr)
+			{
+				ApplyEffect(p);
+				bHasAttacked = true;
+			}
 		}
 	}
 	else
@@ -103,8 +107,10 @@ void ABear::Flee()
 	}
 }
 
-void ABear::ApplyEffect(APawn* player)
+void ABear::ApplyEffect(APlayerCharacter* player)
 {
 	// TODO: BIG AHH RAGDOLL
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Bonjours"));
 	Cast<ACharacter>(player)->LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 15.0f + FVector(0.0f, 0.0f, 1000.0f), false, false);
 }

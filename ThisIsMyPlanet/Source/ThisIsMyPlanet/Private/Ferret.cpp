@@ -52,6 +52,6 @@ void AFerret::Flee()
 	}
 }
 
-void AFerret::ApplyEffect(APawn* Player)
+void AFerret::ApplyEffect(APlayerCharacter* player)
 {
 }
