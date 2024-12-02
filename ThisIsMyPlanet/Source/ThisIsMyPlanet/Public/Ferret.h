@@ -23,7 +23,16 @@ class THISISMYPLANET_API AFerret : public AAnimal
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret", meta = (AllowPrivateAccess = "true"))
 	float WaitDuration;
 
-	bool bIsLookingForSpot = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret", meta = (AllowPrivateAccess = "true"))
+	float RotationSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret", meta = (AllowPrivateAccess = "true"))
+	float RotationDistance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret", meta = (AllowPrivateAccess = "true"))
+	int NumberOfRotations;
+
+	bool bIsLookingForSpot;
 	float WaitTimer;
 
 protected:
@@ -37,5 +46,11 @@ public:
 	void Flee() override;
 
 	void ApplyEffect(APawn* Player) override;
+
+private:
+	bool bIsTurning;
+	float AngleAxis;
+	FVector AxisVector;
+	int RotationCount;
 };
 	
