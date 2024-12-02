@@ -45,7 +45,7 @@ public:
 
 	void Flee() override;
 
-	void ApplyEffect(APawn* Player) override;
+	void ApplyEffect(APlayerCharacter* Player) override;
 
 private:
 	bool bIsTurning;
