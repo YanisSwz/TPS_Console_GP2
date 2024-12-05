@@ -28,7 +28,7 @@ void ADeer::Survive()
 		if (!NavSystem)
 			return;
 
-		TArray<AActor*> deerList;
+		
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADeer::StaticClass(), deerList);
 		float dist = 1000.0f;
 		AActor* nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), deerList, dist);

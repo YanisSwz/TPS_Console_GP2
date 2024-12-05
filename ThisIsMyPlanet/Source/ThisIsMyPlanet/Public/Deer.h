@@ -31,6 +31,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float AttackRange;
+	TArray<AActor*> deerList;
 
 protected:
 	// Called when the game starts or when spawned
