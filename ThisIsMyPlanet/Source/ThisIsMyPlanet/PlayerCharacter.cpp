@@ -199,7 +199,12 @@ void APlayerCharacter::Shoot()
 		return;
 	if (bIsShooting && isAiming == WEAPON)
 	{
-		Weapon->Fire(FollowCamera->GetForwardVector());
+		if (bCanShoot)
+		{
+			Weapon->Fire(FollowCamera->GetForwardVector());
+			bCanShoot = false;
+			reloadTimer = maxReloadTimer;
+		}
 	}
 	else 
 	{
@@ -254,6 +259,13 @@ void APlayerCharacter::EndJumping(const FInputActionValue& Value)
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!bCanShoot)
+	{
+		reloadTimer -= DeltaTime;
+		if (reloadTimer <= 0.f)
+			bCanShoot = true;
+	}
 
 	if (bIsStun)
 	{
