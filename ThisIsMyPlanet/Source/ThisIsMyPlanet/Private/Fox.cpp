@@ -29,11 +29,6 @@ void AFox::Tick(float DeltaTime)
 
 void AFox::Survive()
 {
-	/*if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am survivig"));*/
-
-	
-
 	TArray<AActor*> chickenList;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
 	float dist = 1000.0f;
@@ -62,27 +57,10 @@ void AFox::Survive()
 
 void AFox::Flee()
 {
-	/*if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am fleeig"));*/
-
-	FVector playerLocation;
-	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
-	FVector player2Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 1)->GetActorLocation();
-	if ((player1Location - GetActorLocation()).Length() < (player2Location - GetActorLocation()).Length())
-	{
-		playerLocation = player1Location;
-	}
-	else
-	{
-		playerLocation = player2Location;
-	}
-	TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
+	TargetLocation = GetActorLocation() - (ClosestPlayer->GetActorLocation() - GetActorLocation());
 }
 
 void AFox::ApplyEffect(APlayerCharacter* player)
 {
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I am a fomx and I am bonkig"));
-
 	player->Stun(StunTime);
 }

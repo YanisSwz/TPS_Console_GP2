@@ -62,6 +62,11 @@ void AAnimal::UntouchGround()
 	bHasTouchedGround = false;
 }
 
+void AAnimal::SetReachedDestination(bool bResult)
+{
+	bReachedDestination = bResult;
+}
+
 void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit)
 {
 	if (!bHasTouchedGround && _OtherActor != nullptr)

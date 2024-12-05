@@ -64,18 +64,12 @@ protected:
 	float PointValue;
 	float SleepTimer;
 	bool bHasTouchedGround;
-	
-	
+	bool bReachedDestination;
 	
 public:
 	// Sets default values for this character's properties
 	AAnimal();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -88,4 +82,10 @@ public:
 	virtual void ApplyEffect(APlayerCharacter* player);
 
 	void UntouchGround();
+	void SetReachedDestination(bool bResult);
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 };

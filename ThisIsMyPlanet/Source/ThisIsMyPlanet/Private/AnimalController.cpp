@@ -47,6 +47,10 @@ void AAnimalController::Tick(float DeltaTime)
 	if (!ControlledAnimal->bIsSleeping)
 	{
 		EPathFollowingRequestResult::Type result = MoveToLocation(ControlledAnimal->TargetLocation, 5.f);
+		if (result == EPathFollowingRequestResult::Type::AlreadyAtGoal)
+			ControlledAnimal->SetReachedDestination(true);
+		else
+			ControlledAnimal->SetReachedDestination(false);
 
 		if (GetBlackboardComponent()->GetValueAsBool("bIsSleeping"))
 			GetBlackboardComponent()->SetValueAsBool("bIsSleeping", false);

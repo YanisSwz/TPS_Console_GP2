@@ -20,10 +20,6 @@ void ADeer::Tick(float DeltaTime)
 
 void ADeer::Survive()
 {
-	/*if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("AREYOUADEERSNIFFSNIFFSNIFFSNIFF"));*/
-	
-
 	if (bIsLookingForSpot)
 	{
 		UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
@@ -36,7 +32,6 @@ void ADeer::Survive()
 		AActor* nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), deerList, dist);
 		deerList.RemoveSingle(nearestDeer);
 		nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), deerList, dist);
-
 
 		FNavLocation targetFNavLocation;
 		if (nearestDeer == nullptr)
@@ -51,9 +46,8 @@ void ADeer::Survive()
 		TargetLocation = targetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
-	if ((GetActorLocation() - TargetLocation).Length() <= 160.0f && !bIsEating)
+	if (bReachedDestination && !bIsEating)
 	{
-
 		bIsEating = true;
 		EatingTimer = EatingTime;
 	}
@@ -67,52 +61,33 @@ void ADeer::Survive()
 
 void ADeer::Flee()
 {
-	FVector playerLocation;
-	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
-	FVector player2Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 1)->GetActorLocation();
-	APawn* nearestPlayer;
-	if ((player1Location - GetActorLocation()).Length() < (player2Location - GetActorLocation()).Length())
-	{
-		playerLocation = player1Location;
-		nearestPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	}
-	else
-	{
-		playerLocation = player2Location;
-		nearestPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 1);
-	}
-
 	if (!bHasAttacked)
 	{
-		TargetLocation = playerLocation;
+		TargetLocation = ClosestPlayer->GetActorLocation();
 		if ((GetActorLocation() - TargetLocation).Length() <= 160.0f)
 		{
-			APlayerCharacter* p = Cast<APlayerCharacter>(nearestPlayer);
-			if (p != nullptr)
+			if (ClosestPlayer != nullptr)
 			{
-				ApplyEffect(p);
+				ApplyEffect(ClosestPlayer);
 				bHasAttacked = true;
 			}
 		}
 	}
 	else
 	{
-
 		if (bIsTurningLeft)
 		{
-			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation()).RotateAngleAxis(-45.0f, FVector::UpVector);
+			TargetLocation = GetActorLocation() - (ClosestPlayer->GetActorLocation() - GetActorLocation()).RotateAngleAxis(-45.0f, FVector::UpVector);
 		}
 		else
 		{
-			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation()).RotateAngleAxis(45.0f, FVector::UpVector);
+			TargetLocation = GetActorLocation() - (ClosestPlayer->GetActorLocation() - GetActorLocation()).RotateAngleAxis(45.0f, FVector::UpVector);
 		}
-
 	}
 }
 
 void ADeer::ApplyEffect(APlayerCharacter* player)
 {
-	// TODO: BIG AHH STUN
-	Cast<ACharacter>(player)->LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 5.0f + FVector(0.0f, 0.0f, 300.0f), false, false);
+	LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 5.0f + FVector(0.0f, 0.0f, 300.0f), false, false);
 	player->Stun(StunTime);
 }

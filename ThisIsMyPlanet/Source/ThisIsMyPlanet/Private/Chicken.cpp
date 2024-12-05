@@ -23,10 +23,6 @@ void AChicken::Tick(float DeltaTime)
 
 void AChicken::Survive()
 {
-	/*if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am survivig"));*/
-	
-
 	if (bIsLookingForSpot)
 	{
 		UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
@@ -38,9 +34,8 @@ void AChicken::Survive()
 		TargetLocation = targetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
-	if ((GetActorLocation() - TargetLocation).Length() <= 160.0f && !bIsEating)
+	if (bReachedDestination && !bIsEating)
 	{
-		
 		bIsEating = true;
 		EatingTimer = EatingTime;
 	}
@@ -53,8 +48,6 @@ void AChicken::Survive()
 
 void AChicken::Flee()
 {
-	/*if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("I am a chimken and I am fleeig"));*/
 	TargetLocation = GetActorLocation() - (ClosestPlayer->GetActorLocation() - GetActorLocation());
 }
 
