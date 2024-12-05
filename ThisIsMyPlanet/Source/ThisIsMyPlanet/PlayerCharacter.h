@@ -93,6 +93,12 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	// Grab/Shoot
 	bool bIsShooting = true;
 
+	bool bCanShoot = true;
+	float reloadTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	float maxReloadTimer;
+
 	// Grab/Launch
 	bool bIsLaunchingLeft = false;
 	bool bIsLaunchingRight = false;

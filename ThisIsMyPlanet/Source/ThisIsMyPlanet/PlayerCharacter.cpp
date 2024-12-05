@@ -199,10 +199,12 @@ void APlayerCharacter::Shoot()
 		return;
 	if (bIsShooting)
 	{
-		Weapon->Fire(FollowCamera->GetForwardVector());
-
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
+		if (bCanShoot && isAiming == WEAPON)
+		{
+			Weapon->Fire(FollowCamera->GetForwardVector());
+			bCanShoot = false;
+			reloadTimer = maxReloadTimer;
+		}
 	}
 	else 
 	{
@@ -257,6 +259,13 @@ void APlayerCharacter::EndJumping(const FInputActionValue& Value)
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!bCanShoot)
+	{
+		reloadTimer -= DeltaTime;
+		if (reloadTimer <= 0.f)
+			bCanShoot = true;
+	}
 
 	if (bIsStun)
 	{

@@ -14,8 +14,8 @@ void UWeapon::Fire(FVector LaunchDirection)
 	UWorld* World = GetWorld();
 	if (World != nullptr)
 	{
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Spawn");
+		/*if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Spawn");*/
 
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
@@ -48,24 +48,24 @@ void UWeapon::Fire(FVector LaunchDirection)
 	}
 
 	//changer de place (dans le player)
-	if (bCanShoot) 
+	/*if (bCanShoot) 
 	{
 		
 
 		reloadTimer = 1.0f;
 		bCanShoot = false;
-	}
+	}*/
 }
 
  //Called when the game starts or when spawned
-void UWeapon::BeginPlay()
-{
-	Super::BeginPlay();
-	UE_LOG(LogTemp, Error, TEXT("BBBBB"));
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "bbbbbbbbbbb");
-	
-}
+//void UWeapon::BeginPlay()
+//{
+//	Super::BeginPlay();
+//	UE_LOG(LogTemp, Error, TEXT("BBBBB"));
+//	if (GEngine != nullptr)
+//		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "bbbbbbbbbbb");
+//	
+//}
 
 // Called every frame
 //void UWeapon::Tick(float DeltaTime)
