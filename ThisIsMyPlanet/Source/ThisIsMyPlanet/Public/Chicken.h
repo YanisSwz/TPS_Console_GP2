@@ -23,6 +23,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
 	float SeedSearchingRadius;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
+	float FlashDuration;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 public:
