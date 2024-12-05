@@ -26,6 +26,8 @@ protected:
 	bool bIsTurningLeft;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float TurningInverseFrequency;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
+	float StunTime;
 
 protected:
 	// Called when the game starts or when spawned

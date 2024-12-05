@@ -114,4 +114,5 @@ void ADeer::ApplyEffect(APlayerCharacter* player)
 {
 	// TODO: BIG AHH STUN
 	Cast<ACharacter>(player)->LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 5.0f + FVector(0.0f, 0.0f, 300.0f), false, false);
+	player->Stun(StunTime);
 }
