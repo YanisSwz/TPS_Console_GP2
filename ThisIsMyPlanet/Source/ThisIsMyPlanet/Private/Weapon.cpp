@@ -14,8 +14,8 @@ void UWeapon::Fire(FVector LaunchDirection)
 	UWorld* World = GetWorld();
 	if (World != nullptr)
 	{
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Spawn");
+		/*if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Spawn");*/
 
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
@@ -39,7 +39,7 @@ void UWeapon::Fire(FVector LaunchDirection)
 		//World->SpawnActor<ABullet>(ABullet::StaticClass(),  MuzzleLocation, MuzzleRotation, ActorSpawnParams);
 		ABullet* b = World->SpawnActor<ABullet>(bullet, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
 		if(b)
-			b->FireInDirection(LaunchDirection * 2000);
+			b->FireInDirection(LaunchDirection * 4000);
 	}
 	else
 	{

@@ -200,9 +200,6 @@ void APlayerCharacter::Shoot()
 	if (bIsShooting && isAiming == WEAPON)
 	{
 		Weapon->Fire(FollowCamera->GetForwardVector());
-
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
 	}
 	else 
 	{

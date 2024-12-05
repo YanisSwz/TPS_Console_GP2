@@ -6,8 +6,8 @@
 
 ABullet::ABullet()
 {
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Init");
+	/*if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Init");*/
 
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
@@ -48,10 +48,8 @@ void ABullet::FireInDirection(FVector ShootDirection)
 void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, "Hit");
 
 	//endormir les animeaux
-	Destroy();
+	//Destroy();
 }
 
