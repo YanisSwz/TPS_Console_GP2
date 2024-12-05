@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animal.h"
+#include "Bush.h"
 #include "Bear.generated.h"
 
 /**

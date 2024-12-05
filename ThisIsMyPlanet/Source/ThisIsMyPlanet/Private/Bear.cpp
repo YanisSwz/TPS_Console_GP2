@@ -39,13 +39,23 @@ void ABear::Survive()
 	{
 		if (bIsLookingForSpot)
 		{
-			UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
-			if (!NavSystem)
-				return;
+			
 
-			FNavLocation targetFNavLocation;
-			NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), BerrySearchingRadius, targetFNavLocation);
-			TargetLocation = targetFNavLocation.Location;
+			TArray<AActor*> bushList;
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABush::StaticClass(), bushList);
+			float dist = 10000.0f;
+			AActor* randomBush = bushList[FMath::RandRange(0, bushList.Num() - 1)];
+			
+
+			if (randomBush == nullptr)
+			{
+				TargetLocation = GetActorLocation();
+			}
+			else
+			{
+				TargetLocation = randomBush->GetActorLocation();
+			}
+
 			bIsLookingForSpot = false;
 		}
 		if ((GetActorLocation() - TargetLocation).Length() <= 160.0f && !bIsEating)
