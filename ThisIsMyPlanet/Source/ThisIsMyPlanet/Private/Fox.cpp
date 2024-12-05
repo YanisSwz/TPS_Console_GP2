@@ -6,6 +6,7 @@
 void AFox::BeginPlay()
 {
 	Super::BeginPlay();
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
 }
 
 void AFox::Tick(float DeltaTime)
@@ -29,8 +30,6 @@ void AFox::Tick(float DeltaTime)
 
 void AFox::Survive()
 {
-	TArray<AActor*> chickenList;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
 	float dist = 1000.0f;
 	AActor* nearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), chickenList, dist);
 	if (nearestChicken == nullptr)
@@ -46,6 +45,7 @@ void AFox::Survive()
 			// TODO: ATTACC
 			nearestChicken->Destroy();
 			HungerTimer = HungerTime;
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
 		}
 	}
 	else

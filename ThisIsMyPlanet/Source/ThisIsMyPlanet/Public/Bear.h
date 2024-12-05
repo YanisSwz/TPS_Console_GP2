@@ -28,6 +28,7 @@ protected:
 	float NapTimer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
 	float StunTime;
+	TArray<AActor*> bushList;
 
 protected:
 	// Called when the game starts or when spawned

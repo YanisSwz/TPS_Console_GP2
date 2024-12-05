@@ -6,6 +6,7 @@
 void ABear::BeginPlay()
 {
 	Super::BeginPlay();
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABush::StaticClass(), bushList);
 }
 
 void ABear::Tick(float DeltaTime)
@@ -40,9 +41,6 @@ void ABear::Survive()
 		if (bIsLookingForSpot)
 		{
 			
-
-			TArray<AActor*> bushList;
-			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABush::StaticClass(), bushList);
 			float dist = 10000.0f;
 			AActor* randomBush = bushList[FMath::RandRange(0, bushList.Num() - 1)];
 			
