@@ -27,6 +27,10 @@ protected:
 	float NapTimer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
 	float StunTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float HitForce = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	FVector HitForceBonus;
 
 protected:
 	// Called when the game starts or when spawned

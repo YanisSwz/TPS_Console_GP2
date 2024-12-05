@@ -28,6 +28,10 @@ protected:
 	float TurningInverseFrequency;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float StunTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
+	float HitForce = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
+	FVector HitForceBonus;
 
 protected:
 	// Called when the game starts or when spawned

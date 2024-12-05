@@ -266,7 +266,23 @@ void APlayerCharacter::Tick(float DeltaTime)
 			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(StunTimer));
 
 		if (StunTimer <= 0.f)
+		{
+			FVector inertia = GetMesh()->GetBoneLinearVelocity("pelvis");
 			bIsStun = false;
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GetCharacterMovement()->GravityScale = 1;
+			GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", false);
+			GetMesh()->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true));
+			GetMesh()->SetRelativeLocationAndRotation(-BaseMeshOffset, BaseMeshRotation);
+
+			GetCharacterMovement()->Velocity = inertia;
+
+		}
+		else
+		{
+			GetCapsuleComponent()->SetWorldLocation(GetMesh()->GetSocketLocation("pelvis") + BaseMeshOffset);
+			GetCapsuleComponent()->ResetSceneVelocity();
+		}
 	}
 
 	switch (isAiming)
@@ -342,5 +358,21 @@ void APlayerCharacter::Stun(float _time)
 	StunTimer = _time;
 	bIsStun = true;
 	isAiming = NONE;
+
+	GrabComp->Launch(false, 0);
+	GrabComp->Launch(true, 0);
+
+	bIsLaunchingRight = false;
+	bIsLaunchingLeft = false;
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//GetCapsuleComponent()->SetEnableGravity(false);//HELP NOT WORKING AAAAAAAAAAAAA
+	GetCharacterMovement()->GravityScale = 0;
+	GetCharacterMovement()->Velocity = FVector::Zero();
+	GetCapsuleComponent()->ResetSceneVelocity();
+
+	GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);
+	GetMesh()->SetAllBodiesBelowPhysicsBlendWeight("pelvis", 1.f);
+	
 }
 
