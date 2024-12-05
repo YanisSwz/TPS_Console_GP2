@@ -55,7 +55,6 @@ public:
 	bool bIsSleeping;
 
 	FVector TargetLocation;
-
 	APlayerCharacter* ClosestPlayer;
 
 protected:

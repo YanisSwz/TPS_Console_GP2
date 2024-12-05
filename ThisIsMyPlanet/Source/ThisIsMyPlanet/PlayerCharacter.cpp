@@ -265,9 +265,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 	{
 		StunTimer -= GetWorld()->DeltaTimeSeconds;
 
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(StunTimer));
-
 		if (StunTimer <= 0.f)
 			bIsStunned = false;
 	}

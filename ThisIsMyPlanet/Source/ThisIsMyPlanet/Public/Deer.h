@@ -29,6 +29,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float StunTime;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
+	float AttackRange;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

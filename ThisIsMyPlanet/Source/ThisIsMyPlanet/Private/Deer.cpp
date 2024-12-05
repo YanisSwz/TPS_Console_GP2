@@ -10,6 +10,8 @@ void ADeer::BeginPlay()
 
 void ADeer::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	EatingTimer -= DeltaTime;
 	if (EatingTimer < 0.0f)
 	{
@@ -64,7 +66,7 @@ void ADeer::Flee()
 	if (!bHasAttacked)
 	{
 		TargetLocation = ClosestPlayer->GetActorLocation();
-		if ((GetActorLocation() - TargetLocation).Length() <= 160.0f)
+		if ((GetActorLocation() - TargetLocation).Length() <= AttackRange)
 		{
 			if (ClosestPlayer != nullptr)
 			{
@@ -88,6 +90,6 @@ void ADeer::Flee()
 
 void ADeer::ApplyEffect(APlayerCharacter* player)
 {
-	LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 5.0f + FVector(0.0f, 0.0f, 300.0f), false, false);
+	Cast<ACharacter>(player)->LaunchCharacter((player->GetActorLocation() - GetActorLocation()) * 5.0f + FVector(0.0f, 0.0f, 300.0f), false, false);
 	player->Stun(StunTime);
 }

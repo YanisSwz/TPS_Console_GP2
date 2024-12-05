@@ -40,7 +40,7 @@ void AAnimalController::OnUnPossess()
 
 void AAnimalController::Tick(float DeltaTime)
 {
-	//Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime);
 	if (!ControlledAnimal)
 		return;
 	
