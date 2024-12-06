@@ -73,35 +73,38 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 {
 	if (_OtherActor != nullptr)
 	{
-		if (!bHasTouchedGround)
+		if (bIsActive)//
 		{
-			APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
-
-			if (player != nullptr)
+			if (!bHasTouchedGround)
 			{
-				ApplyEffect(player);
+				APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
+
+				if (player != nullptr)
+				{
+					ApplyEffect(player);
+				}
+
+				if (_OtherActor->Tags.Contains("Ground"))
+				{
+					bHasTouchedGround = true;
+				}
 			}
 
-			if (_OtherActor->Tags.Contains("Ground"))
+			ABullet* bullet = Cast<ABullet>(_OtherActor);
+
+			if (bullet != nullptr)
 			{
-				bHasTouchedGround = true;
+
+				if (GEngine != nullptr)
+					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, "Hit");
+
+				GetCapsuleComponent()->SetSimulatePhysics(true);
+				GetMesh()->SetSimulatePhysics(true);
+				GetCharacterMovement()->SetMovementMode(MOVE_None);
+				bIsSleeping = true;
+
+				_OtherActor->Destroy();
 			}
-		}
-
-		ABullet* bullet = Cast<ABullet>(_OtherActor);
-
-		if (bullet != nullptr)
-		{
-
-			if (GEngine != nullptr)
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, "Hit");
-
-			GetCapsuleComponent()->SetSimulatePhysics(true);
-			GetMesh()->SetSimulatePhysics(true);
-			GetCharacterMovement()->SetMovementMode(MOVE_None);
-			bIsSleeping = true;
-
-			_OtherActor->Destroy();
 		}
 	}
 }

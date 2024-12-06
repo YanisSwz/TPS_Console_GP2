@@ -54,6 +54,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
 	bool bIsSleeping;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Active", meta = (AllowPrivateAccess = "true"))
+	bool bIsActive = true;//
+
 	FVector TargetLocation;
 	APlayerCharacter* ClosestPlayer;
 
