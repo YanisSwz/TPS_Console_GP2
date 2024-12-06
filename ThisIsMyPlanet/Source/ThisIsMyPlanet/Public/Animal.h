@@ -57,6 +57,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
 	bool bIsSleeping;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	float MaxPlayerInvincibilityTimer = 0.2f;
+
 	FVector TargetLocation;
 	APlayerCharacter* ClosestPlayer;
 
@@ -67,6 +70,9 @@ protected:
 	float SleepTimer;
 	bool bHasTouchedGround;
 	bool bReachedDestination;
+	bool bIsPlayerInvincible = false;
+	APlayerCharacter* LastGrabbedBy = nullptr;
+	float PlayerInvincibilityTimer;
 	
 public:
 	// Sets default values for this character's properties
@@ -85,6 +91,7 @@ public:
 
 	void UntouchGround();
 	void SetReachedDestination(bool bResult);
+	void SetLastGrabbedBy(AActor* actor);
 
 protected:
 	// Called when the game starts or when spawned

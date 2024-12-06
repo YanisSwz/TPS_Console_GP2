@@ -42,6 +42,13 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Grabbed = parent;
+
+	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
+
+	if (own != nullptr)
+	{
+		own->SetLastGrabbedBy(Grabbed);
+	}
 }
 
 void UGrabbableComponent::Launch(FVector dir)
@@ -60,7 +67,9 @@ void UGrabbableComponent::Launch(FVector dir)
 	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
 
 	if (own != nullptr)
+	{
 		own->UntouchGround();
+	}
 
 	Grabbed = nullptr;
 }
@@ -71,4 +80,14 @@ void UGrabbableComponent::UnGrab()
 		return;
 
 	Grabbed->GetComponentByClass<UGrabberComponent>()->UnGrab(this);
+}
+
+bool UGrabbableComponent::GetIsGrabbable()
+{
+	return bIsGrabbable;
+}
+
+void UGrabbableComponent::SetIsGrabbable(bool bGrabbable)
+{
+	bIsGrabbable = bGrabbable;
 }

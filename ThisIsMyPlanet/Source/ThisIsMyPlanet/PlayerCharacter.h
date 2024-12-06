@@ -147,6 +147,9 @@ protected:
 	void StartJumping(const FInputActionValue& Value);
 	void EndJumping(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void UnGrab(bool bIsRightHand);
+
 
 private:	
 	// Called every frame

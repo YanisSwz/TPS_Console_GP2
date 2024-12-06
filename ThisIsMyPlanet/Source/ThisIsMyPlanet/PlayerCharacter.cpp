@@ -38,6 +38,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
+	GrabComp->OnUnGrab.BindUObject(this, &ThisClass::UnGrab);
+
 
 	Weapon = CreateDefaultSubobject<UWeapon>(TEXT("Weapon"));
 
@@ -252,6 +254,14 @@ void APlayerCharacter::EndJumping(const FInputActionValue& Value)
 	if (bIsStunned)
 		return;
 	ACharacter::StopJumping();
+}
+
+void APlayerCharacter::UnGrab(bool bIsRightHand)
+{
+	if (bIsRightHand && isAiming == ANIMAL_RIGHT)
+		isAiming = NONE;
+	else if (!bIsRightHand && isAiming == ANIMAL_LEFT)
+		isAiming = NONE;
 }
 
 // Called every frame

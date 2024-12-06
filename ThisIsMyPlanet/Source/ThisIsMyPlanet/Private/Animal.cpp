@@ -22,12 +22,23 @@ void AAnimal::BeginPlay()
 
 	OnActorHit.AddDynamic(this, &AAnimal::OnAnimalHit);
 	SleepTimer = SleepDuration;
+	PlayerInvincibilityTimer = MaxPlayerInvincibilityTimer;
 }
 
 // Called every frame
 void AAnimal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bIsPlayerInvincible)
+	{
+		PlayerInvincibilityTimer -= GetWorld()->DeltaTimeSeconds;
+		if (PlayerInvincibilityTimer <= 0.f)
+		{
+			bIsPlayerInvincible = false;
+			PlayerInvincibilityTimer = MaxPlayerInvincibilityTimer;
+		}
+	}
 }
 
 void AAnimal::Survive()
@@ -48,6 +59,7 @@ void AAnimal::Sleep()
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("woke up!"));
 		GrabbableComp->UnGrab();
+		GrabbableComp->SetIsGrabbable(false);
 		GetCapsuleComponent()->SetSimulatePhysics(false);
 		GetMesh()->SetSimulatePhysics(false);
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
@@ -71,6 +83,19 @@ void AAnimal::SetReachedDestination(bool bResult)
 	bReachedDestination = bResult;
 }
 
+void AAnimal::SetLastGrabbedBy(AActor* actor)
+{
+	if (actor == nullptr)
+	{
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), "How the F did you got ungrabbed by nothing???");
+		return;
+	}
+
+	LastGrabbedBy = Cast<APlayerCharacter>(actor);
+	bIsPlayerInvincible = true;
+}
+
 void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit)
 {
 	if (_OtherActor != nullptr)
@@ -79,7 +104,7 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 		{
 			APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
 
-			if (player != nullptr)
+			if (player != nullptr && LastGrabbedBy != player)
 			{
 				ApplyEffect(player);
 			}
@@ -102,7 +127,7 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 			GetMesh()->SetSimulatePhysics(true);
 			GetCharacterMovement()->SetMovementMode(MOVE_None);
 			bIsSleeping = true;
-
+			GrabbableComp->SetIsGrabbable(true);
 			_OtherActor->Destroy();
 		}
 	}

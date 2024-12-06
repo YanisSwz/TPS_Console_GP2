@@ -7,6 +7,8 @@
 #include "Components/ActorComponent.h"
 #include "GrabberComponent.generated.h"
 
+DECLARE_DELEGATE_RetVal_OneParam(void, FOnUnGrab, bool /* bIsRightHand */);
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THISISMYPLANET_API UGrabberComponent : public UActorComponent
@@ -31,8 +33,8 @@ class THISISMYPLANET_API UGrabberComponent : public UActorComponent
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	TArray<TEnumAsByte<EObjectTypeQuery>> Actors;
 
-
 public:	
+	FOnUnGrab OnUnGrab;
 	// Sets default values for this component's properties
 	UGrabberComponent();
 

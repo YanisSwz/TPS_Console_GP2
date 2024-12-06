@@ -48,10 +48,8 @@ void UGrabberComponent::Grab(bool bIsRightHand)
 		for (size_t i = 0; i < Hits.Num(); i++)
 		{
 			UGrabbableComponent* grabbable = Hits[i].GetActor()->GetComponentByClass<UGrabbableComponent>();
-			if (grabbable != nullptr)
+			if (grabbable != nullptr && grabbable->GetIsGrabbable())
 			{
-				if (GEngine)
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "GG");
 
 				if (bIsRightHand)
 				{
@@ -107,9 +105,15 @@ void UGrabberComponent::Launch(bool bIsRightHand, float BaseLaunchPower)
 void UGrabberComponent::UnGrab(UGrabbableComponent* Grabbed)
 {
 	if (Grabbed == leftGrabbedComp)
+	{
 		Launch(false, 0);
+		OnUnGrab.ExecuteIfBound(false);
+	}
 	else if (Grabbed == rightGrabbedComp)
+	{
 		Launch(true, 0);
+		OnUnGrab.ExecuteIfBound(true);
+	}
 }
 
 bool UGrabberComponent::GetIsGrabbed(bool bIsRightHand)

@@ -17,6 +17,8 @@ void AFerret::BeginPlay()
 
 void AFerret::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	WaitTimer -= GetWorld()->DeltaRealTimeSeconds;
 
 	if(bIsBuried)

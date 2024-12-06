@@ -11,6 +11,8 @@ void AFox::BeginPlay()
 
 void AFox::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	if (bIsTurningLeft)
 	{
 		ScoutStepAngle += TurningSpeed * DeltaTime;

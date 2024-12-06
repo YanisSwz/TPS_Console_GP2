@@ -15,6 +15,8 @@ class THISISMYPLANET_API UGrabbableComponent : public UActorComponent
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	float LaunchPowerMult = 1;
 
+	bool bIsGrabbable = false;
+
 	AActor* Grabbed = nullptr;
 
 public:	
@@ -34,4 +36,8 @@ public:
 	void Launch(FVector dir);
 
 	void UnGrab();
+
+	bool GetIsGrabbable();
+
+	void SetIsGrabbable(bool bGrabbable);
 };
