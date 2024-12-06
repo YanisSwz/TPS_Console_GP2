@@ -10,6 +10,7 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Animation/AnimMontage.h"
 #include "PlayerCharacter.generated.h"
 
 class USpringArmComponent;
@@ -122,6 +123,9 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	FQuat BaseMeshRotation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* JumpAnimation;
 
 private:
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;

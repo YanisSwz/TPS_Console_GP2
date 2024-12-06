@@ -151,12 +151,7 @@ void APlayerCharacter::Aim()
 		return;
 	if (bIsShooting)
 	{
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Aim");
-
 		isAiming = WEAPON;
-		//FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, 0.1f);
-
 		Look(0);
 	}
 	else
@@ -179,11 +174,7 @@ void APlayerCharacter::StopAim()
 		return;
 	if (bIsShooting)
 	{
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "Stop");
-
 		isAiming = NONE;
-		//FollowCamera->FieldOfView = initialFieldofView;
 	}
 	else
 	{
@@ -246,9 +237,11 @@ void APlayerCharacter::Switch()
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
 {
-	if (bIsStunned)
+	if (bIsStunned || bIsCrouched)
 		return;
 	ACharacter::Jump();
+	if(JumpAnimation != nullptr)
+		PlayAnimMontage(JumpAnimation);
 }
 
 void APlayerCharacter::EndJumping(const FInputActionValue& Value)

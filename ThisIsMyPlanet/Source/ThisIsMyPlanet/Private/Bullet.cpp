@@ -6,9 +6,6 @@
 
 ABullet::ABullet()
 {
-	/*if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Init");*/
-
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
 
@@ -31,24 +28,16 @@ ABullet::ABullet()
 	ProjectileMovement->Bounciness = 0.3f;
 	ProjectileMovement->ProjectileGravityScale = 0.1f;
 
-
-	/*FVector inpulse = FVector(100.0f, 0.f, 0.f);
-
-	ProjectileMovement->AddForce(inpulse);*/
-
 	InitialLifeSpan = 5.0f;
 }
 
 void ABullet::FireInDirection(FVector ShootDirection)
 {
-	//ProjectileMovement->Velocity = ShootDirection * ProjectileMovement->InitialSpeed;
 	CollisionComp->AddImpulse(ShootDirection, NAME_None, true);
 }
 
 void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-
-
 	//endormir les animeaux
 	//Destroy();
 }

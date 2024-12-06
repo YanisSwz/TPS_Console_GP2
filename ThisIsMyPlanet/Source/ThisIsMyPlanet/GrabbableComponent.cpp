@@ -50,9 +50,6 @@ void UGrabbableComponent::Launch(FVector dir)
 
 	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(true);
 
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, dir.ToString());
-
 	GetOwner()->GetComponentByClass<UCapsuleComponent>()->AddImpulse(dir * LaunchPowerMult, NAME_None, true);
 
 	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());

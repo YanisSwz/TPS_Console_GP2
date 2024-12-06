@@ -12,6 +12,7 @@ AAnimal::AAnimal()
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bHasTouchedGround = true;
+	bIsSleeping = false;
 }
 
 // Called when the game starts or when spawned
@@ -21,6 +22,7 @@ void AAnimal::BeginPlay()
 
 	OnActorHit.AddDynamic(this, &AAnimal::OnAnimalHit);
 	SleepTimer = SleepDuration;
+	Health = MaxHealth;
 }
 
 // Called every frame
@@ -51,6 +53,7 @@ void AAnimal::Sleep()
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 		SleepTimer = SleepDuration;
 		bIsSleeping = false;
+		Health = MaxHealth;
 	}
 }
 
@@ -92,15 +95,18 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 
 		if (bullet != nullptr)
 		{
-
-			if (GEngine != nullptr)
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, "Hit");
-
-			GetCapsuleComponent()->SetSimulatePhysics(true);
-			GetMesh()->SetSimulatePhysics(true);
-			GetCharacterMovement()->SetMovementMode(MOVE_None);
-			bIsSleeping = true;
-
+			if (!bIsSleeping) 
+			{
+				--Health;
+				if (Health <= 0)
+				{
+					GetCapsuleComponent()->SetSimulatePhysics(true);
+					GetMesh()->SetSimulatePhysics(true);
+					GetCharacterMovement()->StopMovementImmediately();
+					GetCharacterMovement()->SetMovementMode(MOVE_None);
+					bIsSleeping = true;
+				}
+			}
 			_OtherActor->Destroy();
 		}
 	}

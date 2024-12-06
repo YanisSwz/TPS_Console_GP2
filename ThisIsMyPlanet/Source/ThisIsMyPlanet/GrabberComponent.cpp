@@ -50,9 +50,6 @@ bool UGrabberComponent::Grab(bool bIsRightHand)
 			UGrabbableComponent* grabbable = Hits[i].GetActor()->GetComponentByClass<UGrabbableComponent>();
 			if (grabbable != nullptr)
 			{
-				if (GEngine)
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "GG");
-
 				if (bIsRightHand)
 				{
 					grabbable->AttachTo(owner, rightHandSocketName);

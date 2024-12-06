@@ -51,14 +51,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
 	float SleepDuration;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
-	bool bIsSleeping;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
+	int MaxHealth;
 
 	FVector TargetLocation;
 	APlayerCharacter* ClosestPlayer;
+	bool bIsSleeping;
 
 protected:
-
 	int Health;
 	float PointValue;
 	float SleepTimer;
