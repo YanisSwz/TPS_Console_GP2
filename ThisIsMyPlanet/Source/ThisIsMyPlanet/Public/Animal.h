@@ -63,18 +63,23 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Active", meta = (AllowPrivateAccess = "true"))
 	bool bIsActive = true;//
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|points", meta = (AllowPrivateAccess = "true"))
+	int PointValue;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|points", meta = (AllowPrivateAccess = "true"))
+	APlayerCharacter* LastGrabbedBy = nullptr;
+
 	FVector TargetLocation;
 	APlayerCharacter* ClosestPlayer;
 
 protected:
 
 	int Health;
-	float PointValue;
 	float SleepTimer;
 	bool bHasTouchedGround;
 	bool bReachedDestination;
 	bool bIsPlayerInvincible = false;
-	APlayerCharacter* LastGrabbedBy = nullptr;
+	//APlayerCharacter* LastGrabbedBy = nullptr;
 	float PlayerInvincibilityTimer;
 	
 public:

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
+#include "../PlayerCharacter.h"
 #include "GameFramework/Actor.h"
 #include "CashOutZone.generated.h"
 
@@ -14,6 +15,12 @@ class THISISMYPLANET_API ACashOutZone : public AActor
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DetectionZone", meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* DetectionBox;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "player", meta = (AllowPrivateAccess = "true"))
+	class APlayerCharacter* player1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "player", meta = (AllowPrivateAccess = "true"))
+	class APlayerCharacter* player2;
 
 public:	
 	// Sets default values for this actor's properties

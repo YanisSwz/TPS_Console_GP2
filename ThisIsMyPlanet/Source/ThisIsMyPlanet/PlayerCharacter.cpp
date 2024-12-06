@@ -166,6 +166,8 @@ void APlayerCharacter::Aim()
 		if (!GrabComp->GetIsGrabbed(false) && isAiming == NONE)
 		{
 			GrabComp->Grab(false);
+
+			Look(0);
 		}
 		else if (isAiming == NONE)
 		{

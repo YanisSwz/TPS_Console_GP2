@@ -12,6 +12,9 @@ ACashOutZone::ACashOutZone()
 
 	DetectionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("DetectionBox"));
 	//DetectionBox->OnComponentBeginOverlap.AddDynamic(this, &ACashOutZone::OnOverlap);
+
+	/*player1 = ;
+	player2 = ;*/
 }
 
 // Called when the game starts or when spawned
@@ -37,18 +40,23 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, U
 		{
 			//mettre les points
 			
-			/*if (animal->lastGrabbed == player1) 
+			if (animal->LastGrabbedBy == player1)
 			{
-				bluePlayerPoints += animal->points;
+				bluePlayerPoints += animal->PointValue;
 			}
-			else if (animal->lastGrabbed == player2)
+			else if (animal->LastGrabbedBy == player2)
 			{
-				redPlayerPoints += animal->points;
-			}*/
+				redPlayerPoints += animal->PointValue;
+			}
 
 			//desactiver l'animal
 
 			animal->bIsActive = false;
+			animal->GetCapsuleComponent()->SetSimulatePhysics(true);
+			animal->GetMesh()->SetSimulatePhysics(true);
+			animal->GetCharacterMovement()->SetMovementMode(MOVE_None);
+			animal->bIsSleeping = true;
+			//a ameliore prsk la ...
 			//voir si je peux pa juste supp le script
 		}
 	}

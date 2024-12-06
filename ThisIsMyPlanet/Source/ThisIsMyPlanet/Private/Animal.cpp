@@ -53,18 +53,21 @@ void AAnimal::Flee()
 
 void AAnimal::Sleep()
 {
-	SleepTimer -= GetWorld()->DeltaTimeSeconds;
-	if (SleepTimer <= 0.f)
+	if (bIsActive)
 	{
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("woke up!"));
-		GrabbableComp->UnGrab();
-		GrabbableComp->SetIsGrabbable(false);
-		GetCapsuleComponent()->SetSimulatePhysics(false);
-		GetMesh()->SetSimulatePhysics(false);
-		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-		SleepTimer = SleepDuration;
-		bIsSleeping = false;
+		SleepTimer -= GetWorld()->DeltaTimeSeconds;
+		if (SleepTimer <= 0.f)
+		{
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("woke up!"));
+			GrabbableComp->UnGrab();
+			GrabbableComp->SetIsGrabbable(false);
+			GetCapsuleComponent()->SetSimulatePhysics(false);
+			GetMesh()->SetSimulatePhysics(false);
+			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+			SleepTimer = SleepDuration;
+			bIsSleeping = false;
+		}
 	}
 }
 
