@@ -10,7 +10,7 @@ UGrabbableComponent::UGrabbableComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 
@@ -21,13 +21,13 @@ void UGrabbableComponent::BeginPlay()
 }
 
 
-// Called every frame
-void UGrabbableComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
+//// Called every frame
+//void UGrabbableComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+//{
+//	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+//
+//	// ...
+//}
 
 void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 {
@@ -40,6 +40,8 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(false);
 
 	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	Grabbed = parent;
 }
 
 void UGrabbableComponent::Launch(FVector dir)
@@ -59,4 +61,14 @@ void UGrabbableComponent::Launch(FVector dir)
 
 	if (own != nullptr)
 		own->UntouchGround();
+
+	Grabbed = nullptr;
+}
+
+void UGrabbableComponent::UnGrab()
+{
+	if (Grabbed == nullptr)
+		return;
+
+	Grabbed->GetComponentByClass<UGrabberComponent>()->UnGrab(this);
 }

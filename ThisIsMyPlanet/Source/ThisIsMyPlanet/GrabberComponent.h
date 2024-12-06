@@ -44,7 +44,11 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	bool Grab(bool bIsRightHand);
+	void Grab(bool bIsRightHand);
 
 	void Launch(bool bIsRightHand, float BaseLaunchPower);
+
+	void UnGrab(UGrabbableComponent* Grabbed);
+
+	bool GetIsGrabbed(bool bIsRightHand);
 };

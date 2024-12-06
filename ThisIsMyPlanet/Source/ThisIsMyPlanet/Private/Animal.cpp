@@ -12,6 +12,7 @@ AAnimal::AAnimal()
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bHasTouchedGround = true;
+	GrabbableComp = CreateDefaultSubobject<UGrabbableComponent>(TEXT("GrabbableComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +47,7 @@ void AAnimal::Sleep()
 	{
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("woke up!"));
+		GrabbableComp->UnGrab();
 		GetCapsuleComponent()->SetSimulatePhysics(false);
 		GetMesh()->SetSimulatePhysics(false);
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);

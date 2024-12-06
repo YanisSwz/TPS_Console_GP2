@@ -19,6 +19,9 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 	UFUNCTION()
 	void OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit);
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	UGrabbableComponent* GrabbableComp;
+
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
