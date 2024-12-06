@@ -42,7 +42,7 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-void UGrabbableComponent::Launch(FVector dir, float power)
+void UGrabbableComponent::Launch(FVector dir)
 {
 	GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
@@ -53,7 +53,7 @@ void UGrabbableComponent::Launch(FVector dir, float power)
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, dir.ToString());
 
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->AddImpulse(dir * power, NAME_None, true);
+	GetOwner()->GetComponentByClass<UCapsuleComponent>()->AddImpulse(dir * LaunchPowerMult, NAME_None, true);
 
 	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
 

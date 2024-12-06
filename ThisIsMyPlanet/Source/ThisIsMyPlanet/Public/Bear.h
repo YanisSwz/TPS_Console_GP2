@@ -28,6 +28,11 @@ protected:
 	float NapTimer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
 	float StunTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float HitForce = 100.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	FVector HitForceBonus;
+	
 	TArray<AActor*> bushList;
 
 protected:

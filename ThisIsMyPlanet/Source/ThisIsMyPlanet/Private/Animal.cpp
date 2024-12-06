@@ -3,6 +3,8 @@
 
 #include "Animal.h"
 
+#include "Bullet.h"
+
 // Sets default values
 AAnimal::AAnimal()
 {
@@ -69,18 +71,37 @@ void AAnimal::SetReachedDestination(bool bResult)
 
 void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit)
 {
-	if (!bHasTouchedGround && _OtherActor != nullptr)
+	if (_OtherActor != nullptr)
 	{
-		APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
-
-		if (player != nullptr)
+		if (!bHasTouchedGround)
 		{
-			ApplyEffect(player);
+			APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
+
+			if (player != nullptr)
+			{
+				ApplyEffect(player);
+			}
+
+			if (_OtherActor->Tags.Contains("Ground"))
+			{
+				bHasTouchedGround = true;
+			}
 		}
 
-		if (_OtherActor->Tags.Contains("Ground"))
+		ABullet* bullet = Cast<ABullet>(_OtherActor);
+
+		if (bullet != nullptr)
 		{
-			bHasTouchedGround = true;
+
+			if (GEngine != nullptr)
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, "Hit");
+
+			GetCapsuleComponent()->SetSimulatePhysics(true);
+			GetMesh()->SetSimulatePhysics(true);
+			GetCharacterMovement()->SetMovementMode(MOVE_None);
+			bIsSleeping = true;
+
+			_OtherActor->Destroy();
 		}
 	}
 }

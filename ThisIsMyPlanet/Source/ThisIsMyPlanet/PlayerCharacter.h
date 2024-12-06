@@ -95,6 +95,12 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	// Grab/Shoot
 	bool bIsShooting = true;
 
+	bool bCanShoot = true;
+	float reloadTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	float maxReloadTimer;
+
 	// Grab/Launch
 	bool bIsLaunchingLeft = false;
 	bool bIsLaunchingRight = false;
@@ -110,6 +116,12 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds", meta = (AllowPrivateAccess = "true"))
 	float CrouchNoiseReduction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	FVector BaseMeshOffset;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	FQuat BaseMeshRotation;
 
 private:
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;

@@ -202,10 +202,12 @@ void APlayerCharacter::Shoot()
 		return;
 	if (bIsShooting)
 	{
-		Weapon->Fire(FollowCamera->GetForwardVector());
-
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Shoot");
+		if (bCanShoot && isAiming == WEAPON)
+		{
+			Weapon->Fire(FollowCamera->GetForwardVector());
+			bCanShoot = false;
+			reloadTimer = maxReloadTimer;
+		}
 	}
 	else 
 	{
@@ -261,14 +263,36 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!bCanShoot)
+	{
+		reloadTimer -= DeltaTime;
+		if (reloadTimer <= 0.f)
+			bCanShoot = true;
+	}
+
 	if (bIsStunned)
 	{
 		StunTimer -= GetWorld()->DeltaTimeSeconds;
 
 		if (StunTimer <= 0.f)
+		{
+			FVector inertia = GetMesh()->GetBoneLinearVelocity("pelvis");
 			bIsStunned = false;
-	}
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GetCharacterMovement()->GravityScale = 1;
+			GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", false);
+			GetMesh()->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true));
+			GetMesh()->SetRelativeLocationAndRotation(-BaseMeshOffset, BaseMeshRotation);
 
+			GetCharacterMovement()->Velocity = inertia;
+		}
+		else
+		{
+			GetCapsuleComponent()->SetWorldLocation(GetMesh()->GetSocketLocation("pelvis") + BaseMeshOffset);
+			GetCapsuleComponent()->ResetSceneVelocity();
+		}
+	}
+	
 	if(bIsSnared)
 	{
 		SnareTimer -= GetWorld()->DeltaTimeSeconds;
@@ -354,6 +378,26 @@ void APlayerCharacter::Stun(float Duration)
 	StunTimer = Duration;
 	bIsStunned = true;
 	isAiming = NONE;
+
+	if (bIsLaunchingRight)
+	{
+		GrabComp->Launch(true, 0);
+		bIsLaunchingRight = false;
+	}
+	if (bIsLaunchingLeft) 
+	{
+		GrabComp->Launch(false, 0);
+		bIsLaunchingLeft = false;
+	}
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->GravityScale = 0;
+	GetCharacterMovement()->Velocity = FVector::Zero();
+	GetCapsuleComponent()->ResetSceneVelocity();
+
+	GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);
+	GetMesh()->SetAllBodiesBelowPhysicsBlendWeight("pelvis", 1.f);
+	
 }
 
 void APlayerCharacter::Snare(float Duration, float SlowAmount)

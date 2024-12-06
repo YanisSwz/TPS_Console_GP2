@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Actor.h"
 #include "Bullet.h"
 #include "Weapon.generated.h"
 
@@ -33,12 +33,7 @@ public:
 	void Fire(FVector LaunchDirection);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 
 private:	
-	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
 
 };
