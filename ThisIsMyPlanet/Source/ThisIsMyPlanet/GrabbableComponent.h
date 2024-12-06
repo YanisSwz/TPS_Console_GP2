@@ -15,6 +15,10 @@ class THISISMYPLANET_API UGrabbableComponent : public UActorComponent
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	float LaunchPowerMult = 1;
 
+	bool bIsGrabbable = false;
+
+	AActor* Grabbed = nullptr;
+
 public:	
 	// Sets default values for this component's properties
 	UGrabbableComponent();
@@ -25,9 +29,15 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	//virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void AttachTo(AActor* parent, FName socketName);
 
 	void Launch(FVector dir);
+
+	void UnGrab();
+
+	bool GetIsGrabbable();
+
+	void SetIsGrabbable(bool bGrabbable);
 };
