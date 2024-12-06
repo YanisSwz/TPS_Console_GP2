@@ -35,7 +35,7 @@ void UGrabberComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
-bool UGrabberComponent::Grab(bool bIsRightHand)
+void UGrabberComponent::Grab(bool bIsRightHand)
 {
 	FVector start = owner->GetActorLocation();
 	FVector forward = owner->GetActorForwardVector() * HalfSize.X;
@@ -48,10 +48,8 @@ bool UGrabberComponent::Grab(bool bIsRightHand)
 		for (size_t i = 0; i < Hits.Num(); i++)
 		{
 			UGrabbableComponent* grabbable = Hits[i].GetActor()->GetComponentByClass<UGrabbableComponent>();
-			if (grabbable != nullptr)
+			if (grabbable != nullptr && grabbable->GetIsGrabbable())
 			{
-				if (GEngine)
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Emerald, "GG");
 
 				if (bIsRightHand)
 				{
@@ -64,12 +62,10 @@ bool UGrabberComponent::Grab(bool bIsRightHand)
 					leftGrabbedComp = grabbable;
 				}
 
-				return true;
+				return;
 			}
 		}
 	}
-
-	return false;
 }
 
 void UGrabberComponent::Launch(bool bIsRightHand, float BaseLaunchPower)
@@ -104,4 +100,26 @@ void UGrabberComponent::Launch(bool bIsRightHand, float BaseLaunchPower)
 
 		leftGrabbedComp = nullptr;
 	}
+}
+
+void UGrabberComponent::UnGrab(UGrabbableComponent* Grabbed)
+{
+	if (Grabbed == leftGrabbedComp)
+	{
+		Launch(false, 0);
+		OnUnGrab.ExecuteIfBound(false);
+	}
+	else if (Grabbed == rightGrabbedComp)
+	{
+		Launch(true, 0);
+		OnUnGrab.ExecuteIfBound(true);
+	}
+}
+
+bool UGrabberComponent::GetIsGrabbed(bool bIsRightHand)
+{
+	if (bIsRightHand)
+		return rightGrabbedComp != nullptr;
+	else
+		return leftGrabbedComp != nullptr;
 }
