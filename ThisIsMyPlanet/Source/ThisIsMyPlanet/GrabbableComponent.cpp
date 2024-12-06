@@ -87,7 +87,14 @@ bool UGrabbableComponent::GetIsGrabbable()
 	return bIsGrabbable;
 }
 
+bool UGrabbableComponent::GetIsTwoSlots()
+{
+	return bIsTwoSlots;
+}
+
 void UGrabbableComponent::SetIsGrabbable(bool bGrabbable)
 {
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, FString::SanitizeFloat(bGrabbable));
 	bIsGrabbable = bGrabbable;
 }

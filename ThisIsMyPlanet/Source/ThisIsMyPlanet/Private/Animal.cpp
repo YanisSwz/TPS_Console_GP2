@@ -106,7 +106,7 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 			{
 				APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
 
-				if (player != nullptr)
+				if (player != nullptr && LastGrabbedBy != player)
 				{
 					ApplyEffect(player);
 				}
