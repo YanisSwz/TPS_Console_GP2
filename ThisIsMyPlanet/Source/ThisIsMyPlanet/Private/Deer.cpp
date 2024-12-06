@@ -22,7 +22,7 @@ void ADeer::Tick(float DeltaTime)
 	if (TurnTimer <= 0.0f)
 	{
 		TurnTimer = TurnTime;
-		Jump();
+		if (bHasAttacked) Jump();
 		bIsTurningLeft = !bIsTurningLeft;
 	}
 }
