@@ -125,8 +125,17 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 				if (GEngine != nullptr)
 					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, "Hit");
 
-				GetCapsuleComponent()->SetSimulatePhysics(true);
-				GetMesh()->SetSimulatePhysics(true);
+				//GetCapsuleComponent()->SetSimulatePhysics(true);
+				//GetMesh()->SetSimulatePhysics(true);
+
+				GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+				GetCharacterMovement()->GravityScale = 0;
+				GetCharacterMovement()->Velocity = FVector::Zero();
+				GetCapsuleComponent()->ResetSceneVelocity();
+
+				GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);
+				GetMesh()->SetAllBodiesBelowPhysicsBlendWeight("pelvis", 1.f);
+
 				GetCharacterMovement()->SetMovementMode(MOVE_None);
 				bIsSleeping = true;
 				GrabbableComp->SetIsGrabbable(true);
