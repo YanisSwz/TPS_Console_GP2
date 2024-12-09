@@ -37,6 +37,10 @@ protected:
 	float AttackRange;
 	TArray<AActor*> deerList;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
+	float TurnTime;
+	float TurnTimer;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

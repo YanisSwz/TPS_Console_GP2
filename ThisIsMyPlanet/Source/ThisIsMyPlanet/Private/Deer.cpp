@@ -6,6 +6,7 @@
 void ADeer::BeginPlay()
 {
 	Super::BeginPlay();
+	TurnTimer = TurnTime;
 }
 
 void ADeer::Tick(float DeltaTime)
@@ -17,7 +18,13 @@ void ADeer::Tick(float DeltaTime)
 	{
 		EatingTimer = 0.0f;
 	}
-	if (FMath::RandRange(0, FMath::FloorToInt(TurningInverseFrequency * DeltaTime)) == 1 && !bIsSleeping) bIsTurningLeft = !bIsTurningLeft;
+	TurnTimer -= DeltaTime;
+	if (TurnTimer <= 0.0f)
+	{
+		TurnTimer = TurnTime;
+		if (bHasAttacked) Jump();
+		bIsTurningLeft = !bIsTurningLeft;
+	}
 }
 
 void ADeer::Survive()

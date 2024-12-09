@@ -11,16 +11,18 @@ void ABear::BeginPlay()
 
 void ABear::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	EatingTimer -= DeltaTime;
 	if (EatingTimer < 0.0f)
 	{
 		EatingTimer = 0.0f;
 	}
 
-	SleepTimer -= DeltaTime;
-	if (SleepTimer <= 0.0f)
+	NapTimer -= DeltaTime;
+	if (NapTimer <= 0.0f && BerryCount >= 5)
 	{
-		SleepTimer = 0.0f;
+		NapTimer = 0.0f;
 		BerryCount = 0;
 	}
 
@@ -28,9 +30,14 @@ void ABear::Tick(float DeltaTime)
 
 void ABear::Survive()
 {
-	if (SleepTimer > 0.0f)
+	/*if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("BEAR"));*/
+	
+
+	if (NapTimer > 0.0f)
 	{
 		// honk mimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimi
+		
 	}
 	else
 	{
@@ -63,10 +70,11 @@ void ABear::Survive()
 			bIsEating = false;
 			bIsLookingForSpot = true;
 			++BerryCount;
+			
 		}
 		if (BerryCount >= 5)
 		{
-			SleepTimer = 15.0f;
+			NapTimer = 15.0f;
 		}
 	}
 	

@@ -102,10 +102,6 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	float maxReloadTimer;
 
-	// Grab/Launch
-	bool bIsLaunchingLeft = false;
-	bool bIsLaunchingRight = false;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	UWeapon* Weapon;
 
@@ -154,6 +150,9 @@ protected:
 	void EndCrouching();
 	void StartJumping(const FInputActionValue& Value);
 	void EndJumping(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void UnGrab(bool bIsRightHand);
 
 
 private:	

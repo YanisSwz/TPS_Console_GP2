@@ -38,6 +38,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	GrabComp = CreateDefaultSubobject<UGrabberComponent>(TEXT("GrabberComponent"));
+	GrabComp->OnUnGrab.BindUObject(this, &ThisClass::UnGrab);
+
 
 	Weapon = CreateDefaultSubobject<UWeapon>(TEXT("Weapon"));
 
@@ -156,10 +158,9 @@ void APlayerCharacter::Aim()
 	}
 	else
 	{
-		if (!bIsLaunchingLeft && isAiming == NONE)
+		if (!GrabComp->GetIsGrabbed(false) && isAiming == NONE)
 		{
-			if (GrabComp->Grab(false))
-				bIsLaunchingLeft = true;
+			GrabComp->Grab(false);
 		}
 		else if (isAiming == NONE)
 		{
@@ -178,10 +179,9 @@ void APlayerCharacter::StopAim()
 	}
 	else
 	{
-		if (bIsLaunchingLeft && isAiming == ANIMAL_LEFT)
+		if (GrabComp->GetIsGrabbed(false) && isAiming == ANIMAL_LEFT)
 		{
 			GrabComp->Launch(false, baseLaunchPower);
-			bIsLaunchingLeft = false;
 			isAiming = NONE;
 		}
 	}
@@ -202,10 +202,9 @@ void APlayerCharacter::Shoot()
 	}
 	else 
 	{
-		if (!bIsLaunchingRight && isAiming == NONE)
+		if (!GrabComp->GetIsGrabbed(true) && isAiming == NONE)
 		{
-			if (GrabComp->Grab(true))
-				bIsLaunchingRight = true;
+			GrabComp->Grab(true);
 		}
 		else if(isAiming == NONE)
 		{
@@ -220,10 +219,9 @@ void APlayerCharacter::StopShooting()
 		return;
 	if (!bIsShooting)
 	{
-		if (bIsLaunchingRight && isAiming == ANIMAL_RIGHT)
+		if (GrabComp->GetIsGrabbed(true) && isAiming == ANIMAL_RIGHT)
 		{
 			GrabComp->Launch(true, baseLaunchPower);
-			bIsLaunchingRight = false;
 			isAiming = NONE;
 		}
 	}
@@ -249,6 +247,14 @@ void APlayerCharacter::EndJumping(const FInputActionValue& Value)
 	if (bIsStunned)
 		return;
 	ACharacter::StopJumping();
+}
+
+void APlayerCharacter::UnGrab(bool bIsRightHand)
+{
+	if (bIsRightHand && isAiming == ANIMAL_RIGHT)
+		isAiming = NONE;
+	else if (!bIsRightHand && isAiming == ANIMAL_LEFT)
+		isAiming = NONE;
 }
 
 // Called every frame
@@ -372,15 +378,13 @@ void APlayerCharacter::Stun(float Duration)
 	bIsStunned = true;
 	isAiming = NONE;
 
-	if (bIsLaunchingRight)
+	if (GrabComp->GetIsGrabbed(true))
 	{
 		GrabComp->Launch(true, 0);
-		bIsLaunchingRight = false;
 	}
-	if (bIsLaunchingLeft) 
+	if (GrabComp->GetIsGrabbed(false))
 	{
 		GrabComp->Launch(false, 0);
-		bIsLaunchingLeft = false;
 	}
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);

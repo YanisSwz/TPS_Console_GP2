@@ -14,6 +14,8 @@ void AChicken::BeginPlay()
 
 void AChicken::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	EatingTimer -= DeltaTime;
 	if (EatingTimer < 0.0f)
 	{

@@ -19,6 +19,9 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 	UFUNCTION()
 	void OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit);
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	UGrabbableComponent* GrabbableComp;
+
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
@@ -54,6 +57,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
 	int MaxHealth;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	float MaxPlayerInvincibilityTimer = 0.2f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Active", meta = (AllowPrivateAccess = "true"))
+	bool bIsActive = true;//
+
 	FVector TargetLocation;
 	APlayerCharacter* ClosestPlayer;
 	bool bIsSleeping;
@@ -64,6 +73,9 @@ protected:
 	float SleepTimer;
 	bool bHasTouchedGround;
 	bool bReachedDestination;
+	bool bIsPlayerInvincible = false;
+	APlayerCharacter* LastGrabbedBy = nullptr;
+	float PlayerInvincibilityTimer;
 	
 public:
 	// Sets default values for this character's properties
@@ -82,6 +94,7 @@ public:
 
 	void UntouchGround();
 	void SetReachedDestination(bool bResult);
+	void SetLastGrabbedBy(AActor* actor);
 
 protected:
 	// Called when the game starts or when spawned
