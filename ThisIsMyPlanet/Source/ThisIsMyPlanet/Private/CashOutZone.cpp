@@ -4,17 +4,18 @@
 #include "CashOutZone.h"
 #include "animal.h"
 
+
 // Sets default values
 ACashOutZone::ACashOutZone()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	//PrimaryActorTick.bCanEverTick = true;
 
 	DetectionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("DetectionBox"));
-	//DetectionBox->OnComponentBeginOverlap.AddDynamic(this, &ACashOutZone::OnOverlap);
+	DetectionBox->OnComponentBeginOverlap.AddDynamic(this, &ACashOutZone::OnOverlap);
 
-	/*player1 = ;
-	player2 = ;*/
+	player1 = nullptr;
+	player2 = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -22,6 +23,8 @@ void ACashOutZone::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	player1 = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	player2 = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 1));
 }
 
 // Called every frame
@@ -31,11 +34,17 @@ void ACashOutZone::Tick(float DeltaTime)
 
 }
 
-void ACashOutZone::OnOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "activated");
+
 	AAnimal* animal = Cast<AAnimal>(OtherActor);
 	if (animal != nullptr)
 	{
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "animal detected");
+
 		if (animal->bIsSleeping) 
 		{
 			//mettre les points
@@ -57,7 +66,6 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, U
 			animal->GetCharacterMovement()->SetMovementMode(MOVE_None);
 			animal->bIsSleeping = true;
 			//a ameliore prsk la ...
-			//voir si je peux pa juste supp le script
 		}
 	}
 }
