@@ -7,6 +7,7 @@ void AFox::BeginPlay()
 {
 	Super::BeginPlay();
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
+	InitialSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
 
 void AFox::Tick(float DeltaTime)
@@ -27,11 +28,16 @@ void AFox::Tick(float DeltaTime)
 
 	HungerTimer -= DeltaTime;
 	if (HungerTimer <= 0.0f) HungerTimer = 0.0f;
-	
+
+	if(bIsSleeping && GetCharacterMovement()->GetMaxSpeed() != InitialSpeed)
+		GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
 }
 
 void AFox::Survive()
 {
+	if (GetCharacterMovement()->GetMaxSpeed() != InitialSpeed)
+		GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
+
 	float dist = 1000.0f;
 	AActor* nearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), chickenList, dist);
 	if (nearestChicken == nullptr)
@@ -59,6 +65,8 @@ void AFox::Survive()
 
 void AFox::Flee()
 {
+	if (GetCharacterMovement()->GetMaxSpeed() != FleeSpeed)
+		GetCharacterMovement()->MaxWalkSpeed = FleeSpeed;
 	TargetLocation = GetActorLocation() - (ClosestPlayer->GetActorLocation() - GetActorLocation());
 }
 

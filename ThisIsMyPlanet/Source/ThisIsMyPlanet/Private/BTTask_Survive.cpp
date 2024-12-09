@@ -16,6 +16,9 @@ EBTNodeResult::Type UBTTask_Survive::ExecuteTask(UBehaviorTreeComponent& OwnerCo
     }
 
     AAnimalController* Controller = Cast<AAnimalController>(OwnerComp.GetAIOwner());
+    if(!Controller)
+        return EBTNodeResult::Failed;
+
     Controller->Survive();
 
     return EBTNodeResult::Succeeded;

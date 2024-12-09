@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animal.h"
 #include "AIController.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Chicken.generated.h"
 
 /**
@@ -16,7 +17,9 @@ class THISISMYPLANET_API AChicken : public AAnimal
 	GENERATED_BODY()
 protected:
 	bool bIsLookingForSpot = true;
+	bool bLaunched = false;
 	float EatingTimer = 0.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
 	float EatingTime;
 	bool bIsEating = false;
@@ -25,6 +28,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
 	float FlashDuration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
+	float FlyForce;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
+	float HorizontalImpulse;
+
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

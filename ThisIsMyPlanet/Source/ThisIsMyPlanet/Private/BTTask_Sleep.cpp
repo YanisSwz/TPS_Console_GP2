@@ -16,6 +16,9 @@ EBTNodeResult::Type UBTTask_Sleep::ExecuteTask(UBehaviorTreeComponent& OwnerComp
     }
 
     AAnimalController* Controller = Cast<AAnimalController>(OwnerComp.GetAIOwner());
+    if (!Controller)
+        return EBTNodeResult::Failed;
+
     Controller->Sleep();
 
     return EBTNodeResult::Succeeded; return EBTNodeResult::Type();
