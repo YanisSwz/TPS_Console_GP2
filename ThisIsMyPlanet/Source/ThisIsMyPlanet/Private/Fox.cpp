@@ -37,7 +37,6 @@ void AFox::Survive()
 	if (nearestChicken == nullptr)
 	{
 		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
-		
 	}
 	else if ((nearestChicken->GetActorLocation() - GetActorLocation()).Length() < 3000.0f && HungerTimer <= 0.0f)
 	{
