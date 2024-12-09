@@ -170,6 +170,7 @@ void APlayerCharacter::Aim()
 		else if (isAiming == NONE)
 		{
 			isAiming = ANIMAL_LEFT;
+			GrabComp->SwitchHand(false);
 		}
 	}
 }
@@ -218,6 +219,7 @@ void APlayerCharacter::Shoot()
 		else if(isAiming == NONE)
 		{
 			isAiming = ANIMAL_RIGHT;
+			GrabComp->SwitchHand(true);
 		}
 	}
 }

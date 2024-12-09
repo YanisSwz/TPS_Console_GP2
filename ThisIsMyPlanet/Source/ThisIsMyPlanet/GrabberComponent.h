@@ -48,6 +48,8 @@ public:
 
 	void Grab(bool bIsRightHand);
 
+	void SwitchHand(bool bIsRightHand);
+
 	void Launch(bool bIsRightHand, float BaseLaunchPower);
 
 	void UnGrab(UGrabbableComponent* Grabbed);

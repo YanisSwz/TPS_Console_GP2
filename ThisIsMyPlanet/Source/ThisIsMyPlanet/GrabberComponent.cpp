@@ -72,6 +72,25 @@ void UGrabberComponent::Grab(bool bIsRightHand)
 	}
 }
 
+void UGrabberComponent::SwitchHand(bool bIsRightHand)
+{
+	if (leftGrabbedComp == nullptr || !leftGrabbedComp->GetIsTwoSlots())
+		return;
+
+	UGrabbableComponent* grabbedComp = leftGrabbedComp;
+
+	Launch(false, 0);
+
+	if (bIsRightHand)
+		grabbedComp->AttachTo(owner, rightHandSocketName);
+	else
+		grabbedComp->AttachTo(owner, leftHandSocketName);
+
+	leftGrabbedComp = grabbedComp;
+
+	rightGrabbedComp = grabbedComp;
+}
+
 void UGrabberComponent::Launch(bool bIsRightHand, float BaseLaunchPower)
 {
 	if (bIsRightHand)

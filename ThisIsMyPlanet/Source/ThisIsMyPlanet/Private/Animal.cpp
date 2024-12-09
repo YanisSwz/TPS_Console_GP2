@@ -61,6 +61,8 @@ void AAnimal::Sleep()
 		GrabbableComp->UnGrab();
 		GrabbableComp->SetIsGrabbable(false);
 		GetCapsuleComponent()->SetSimulatePhysics(false);
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		GetCharacterMovement()->GravityScale = 1;
 		GetMesh()->SetSimulatePhysics(false);
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 		SleepTimer = SleepDuration;
@@ -106,9 +108,10 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 			{
 				APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
 
-				if (player != nullptr && LastGrabbedBy != player)
+				if (player != nullptr && (LastGrabbedBy != player || !bIsPlayerInvincible))
 				{
 					ApplyEffect(player);
+					SleepTimer = 0.f;
 				}
 
 				if (_OtherActor->Tags.Contains("Ground"))
@@ -128,7 +131,7 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 				//GetCapsuleComponent()->SetSimulatePhysics(true);
 				//GetMesh()->SetSimulatePhysics(true);
 
-				GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+				GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 				GetCharacterMovement()->GravityScale = 0;
 				GetCharacterMovement()->Velocity = FVector::Zero();
 				GetCapsuleComponent()->ResetSceneVelocity();
