@@ -36,26 +36,25 @@ void ACashOutZone::Tick(float DeltaTime)
 
 void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "activated");
-
 	AAnimal* animal = Cast<AAnimal>(OtherActor);
 	if (animal != nullptr)
 	{
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "animal detected");
 
-		if (animal->bIsSleeping) 
+		if (animal->bIsSleeping && animal->bIsActive) 
 		{
 			//mettre les points
 			
 			if (animal->LastGrabbedBy == player1)
 			{
 				bluePlayerPoints += animal->PointValue;
+				if (GEngine != nullptr)
+					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "blue scored");
 			}
 			else if (animal->LastGrabbedBy == player2)
 			{
 				redPlayerPoints += animal->PointValue;
+				if (GEngine != nullptr)
+					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "red scored");
 			}
 
 			//desactiver l'animal
