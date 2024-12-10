@@ -124,16 +124,19 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 
 			if (bullet != nullptr)
 			{
-
-				if (GEngine != nullptr)
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, "Hit");
-
-				GetCapsuleComponent()->SetSimulatePhysics(true);
-				GetMesh()->SetSimulatePhysics(true);
-				GetCharacterMovement()->StopMovementImmediately();
-				GetCharacterMovement()->SetMovementMode(MOVE_None);
-				bIsSleeping = true;
-				GrabbableComp->SetIsGrabbable(true);
+				if (!bIsSleeping)
+				{
+					--Health;
+					if (Health <= 0)
+					{
+						GetCapsuleComponent()->SetSimulatePhysics(true);
+						GetMesh()->SetSimulatePhysics(true);
+						GetCharacterMovement()->StopMovementImmediately();
+						GetCharacterMovement()->SetMovementMode(MOVE_None);
+						bIsSleeping = true;
+						GrabbableComp->SetIsGrabbable(true);
+					}
+				}
 				_OtherActor->Destroy();
 			}
 		}

@@ -19,19 +19,19 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
+UENUM(BlueprintType)
+enum class Aiming : uint8
+{
+	NONE,
+	WEAPON,
+	ANIMAL_LEFT,
+	ANIMAL_RIGHT
+};
 
 UCLASS()
 class THISISMYPLANET_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
-	enum Aiming
-	{
-		NONE,
-		WEAPON,
-		ANIMAL_LEFT,
-		ANIMAL_RIGHT
-	};
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -132,7 +132,7 @@ public:
 	APlayerCharacter();
 
 protected:
-	Aiming isAiming = NONE;
+	Aiming isAiming = Aiming::NONE;
 
 	float initialFieldofView;
 	float zoomedFieldOfView = 45.0f;
@@ -165,6 +165,9 @@ private:
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Flash(float Duration);
+
+	UFUNCTION(BlueprintCallable)
+	Aiming GetAimState();
 
 	void Stun(float Duration);
 	void Snare(float Duration, float SlowAmount);

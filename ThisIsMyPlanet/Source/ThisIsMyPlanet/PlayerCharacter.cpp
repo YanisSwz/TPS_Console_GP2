@@ -79,7 +79,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		if (isAiming)
+		if (isAiming != Aiming::NONE)
 		{
 			GetCharacterMovement()->bOrientRotationToMovement = false;
 		}
@@ -116,7 +116,7 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		if (isAiming)
+		if (isAiming != Aiming::NONE)
 		{
 			//this->GetActorForwardVector().X = FollowCamera->GetForwardVector().X;
 
@@ -153,18 +153,18 @@ void APlayerCharacter::Aim()
 		return;
 	if (bIsShooting)
 	{
-		isAiming = WEAPON;
+		isAiming = Aiming::WEAPON;
 		Look(0);
 	}
 	else
 	{
-		if (!GrabComp->GetIsGrabbed(false) && isAiming == NONE)
+		if (!GrabComp->GetIsGrabbed(false) && isAiming == Aiming::NONE)
 		{
 			GrabComp->Grab(false);
 		}
-		else if (isAiming == NONE)
+		else if (isAiming == Aiming::NONE)
 		{
-			isAiming = ANIMAL_LEFT;
+			isAiming = Aiming::ANIMAL_LEFT;
 		}
 	}
 }
@@ -175,14 +175,14 @@ void APlayerCharacter::StopAim()
 		return;
 	if (bIsShooting)
 	{
-		isAiming = NONE;
+		isAiming = Aiming::NONE;
 	}
 	else
 	{
-		if (GrabComp->GetIsGrabbed(false) && isAiming == ANIMAL_LEFT)
+		if (GrabComp->GetIsGrabbed(false) && isAiming == Aiming::ANIMAL_LEFT)
 		{
 			GrabComp->Launch(false, baseLaunchPower);
-			isAiming = NONE;
+			isAiming = Aiming::NONE;
 		}
 	}
 }
@@ -193,7 +193,7 @@ void APlayerCharacter::Shoot()
 		return;
 	if (bIsShooting)
 	{
-		if (bCanShoot && isAiming == WEAPON)
+		if (bCanShoot && isAiming == Aiming::WEAPON)
 		{
 			Weapon->Fire(FollowCamera->GetForwardVector());
 			bCanShoot = false;
@@ -202,13 +202,13 @@ void APlayerCharacter::Shoot()
 	}
 	else 
 	{
-		if (!GrabComp->GetIsGrabbed(true) && isAiming == NONE)
+		if (!GrabComp->GetIsGrabbed(true) && isAiming == Aiming::NONE)
 		{
 			GrabComp->Grab(true);
 		}
-		else if(isAiming == NONE)
+		else if(isAiming == Aiming::NONE)
 		{
-			isAiming = ANIMAL_RIGHT;
+			isAiming = Aiming::ANIMAL_RIGHT;
 		}
 	}
 }
@@ -219,10 +219,10 @@ void APlayerCharacter::StopShooting()
 		return;
 	if (!bIsShooting)
 	{
-		if (GrabComp->GetIsGrabbed(true) && isAiming == ANIMAL_RIGHT)
+		if (GrabComp->GetIsGrabbed(true) && isAiming == Aiming::ANIMAL_RIGHT)
 		{
 			GrabComp->Launch(true, baseLaunchPower);
-			isAiming = NONE;
+			isAiming = Aiming::NONE;
 		}
 	}
 }
@@ -230,7 +230,7 @@ void APlayerCharacter::StopShooting()
 void APlayerCharacter::Switch()
 {
 	bIsShooting = !bIsShooting;
-	isAiming = NONE;
+	isAiming = Aiming::NONE;
 }
 
 void APlayerCharacter::StartJumping(const FInputActionValue& Value)
@@ -251,10 +251,10 @@ void APlayerCharacter::EndJumping(const FInputActionValue& Value)
 
 void APlayerCharacter::UnGrab(bool bIsRightHand)
 {
-	if (bIsRightHand && isAiming == ANIMAL_RIGHT)
-		isAiming = NONE;
-	else if (!bIsRightHand && isAiming == ANIMAL_LEFT)
-		isAiming = NONE;
+	if (bIsRightHand && isAiming == Aiming::ANIMAL_RIGHT)
+		isAiming = Aiming::NONE;
+	else if (!bIsRightHand && isAiming == Aiming::ANIMAL_LEFT)
+		isAiming = Aiming::NONE;
 }
 
 // Called every frame
@@ -306,19 +306,19 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	switch (isAiming)
 	{
-	case APlayerCharacter::NONE:
+	case Aiming::NONE:
 		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, initialFieldofView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
 		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
 		break;
-	case APlayerCharacter::WEAPON:
+	case Aiming::WEAPON:
 		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
 		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
 		break;
-	case APlayerCharacter::ANIMAL_LEFT:
+	case Aiming::ANIMAL_LEFT:
 		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
 		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), FVector(CameraZoomGrabPosition.X, -CameraZoomGrabPosition.Y, CameraZoomGrabPosition.Z), CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
 		break;
-	case APlayerCharacter::ANIMAL_RIGHT:
+	case Aiming::ANIMAL_RIGHT:
 		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
 		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), CameraZoomGrabPosition, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
 		break;
@@ -372,11 +372,16 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
+Aiming APlayerCharacter::GetAimState()
+{
+	return isAiming;
+}
+
 void APlayerCharacter::Stun(float Duration)
 {
 	StunTimer = Duration;
 	bIsStunned = true;
-	isAiming = NONE;
+	isAiming = Aiming::NONE;
 
 	if (GrabComp->GetIsGrabbed(true))
 	{
