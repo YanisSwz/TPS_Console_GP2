@@ -50,7 +50,6 @@ void UGrabberComponent::Grab(bool bIsRightHand)
 			UGrabbableComponent* grabbable = Hits[i].GetActor()->GetComponentByClass<UGrabbableComponent>();
 			if (grabbable != nullptr && grabbable->GetIsGrabbable())
 			{
-
 				if (bIsRightHand)
 				{
 					grabbable->AttachTo(owner, rightHandSocketName);

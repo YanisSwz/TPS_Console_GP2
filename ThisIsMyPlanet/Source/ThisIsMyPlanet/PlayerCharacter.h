@@ -10,6 +10,7 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Animation/AnimMontage.h"
 #include "PlayerCharacter.generated.h"
 
 class USpringArmComponent;
@@ -18,19 +19,19 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
+UENUM(BlueprintType)
+enum class Aiming : uint8
+{
+	NONE,
+	WEAPON,
+	ANIMAL_LEFT,
+	ANIMAL_RIGHT
+};
 
 UCLASS()
 class THISISMYPLANET_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
-	enum Aiming
-	{
-		NONE,
-		WEAPON,
-		ANIMAL_LEFT,
-		ANIMAL_RIGHT
-	};
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -119,6 +120,9 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	FQuat BaseMeshRotation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* JumpAnimation;
+
 private:
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;
 	void SetupStimulusSource();
@@ -128,7 +132,7 @@ public:
 	APlayerCharacter();
 
 protected:
-	Aiming isAiming = NONE;
+	Aiming isAiming = Aiming::NONE;
 
 	float initialFieldofView;
 	float zoomedFieldOfView = 45.0f;
@@ -161,6 +165,9 @@ private:
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Flash(float Duration);
+
+	UFUNCTION(BlueprintCallable)
+	Aiming GetAimState();
 
 	void Stun(float Duration);
 	void Snare(float Duration, float SlowAmount);

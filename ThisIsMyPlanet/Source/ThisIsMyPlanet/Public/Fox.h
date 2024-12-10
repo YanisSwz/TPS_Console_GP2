@@ -20,7 +20,10 @@ protected:
 	bool bIsTurningLeft;
 	AChicken* ChasedChicken;
 	float HungerTimer;
+	float InitialSpeed;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
+	float FleeSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))
 	float TurningSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fox", meta = (AllowPrivateAccess = "true"))

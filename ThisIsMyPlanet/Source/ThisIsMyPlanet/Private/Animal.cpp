@@ -13,6 +13,7 @@ AAnimal::AAnimal()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bHasTouchedGround = true;
 	GrabbableComp = CreateDefaultSubobject<UGrabbableComponent>(TEXT("GrabbableComponent"));
+	bIsSleeping = false;
 }
 
 // Called when the game starts or when spawned
@@ -23,6 +24,7 @@ void AAnimal::BeginPlay()
 	OnActorHit.AddDynamic(this, &AAnimal::OnAnimalHit);
 	SleepTimer = SleepDuration;
 	PlayerInvincibilityTimer = MaxPlayerInvincibilityTimer;
+	Health = MaxHealth;
 }
 
 // Called every frame
@@ -67,6 +69,7 @@ void AAnimal::Sleep()
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 		SleepTimer = SleepDuration;
 		bIsSleeping = false;
+		Health = MaxHealth;
 	}
 }
 
@@ -78,6 +81,7 @@ void AAnimal::ApplyEffect(APlayerCharacter* player)
 void AAnimal::UntouchGround()
 {
 	bHasTouchedGround = false;
+	bIsPlayerInvincible = true;
 }
 
 void AAnimal::SetReachedDestination(bool bResult)
@@ -95,14 +99,13 @@ void AAnimal::SetLastGrabbedBy(AActor* actor)
 	}
 
 	LastGrabbedBy = Cast<APlayerCharacter>(actor);
-	bIsPlayerInvincible = true;
 }
 
 void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit)
 {
 	if (_OtherActor != nullptr)
 	{
-		if (bIsActive)//
+		if (bIsActive)
 		{
 			if (!bHasTouchedGround)
 			{
@@ -124,24 +127,27 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 
 			if (bullet != nullptr)
 			{
+				if (!bIsSleeping)
+				{
+					--Health;
+					if (Health <= 0)
+					{
+						//GetCapsuleComponent()->SetSimulatePhysics(true);
+						//GetMesh()->SetSimulatePhysics(true);
 
-				if (GEngine != nullptr)
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, "Hit");
+						GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+						GetCharacterMovement()->GravityScale = 0;
+						GetCharacterMovement()->Velocity = FVector::Zero();
+						GetCapsuleComponent()->ResetSceneVelocity();
 
-				//GetCapsuleComponent()->SetSimulatePhysics(true);
-				//GetMesh()->SetSimulatePhysics(true);
-
-				GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-				GetCharacterMovement()->GravityScale = 0;
-				GetCharacterMovement()->Velocity = FVector::Zero();
-				GetCapsuleComponent()->ResetSceneVelocity();
-
-				GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);
-				GetMesh()->SetAllBodiesBelowPhysicsBlendWeight("pelvis", 1.f);
-
-				GetCharacterMovement()->SetMovementMode(MOVE_None);
-				bIsSleeping = true;
-				GrabbableComp->SetIsGrabbable(true);
+						GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);
+						GetMesh()->SetAllBodiesBelowPhysicsBlendWeight("pelvis", 1.f);
+						GetCharacterMovement()->StopMovementImmediately();
+						GetCharacterMovement()->SetMovementMode(MOVE_None);
+						bIsSleeping = true;
+						GrabbableComp->SetIsGrabbable(true);
+					}
+				}
 				_OtherActor->Destroy();
 			}
 		}
