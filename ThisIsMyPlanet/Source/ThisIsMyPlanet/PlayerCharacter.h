@@ -105,6 +105,9 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	UWeapon* Weapon;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* WeaponMesh;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sounds", meta = (AllowPrivateAccess = "true"))
 	USoundBase* Footsteps;
 
@@ -122,6 +125,9 @@ class THISISMYPLANET_API APlayerCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* JumpAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* AimingJumpAnimation;
 
 private:
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;

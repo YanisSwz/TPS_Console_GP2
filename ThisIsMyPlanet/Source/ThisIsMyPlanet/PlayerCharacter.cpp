@@ -135,7 +135,7 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::StartCrouching()
 {
-	if (bIsStunned)
+	if (bIsStunned || GetCharacterMovement()->IsFalling())
 		return;
 	Crouch();
 }
@@ -229,6 +229,10 @@ void APlayerCharacter::StopShooting()
 
 void APlayerCharacter::Switch()
 {
+	if(WeaponMesh)
+	{
+		WeaponMesh->SetVisibility(!WeaponMesh->IsVisible());
+	}
 	bIsShooting = !bIsShooting;
 	isAiming = Aiming::NONE;
 }
@@ -238,8 +242,10 @@ void APlayerCharacter::StartJumping(const FInputActionValue& Value)
 	if (bIsStunned || bIsCrouched)
 		return;
 	ACharacter::Jump();
-	if(JumpAnimation != nullptr)
+	if(JumpAnimation != nullptr && isAiming != Aiming::WEAPON)
 		PlayAnimMontage(JumpAnimation);
+	else if (AimingJumpAnimation != nullptr)
+		PlayAnimMontage(AimingJumpAnimation);
 }
 
 void APlayerCharacter::EndJumping(const FInputActionValue& Value)
