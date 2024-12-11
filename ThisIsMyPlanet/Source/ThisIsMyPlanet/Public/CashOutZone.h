@@ -22,12 +22,21 @@ class THISISMYPLANET_API ACashOutZone : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "player", meta = (AllowPrivateAccess = "true"))
 	class APlayerCharacter* player2;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Points", meta = (AllowPrivateAccess = "true"))
+	float bluePlayerPoints = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Points", meta = (AllowPrivateAccess = "true"))
+	float redPlayerPoints = 0;
+
 public:	
 	// Sets default values for this actor's properties
 	ACashOutZone();
 
-	int bluePlayerPoints = 0;
-	int redPlayerPoints = 0;
+	UFUNCTION(BlueprintImplementableEvent)
+	void ChangeBlueScore();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ChangeRedScore();
 
 protected:
 	// Called when the game starts or when spawned
