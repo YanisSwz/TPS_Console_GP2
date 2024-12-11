@@ -30,6 +30,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
 	float MinEffectVelocity;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	FVector BaseMeshOffset;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	FQuat BaseMeshRotation;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Perception|Sight", meta = (AllowPrivateAccess = "true"))
 	float SightRadius;
 
@@ -58,6 +64,9 @@ public:
 	int MaxHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	float MinVelocityToApplyEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	float MaxPlayerInvincibilityTimer = 0.2f;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Active", meta = (AllowPrivateAccess = "true"))
@@ -71,7 +80,7 @@ protected:
 	int Health;
 	float PointValue;
 	float SleepTimer;
-	bool bHasTouchedGround;
+	bool bIsGrabbed;
 	bool bReachedDestination;
 	bool bIsPlayerInvincible = false;
 	APlayerCharacter* LastGrabbedBy = nullptr;
@@ -92,9 +101,10 @@ public:
 
 	virtual void ApplyEffect(APlayerCharacter* player);
 
-	void UntouchGround();
+	void SetUngrabbed();
 	void SetReachedDestination(bool bResult);
 	void SetLastGrabbedBy(AActor* actor);
+	void ResetMeshPos();
 
 protected:
 	// Called when the game starts or when spawned

@@ -37,35 +37,45 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 
 	GetOwner()->SetActorLocation(socketPos);
 
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(false);
-
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
 
 	Grabbed = parent;
-
-	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
 
 	if (own != nullptr)
 	{
 		own->SetLastGrabbedBy(Grabbed);
+
+		own->ResetMeshPos();
+
+		own->GetMesh()->SetSimulatePhysics(false);
+
+		own->GetMesh()->SetSimulatePhysics(true);
+
+		own->GetMesh()->SetBodySimulatePhysics(GrabSocket, false);
+
+		own->GetMesh()->SetRelativeLocation(own->GetMesh()->GetRelativeLocation() - (own->GetMesh()->GetSocketLocation(GrabSocket) - socketPos), false, nullptr, ETeleportType::TeleportPhysics);
 	}
+
+	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(false);
+
+	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void UGrabbableComponent::Launch(FVector dir)
 {
 	GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(true);
-
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->AddImpulse(dir * LaunchPowerMult, NAME_None, true);
+	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(true);
 
 	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
 
 	if (own != nullptr)
 	{
-		own->UntouchGround();
+		own->SetUngrabbed();
+		own->GetMesh()->SetSimulatePhysics(true);
+		own->GetMesh()->AddImpulse(dir * LaunchPowerMult, NAME_None, true);
 	}
 
 	Grabbed = nullptr;

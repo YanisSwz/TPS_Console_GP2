@@ -11,7 +11,7 @@ AAnimal::AAnimal()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	bHasTouchedGround = true;
+	bIsGrabbed = true;
 	GrabbableComp = CreateDefaultSubobject<UGrabbableComponent>(TEXT("GrabbableComponent"));
 	bIsSleeping = false;
 }
@@ -60,13 +60,18 @@ void AAnimal::Sleep()
 	{
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("woke up!"));
+		FVector inertia = GetMesh()->GetBoneLinearVelocity(NAME_None);
 		GrabbableComp->UnGrab();
 		GrabbableComp->SetIsGrabbable(false);
 		GetCapsuleComponent()->SetSimulatePhysics(false);
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		GetCharacterMovement()->GravityScale = 1;
 		GetMesh()->SetSimulatePhysics(false);
+		GetCapsuleComponent()->SetWorldLocation(GetMesh()->GetSocketLocation("") + BaseMeshOffset);
+		GetCapsuleComponent()->ResetSceneVelocity();
+		GetMesh()->SetRelativeLocationAndRotation(-BaseMeshOffset, BaseMeshRotation);
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		GetCharacterMovement()->Velocity = inertia;
 		SleepTimer = SleepDuration;
 		bIsSleeping = false;
 		Health = MaxHealth;
@@ -78,9 +83,9 @@ void AAnimal::ApplyEffect(APlayerCharacter* player)
 
 }
 
-void AAnimal::UntouchGround()
+void AAnimal::SetUngrabbed()
 {
-	bHasTouchedGround = false;
+	bIsGrabbed = false;
 	bIsPlayerInvincible = true;
 }
 
@@ -94,11 +99,19 @@ void AAnimal::SetLastGrabbedBy(AActor* actor)
 	if (actor == nullptr)
 	{
 		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), "How the F did you got ungrabbed by nothing???");
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), "How the F did you got grabbed by nothing???");
 		return;
 	}
 
 	LastGrabbedBy = Cast<APlayerCharacter>(actor);
+	bIsGrabbed = true;
+}
+
+void AAnimal::ResetMeshPos()
+{
+	GetMesh()->SetRelativeLocationAndRotation(-BaseMeshOffset, BaseMeshRotation, false, nullptr, ETeleportType::TeleportPhysics);
+
+	
 }
 
 void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit)
@@ -107,19 +120,20 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 	{
 		if (bIsActive)
 		{
-			if (!bHasTouchedGround)
+			if (!bIsGrabbed && SleepTimer > 0.0001f && GetMesh()->GetBoneLinearVelocity(NAME_None).Length() > MinVelocityToApplyEffect)
 			{
 				APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
 
 				if (player != nullptr && (LastGrabbedBy != player || !bIsPlayerInvincible))
 				{
+					if (GEngine != nullptr)
+						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), player->GetActorNameOrLabel());
+					if (GEngine != nullptr)
+						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), LastGrabbedBy->GetActorNameOrLabel());
+					if (GEngine != nullptr)
+						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), FString::SanitizeFloat(bIsPlayerInvincible));
 					ApplyEffect(player);
 					SleepTimer = 0.f;
-				}
-
-				if (_OtherActor->Tags.Contains("Ground"))
-				{
-					bHasTouchedGround = true;
 				}
 			}
 
@@ -132,16 +146,13 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 					--Health;
 					if (Health <= 0)
 					{
-						//GetCapsuleComponent()->SetSimulatePhysics(true);
-						//GetMesh()->SetSimulatePhysics(true);
+						GetMesh()->SetSimulatePhysics(true);
 
-						GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+						GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 						GetCharacterMovement()->GravityScale = 0;
 						GetCharacterMovement()->Velocity = FVector::Zero();
 						GetCapsuleComponent()->ResetSceneVelocity();
 
-						GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);
-						GetMesh()->SetAllBodiesBelowPhysicsBlendWeight("pelvis", 1.f);
 						GetCharacterMovement()->StopMovementImmediately();
 						GetCharacterMovement()->SetMovementMode(MOVE_None);
 						bIsSleeping = true;
