@@ -7,6 +7,7 @@ void AFox::BeginPlay()
 {
 	Super::BeginPlay();
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
+	PointValue = 0.1;
 }
 
 void AFox::Tick(float DeltaTime)

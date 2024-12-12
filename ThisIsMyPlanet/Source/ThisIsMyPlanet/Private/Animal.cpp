@@ -103,7 +103,7 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 {
 	if (_OtherActor != nullptr)
 	{
-		if (bIsActive)//
+		if (bIsActive)
 		{
 			if (!bHasTouchedGround)
 			{

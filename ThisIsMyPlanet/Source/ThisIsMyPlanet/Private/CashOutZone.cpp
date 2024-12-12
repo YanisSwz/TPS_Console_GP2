@@ -42,7 +42,6 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	AAnimal* animal = Cast<AAnimal>(OtherActor);
 	if (animal != nullptr)
 	{
-
 		if (animal->bIsSleeping && animal->bIsActive) 
 		{
 			//mettre les points
@@ -62,6 +61,14 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
 				if (GEngine != nullptr)
 					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "red scored");
+			}
+
+
+			if (GEngine != nullptr) 
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(bluePlayerPoints));
+
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(redPlayerPoints));
 			}
 
 			//desactiver l'animal

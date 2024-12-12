@@ -61,7 +61,7 @@ public:
 	float MaxPlayerInvincibilityTimer = 0.2f;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Active", meta = (AllowPrivateAccess = "true"))
-	bool bIsActive = true;//
+	bool bIsActive = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|points", meta = (AllowPrivateAccess = "true"))
 	int PointValue;

@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+//#include "Animal.h"
 
 ABullet::ABullet()
 {
@@ -47,9 +48,9 @@ void ABullet::FireInDirection(FVector ShootDirection)
 
 void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	/*AAnimal* animal = Cast<AAnimal, AActor>(OtherActor);
 
-
-	//endormir les animeaux
-	//Destroy();
+	if (animal == nullptr)
+		Destroy();*/
 }
 
