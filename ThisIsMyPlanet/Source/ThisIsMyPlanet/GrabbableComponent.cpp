@@ -35,7 +35,6 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 
 	FVector socketPos = parent->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(socketName);
 
-	GetOwner()->SetActorLocation(socketPos);
 
 	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
 
@@ -45,15 +44,13 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 	{
 		own->SetLastGrabbedBy(Grabbed);
 
-		own->ResetMeshPos();
+		GetOwner()->SetActorLocation(socketPos);
 
-		own->GetMesh()->SetSimulatePhysics(false);
+		own->GetMesh()->SetRelativeRotation(GrabQuaternion, false, nullptr, ETeleportType::TeleportPhysics);
 
-		own->GetMesh()->SetSimulatePhysics(true);
+		own->GetMesh()->SetWorldLocation(socketPos - (own->GetMesh()->GetSocketLocation(GrabSocket) - own->GetMesh()->GetComponentLocation()), false, nullptr, ETeleportType::TeleportPhysics);
 
-		own->GetMesh()->SetBodySimulatePhysics(GrabSocket, false);
-
-		own->GetMesh()->SetRelativeLocation(own->GetMesh()->GetRelativeLocation() - (own->GetMesh()->GetSocketLocation(GrabSocket) - socketPos), false, nullptr, ETeleportType::TeleportPhysics);
+		own->GetMesh()->SetBodySimulatePhysics(own->GetMesh()->GetSocketBoneName(GrabSocket), false);
 	}
 
 	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(false);

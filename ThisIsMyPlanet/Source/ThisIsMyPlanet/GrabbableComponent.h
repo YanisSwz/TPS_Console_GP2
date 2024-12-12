@@ -24,6 +24,9 @@ class THISISMYPLANET_API UGrabbableComponent : public UActorComponent
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	FName GrabSocket;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	FQuat GrabQuaternion;
+
 	AActor* Grabbed = nullptr;
 
 public:	
