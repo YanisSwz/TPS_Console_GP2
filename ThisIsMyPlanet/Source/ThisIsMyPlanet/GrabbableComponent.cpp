@@ -46,7 +46,7 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 
 		GetOwner()->SetActorLocation(socketPos);
 
-		own->GetMesh()->SetRelativeRotation(GrabQuaternion, false, nullptr, ETeleportType::TeleportPhysics);
+		own->GetMesh()->SetRelativeRotation(own->GetMesh()->GetSocketRotation(GrabSocket).Quaternion() * GrabQuaternion, false, nullptr, ETeleportType::TeleportPhysics);
 
 		own->GetMesh()->SetWorldLocation(socketPos - (own->GetMesh()->GetSocketLocation(GrabSocket) - own->GetMesh()->GetComponentLocation()), false, nullptr, ETeleportType::TeleportPhysics);
 
