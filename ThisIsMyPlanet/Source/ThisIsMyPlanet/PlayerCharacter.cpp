@@ -160,6 +160,8 @@ void APlayerCharacter::Aim()
 	{
 		if (!GrabComp->GetIsGrabbed(false) && isAiming == Aiming::NONE)
 		{
+			if (GrabLeftAnimation)
+				PlayAnimMontage(GrabLeftAnimation);
 			GrabComp->Grab(false);
 		}
 		else if (isAiming == Aiming::NONE)
@@ -195,6 +197,8 @@ void APlayerCharacter::Shoot()
 	{
 		if (bCanShoot && isAiming == Aiming::WEAPON)
 		{
+			if(ShootAnimation)
+				PlayAnimMontage(ShootAnimation);
 			Weapon->Fire(FollowCamera->GetForwardVector());
 			bCanShoot = false;
 			reloadTimer = maxReloadTimer;
@@ -204,6 +208,8 @@ void APlayerCharacter::Shoot()
 	{
 		if (!GrabComp->GetIsGrabbed(true) && isAiming == Aiming::NONE)
 		{
+			if (GrabRightAnimation)
+				PlayAnimMontage(GrabRightAnimation);
 			GrabComp->Grab(true);
 		}
 		else if(isAiming == Aiming::NONE)
