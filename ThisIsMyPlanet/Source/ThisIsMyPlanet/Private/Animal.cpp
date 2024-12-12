@@ -75,6 +75,7 @@ void AAnimal::Sleep()
 		SleepTimer = SleepDuration;
 		bIsSleeping = false;
 		Health = MaxHealth;
+		bHasHitPlayer = false;
 	}
 }
 
@@ -120,7 +121,7 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 	{
 		if (bIsActive)
 		{
-			if (!bIsGrabbed && SleepTimer > 0.0001f && GetMesh()->GetBoneLinearVelocity(NAME_None).Length() > MinVelocityToApplyEffect)
+			if (!bIsGrabbed && !bHasHitPlayer && GetMesh()->GetBoneLinearVelocity(NAME_None).Length() > MinVelocityToApplyEffect)
 			{
 				APlayerCharacter* player = Cast<APlayerCharacter, AActor>(_OtherActor);
 
@@ -134,6 +135,7 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), FString::SanitizeFloat(bIsPlayerInvincible));
 					ApplyEffect(player);
 					SleepTimer = 0.f;
+					bHasHitPlayer = true;
 				}
 			}
 
@@ -157,6 +159,7 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 						GetCharacterMovement()->SetMovementMode(MOVE_None);
 						bIsSleeping = true;
 						GrabbableComp->SetIsGrabbable(true);
+						bHasHitPlayer = false;
 					}
 				}
 				_OtherActor->Destroy();

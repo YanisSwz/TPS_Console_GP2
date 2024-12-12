@@ -397,6 +397,7 @@ void APlayerCharacter::Stun(float Duration)
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->GravityScale = 0;
 	GetCharacterMovement()->Velocity = FVector::Zero();
+	UnCrouch();
 	GetCapsuleComponent()->ResetSceneVelocity();
 
 	GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);

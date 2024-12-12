@@ -85,6 +85,7 @@ protected:
 	bool bIsPlayerInvincible = false;
 	APlayerCharacter* LastGrabbedBy = nullptr;
 	float PlayerInvincibilityTimer;
+	bool bHasHitPlayer = false;
 	
 public:
 	// Sets default values for this character's properties
