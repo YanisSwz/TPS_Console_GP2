@@ -183,6 +183,8 @@ void APlayerCharacter::StopAim()
 	{
 		if (GrabComp->GetIsGrabbed(false) && isAiming == Aiming::ANIMAL_LEFT)
 		{
+			if (ThrowLeftAnimation)
+				PlayAnimMontage(ThrowLeftAnimation);
 			GrabComp->Launch(false, baseLaunchPower);
 			isAiming = Aiming::NONE;
 		}
@@ -227,6 +229,8 @@ void APlayerCharacter::StopShooting()
 	{
 		if (GrabComp->GetIsGrabbed(true) && isAiming == Aiming::ANIMAL_RIGHT)
 		{
+			if (ThrowRightAnimation)
+				PlayAnimMontage(ThrowRightAnimation);
 			GrabComp->Launch(true, baseLaunchPower);
 			isAiming = Aiming::NONE;
 		}
