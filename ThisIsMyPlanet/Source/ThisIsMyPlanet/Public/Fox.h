@@ -34,7 +34,6 @@ protected:
 	float HungerTime;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Fox", meta = (AllowPrivateAccess = "true"))
 	float StunTime;
-	TArray<AActor*> chickenList;
 
 protected:
 	// Called when the game starts or when spawned

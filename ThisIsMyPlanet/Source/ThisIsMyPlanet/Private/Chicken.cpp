@@ -2,14 +2,22 @@
 
 
 #include "Chicken.h"
-
+#include "ChickenDirector.h"
 
 void AChicken::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->AddChicken(this);
+
 	bIsLookingForSpot = true;
 	bIsEating = false;
 	EatingTimer = 0.0f;
+}
+
+void AChicken::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->RemoveChicken(this);
 }
 
 void AChicken::Tick(float DeltaTime)

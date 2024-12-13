@@ -2,11 +2,11 @@
 
 
 #include "Fox.h"
+#include "ChickenDirector.h"
 
 void AFox::BeginPlay()
 {
 	Super::BeginPlay();
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
 	InitialSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
 
@@ -39,7 +39,7 @@ void AFox::Survive()
 		GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
 
 	float dist = 1000.0f;
-	AActor* nearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), chickenList, dist);
+	AActor* nearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->GetChickens(), dist);
 	if (nearestChicken == nullptr)
 	{
 		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
@@ -52,7 +52,6 @@ void AFox::Survive()
 			// TODO: ATTACC
 			nearestChicken->Destroy();
 			HungerTimer = HungerTime;
-			UGameplayStatics::GetAllActorsOfClass(GetWorld(), AChicken::StaticClass(), chickenList);
 		}
 	}
 	else
