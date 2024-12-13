@@ -110,10 +110,16 @@ void AFerret::Flee()
 	else
 	{
 		bIsTurning = false;
-		TargetLocation = Burrow->GetActorLocation();
-		if (FVector::Dist(GetActorLocation(), TargetLocation) <= GetCapsuleComponent()->GetScaledCapsuleHalfHeight() + 5.f && !bIsBuried)
+		if (Burrow != nullptr)
 		{
-			Bury();
+			if (TargetLocation != Burrow->GetActorLocation())
+			{
+				TargetLocation = Burrow->GetActorLocation();
+			}
+			if (bReachedDestination && !bIsBuried)
+			{
+				Bury();
+			}
 		}
 	}
 }
