@@ -54,17 +54,40 @@ void UGrabberComponent::Grab(bool bIsRightHand)
 				{
 					grabbable->AttachTo(owner, rightHandSocketName);
 					rightGrabbedComp = grabbable;
+					if (grabbable->GetIsTwoSlots())
+						leftGrabbedComp = grabbable;
 				}
 				else
 				{
 					grabbable->AttachTo(owner, leftHandSocketName);
 					leftGrabbedComp = grabbable;
+					if (grabbable->GetIsTwoSlots())
+						rightGrabbedComp = grabbable;
 				}
 
 				return;
 			}
 		}
 	}
+}
+
+void UGrabberComponent::SwitchHand(bool bIsRightHand)
+{
+	if (leftGrabbedComp == nullptr || !leftGrabbedComp->GetIsTwoSlots())
+		return;
+
+	UGrabbableComponent* grabbedComp = leftGrabbedComp;
+
+	Launch(false, 0);
+
+	if (bIsRightHand)
+		grabbedComp->AttachTo(owner, rightHandSocketName);
+	else
+		grabbedComp->AttachTo(owner, leftHandSocketName);
+
+	leftGrabbedComp = grabbedComp;
+
+	rightGrabbedComp = grabbedComp;
 }
 
 void UGrabberComponent::Launch(bool bIsRightHand, float BaseLaunchPower)
@@ -82,6 +105,9 @@ void UGrabberComponent::Launch(bool bIsRightHand, float BaseLaunchPower)
 
 		rightGrabbedComp->Launch(launch);
 
+		if (rightGrabbedComp->GetIsTwoSlots())
+			leftGrabbedComp = nullptr;
+
 		rightGrabbedComp = nullptr;
 	}
 	else
@@ -96,6 +122,9 @@ void UGrabberComponent::Launch(bool bIsRightHand, float BaseLaunchPower)
 		FVector launch = owner->GetComponentByClass<UCameraComponent>()->GetForwardVector() * BaseLaunchPower + owner->GetVelocity();
 
 		leftGrabbedComp->Launch(launch);
+
+		if (leftGrabbedComp->GetIsTwoSlots())
+			rightGrabbedComp = nullptr;
 
 		leftGrabbedComp = nullptr;
 	}

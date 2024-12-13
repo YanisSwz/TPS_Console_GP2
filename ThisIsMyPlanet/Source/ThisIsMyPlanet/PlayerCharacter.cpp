@@ -167,6 +167,7 @@ void APlayerCharacter::Aim()
 		else if (isAiming == Aiming::NONE)
 		{
 			isAiming = Aiming::ANIMAL_LEFT;
+			GrabComp->SwitchHand(false);
 		}
 	}
 }
@@ -217,6 +218,7 @@ void APlayerCharacter::Shoot()
 		else if (isAiming == Aiming::NONE)
 		{
 			isAiming = Aiming::ANIMAL_RIGHT;
+			GrabComp->SwitchHand(true);
 		}
 	}
 }
@@ -426,6 +428,7 @@ void APlayerCharacter::Stun(float Duration)
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->GravityScale = 0;
 	GetCharacterMovement()->Velocity = FVector::Zero();
+	UnCrouch();
 	GetCapsuleComponent()->ResetSceneVelocity();
 
 	GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);

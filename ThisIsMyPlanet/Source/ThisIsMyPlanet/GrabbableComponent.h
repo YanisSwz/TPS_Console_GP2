@@ -15,7 +15,17 @@ class THISISMYPLANET_API UGrabbableComponent : public UActorComponent
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	float LaunchPowerMult = 1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	bool bIsTwoSlots = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	bool bIsGrabbable = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	FName GrabSocket;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
+	FQuat GrabQuaternion;
 
 	AActor* Grabbed = nullptr;
 
@@ -38,6 +48,8 @@ public:
 	void UnGrab();
 
 	bool GetIsGrabbable();
+
+	bool GetIsTwoSlots();
 
 	void SetIsGrabbable(bool bGrabbable);
 };

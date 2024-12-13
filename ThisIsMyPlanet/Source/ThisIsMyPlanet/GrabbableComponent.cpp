@@ -35,37 +35,44 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 
 	FVector socketPos = parent->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(socketName);
 
-	GetOwner()->SetActorLocation(socketPos);
-
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(false);
-
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	Grabbed = parent;
 
 	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
+
+	Grabbed = parent;
 
 	if (own != nullptr)
 	{
 		own->SetLastGrabbedBy(Grabbed);
+
+		GetOwner()->SetActorLocation(socketPos);
+
+		own->GetMesh()->SetBodySimulatePhysics(own->GetMesh()->GetSocketBoneName(GrabSocket), false);
+
+		own->GetMesh()->SetRelativeRotation(own->GetMesh()->GetSocketRotation(GrabSocket).Quaternion().Inverse() * own->GetMesh()->GetComponentRotation().Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
+
+		own->GetMesh()->SetWorldLocation(socketPos - (own->GetMesh()->GetSocketLocation(GrabSocket) - own->GetMesh()->GetComponentLocation()), false, nullptr, ETeleportType::TeleportPhysics);
 	}
+
+	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(false);
+
+	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void UGrabbableComponent::Launch(FVector dir)
 {
 	GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(true);
-
-	GetOwner()->GetComponentByClass<UCapsuleComponent>()->AddImpulse(dir * LaunchPowerMult, NAME_None, true);
+	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(true);
 
 	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
 
 	if (own != nullptr)
 	{
-		own->UntouchGround();
+		own->SetUngrabbed();
+		own->GetMesh()->SetSimulatePhysics(true);
+		own->GetMesh()->AddImpulse(dir * LaunchPowerMult, NAME_None, true);
 	}
 
 	Grabbed = nullptr;
@@ -84,7 +91,14 @@ bool UGrabbableComponent::GetIsGrabbable()
 	return bIsGrabbable;
 }
 
+bool UGrabbableComponent::GetIsTwoSlots()
+{
+	return bIsTwoSlots;
+}
+
 void UGrabbableComponent::SetIsGrabbable(bool bGrabbable)
 {
+	if (GEngine != nullptr)
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, FString::SanitizeFloat(bGrabbable));
 	bIsGrabbable = bGrabbable;
 }
