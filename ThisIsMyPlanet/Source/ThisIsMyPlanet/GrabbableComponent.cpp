@@ -31,7 +31,11 @@ void UGrabbableComponent::BeginPlay()
 
 void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 {
-	GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), socketName);
+	if (GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true), socketName))
+	{
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::MakeRandomColor(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+	}
 
 	FVector socketPos = parent->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(socketName);
 
