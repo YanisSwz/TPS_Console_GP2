@@ -10,7 +10,7 @@ void AChicken::BeginPlay()
 	bIsLookingForSpot = true;
 	bIsEating = false;
 	EatingTimer = 0.0f;
-	PointValue = 50;
+	PointValue = 250;
 }
 
 void AChicken::Tick(float DeltaTime)

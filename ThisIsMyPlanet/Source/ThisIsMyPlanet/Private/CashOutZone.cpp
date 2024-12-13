@@ -31,11 +31,11 @@ void ACashOutZone::BeginPlay()
 }
 
 // Called every frame
-void ACashOutZone::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
+//void ACashOutZone::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//}
 
 void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -66,9 +66,8 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
 			if (GEngine != nullptr) 
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(bluePlayerPoints));
-
 				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(redPlayerPoints));
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(bluePlayerPoints));
 			}
 
 			//desactiver l'animal
@@ -78,7 +77,6 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			animal->GetMesh()->SetSimulatePhysics(true);
 			animal->GetCharacterMovement()->SetMovementMode(MOVE_None);
 			animal->bIsSleeping = true;
-			//a ameliore prsk la ...
 		}
 	}
 }

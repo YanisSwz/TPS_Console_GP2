@@ -23,10 +23,10 @@ class THISISMYPLANET_API ACashOutZone : public AActor
 	class APlayerCharacter* player2;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Points", meta = (AllowPrivateAccess = "true"))
-	float bluePlayerPoints = 0;
+	float bluePlayerPoints = 100;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Points", meta = (AllowPrivateAccess = "true"))
-	float redPlayerPoints = 0;
+	float redPlayerPoints = 100;
 
 public:	
 	// Sets default values for this actor's properties
@@ -44,7 +44,7 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
