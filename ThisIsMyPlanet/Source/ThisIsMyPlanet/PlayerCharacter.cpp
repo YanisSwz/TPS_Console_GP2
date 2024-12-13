@@ -15,7 +15,7 @@
 void APlayerCharacter::SetupStimulusSource()
 {
 	StimulusSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Stimulus"));
-	if(StimulusSource)
+	if (StimulusSource)
 	{
 		StimulusSource->RegisterForSense(UAISense_Sight::StaticClass());
 		StimulusSource->RegisterForSense(UAISense_Hearing::StaticClass());
@@ -26,7 +26,7 @@ void APlayerCharacter::SetupStimulusSource()
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -52,7 +52,7 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	initialFieldofView = FollowCamera->FieldOfView;
 	BaseCameraPos = FollowCamera->GetRelativeLocation();
 	InitialSpeed = GetCharacterMovement()->MaxWalkSpeed;
@@ -67,7 +67,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		
+
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 
@@ -99,7 +99,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 				UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f);
 				UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f, this, FootstepsRange);
 			}
-			else 
+			else
 			{
 				UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f / CrouchNoiseReduction);
 				UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f / CrouchNoiseReduction, this, FootstepsRange);
@@ -135,7 +135,7 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::StartCrouching()
 {
-	if (bIsStunned)
+	if (bIsStunned || GetCharacterMovement()->IsFalling())
 		return;
 	Crouch();
 }
@@ -160,6 +160,8 @@ void APlayerCharacter::Aim()
 	{
 		if (!GrabComp->GetIsGrabbed(false) && isAiming == Aiming::NONE)
 		{
+			if (GrabLeftAnimation)
+				PlayAnimMontage(GrabLeftAnimation);
 			GrabComp->Grab(false);
 		}
 		else if (isAiming == Aiming::NONE)
@@ -181,6 +183,8 @@ void APlayerCharacter::StopAim()
 	{
 		if (GrabComp->GetIsGrabbed(false) && isAiming == Aiming::ANIMAL_LEFT)
 		{
+			if (ThrowLeftAnimation)
+				PlayAnimMontage(ThrowLeftAnimation);
 			GrabComp->Launch(false, baseLaunchPower);
 			isAiming = Aiming::NONE;
 		}
@@ -195,18 +199,22 @@ void APlayerCharacter::Shoot()
 	{
 		if (bCanShoot && isAiming == Aiming::WEAPON)
 		{
+			if (ShootAnimation)
+				PlayAnimMontage(ShootAnimation);
 			Weapon->Fire(FollowCamera->GetForwardVector());
 			bCanShoot = false;
 			reloadTimer = maxReloadTimer;
 		}
 	}
-	else 
+	else
 	{
 		if (!GrabComp->GetIsGrabbed(true) && isAiming == Aiming::NONE)
 		{
+			if (GrabRightAnimation)
+				PlayAnimMontage(GrabRightAnimation);
 			GrabComp->Grab(true);
 		}
-		else if(isAiming == Aiming::NONE)
+		else if (isAiming == Aiming::NONE)
 		{
 			isAiming = Aiming::ANIMAL_RIGHT;
 		}
@@ -221,6 +229,8 @@ void APlayerCharacter::StopShooting()
 	{
 		if (GrabComp->GetIsGrabbed(true) && isAiming == Aiming::ANIMAL_RIGHT)
 		{
+			if (ThrowRightAnimation)
+				PlayAnimMontage(ThrowRightAnimation);
 			GrabComp->Launch(true, baseLaunchPower);
 			isAiming = Aiming::NONE;
 		}
@@ -229,6 +239,10 @@ void APlayerCharacter::StopShooting()
 
 void APlayerCharacter::Switch()
 {
+	if (WeaponMesh)
+	{
+		WeaponMesh->SetVisibility(!WeaponMesh->IsVisible());
+	}
 	bIsShooting = !bIsShooting;
 	isAiming = Aiming::NONE;
 }
@@ -238,8 +252,25 @@ void APlayerCharacter::StartJumping(const FInputActionValue& Value)
 	if (bIsStunned || bIsCrouched)
 		return;
 	ACharacter::Jump();
-	if(JumpAnimation != nullptr)
-		PlayAnimMontage(JumpAnimation);
+	switch (isAiming)
+	{
+	case Aiming::WEAPON:
+		if (AimingJumpAnimation != nullptr)
+			PlayAnimMontage(AimingJumpAnimation);
+		break;
+	case Aiming::ANIMAL_RIGHT:
+		if (GrabRightJumpAnimation != nullptr)
+			PlayAnimMontage(GrabRightJumpAnimation);
+		break;
+	case Aiming::ANIMAL_LEFT:
+		if (GrabLeftJumpAnimation != nullptr)
+			PlayAnimMontage(GrabLeftJumpAnimation);
+		break;
+	default:
+		if (JumpAnimation != nullptr)
+			PlayAnimMontage(JumpAnimation);
+		break;
+	}
 }
 
 void APlayerCharacter::EndJumping(const FInputActionValue& Value)
@@ -291,12 +322,12 @@ void APlayerCharacter::Tick(float DeltaTime)
 			GetCapsuleComponent()->ResetSceneVelocity();
 		}
 	}
-	
-	if(bIsSnared)
+
+	if (bIsSnared)
 	{
 		SnareTimer -= GetWorld()->DeltaTimeSeconds;
 
-		if(SnareTimer <= 0.f)
+		if (SnareTimer <= 0.f)
 		{
 			GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
 			GetCharacterMovement()->MaxWalkSpeedCrouched = InitialSpeedCrouched;
@@ -342,7 +373,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) 
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 
 		// Jumping
@@ -358,7 +389,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		// Crouching
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &APlayerCharacter::StartCrouching);
 		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::EndCrouching);
-		
+
 		// Aim
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &APlayerCharacter::Aim);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &APlayerCharacter::StopAim);
@@ -399,7 +430,7 @@ void APlayerCharacter::Stun(float Duration)
 
 	GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);
 	GetMesh()->SetAllBodiesBelowPhysicsBlendWeight("pelvis", 1.f);
-	
+
 }
 
 void APlayerCharacter::Snare(float Duration, float SlowAmount)
