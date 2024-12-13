@@ -44,6 +44,8 @@ class THISISMYPLANET_API AFerret : public AAnimal
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ferret|Snare", meta = (AllowPrivateAccess = "true"))
 	float SlowAmount;
 
+	UFUNCTION(BlueprintCallable)
+	bool GetIsTurning();
 
 protected:
 	// Called when the game starts or when spawned
