@@ -81,6 +81,8 @@ void ADeer::Flee()
 		{
 			if (ClosestPlayer != nullptr)
 			{
+				if (AttackAnimation != nullptr)
+					PlayAnimMontage(AttackAnimation);
 				ApplyEffect(ClosestPlayer);
 				bHasAttacked = true;
 				TurnTimer = TurnTime;

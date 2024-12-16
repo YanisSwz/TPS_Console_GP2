@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animal.h"
+#include "Animation/AnimMontage.h"
 #include "Deer.generated.h"
 
 /**
@@ -35,11 +36,15 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float AttackRange;
-	TArray<AActor*> deerList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* AttackAnimation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float TurnTime;
+
 	float TurnTimer;
+	TArray<AActor*> deerList;
 
 protected:
 	// Called when the game starts or when spawned

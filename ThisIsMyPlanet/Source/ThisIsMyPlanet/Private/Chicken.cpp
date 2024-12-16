@@ -4,6 +4,11 @@
 #include "Chicken.h"
 #include "ChickenDirector.h"
 
+bool AChicken::GetIsFlying()
+{
+	return bLaunched;
+}
+
 void AChicken::BeginPlay()
 {
 	Super::BeginPlay();
@@ -36,8 +41,12 @@ void AChicken::Tick(float DeltaTime)
 
 void AChicken::Survive()
 {
-	if (bLaunched)
+	if (bLaunched && !GetCharacterMovement()->IsFalling())
 		bLaunched = false;
+	
+	if (bLaunched)
+		return;
+
 	if (bIsLookingForSpot)
 	{
 		UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetCurrent(GetWorld());
@@ -78,6 +87,10 @@ void AChicken::Flee()
 		SetActorRotation(Rota);
 		LaunchCharacter(FVector(GetActorForwardVector().X, GetActorForwardVector().Y, HorizontalImpulse) * FlyForce, true, true);
 		bLaunched = true;
+	}
+	else if(!GetCharacterMovement()->IsFalling() && bLaunched)
+	{
+		bLaunched = false;
 	}
 }
 

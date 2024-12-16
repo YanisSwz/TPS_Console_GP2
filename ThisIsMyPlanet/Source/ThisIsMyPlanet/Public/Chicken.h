@@ -35,6 +35,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
 	float HorizontalImpulse;
 
+	UFUNCTION(BlueprintCallable)
+	bool GetIsFlying();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

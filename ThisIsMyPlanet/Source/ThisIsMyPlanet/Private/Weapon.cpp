@@ -44,7 +44,7 @@ void UWeapon::Fire(FVector LaunchDirection)
 	else
 	{
 		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "World is nullptr");
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "World is nullptr");
 	}
 
 	//changer de place (dans le player)
