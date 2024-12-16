@@ -32,6 +32,11 @@ void ABear::Tick(float DeltaTime)
 		BerryCount = 0;
 	}
 
+	AfterAttackTimer -= DeltaTime;
+	if (AfterAttackTimer < 0.0f)
+	{
+		AfterAttackTimer = 0.0f;
+	}
 }
 
 void ABear::Survive()
@@ -49,7 +54,8 @@ void ABear::Survive()
 	{
 		if (bIsLookingForSpot)
 		{
-			
+			AnimalController->SightConfig->SightRadius = SightRadius;
+			AnimalController->HearingConfig->HearingRange = HearingRange;
 			float dist = 10000.0f;
 			AActor* randomBush = bushList[FMath::RandRange(0, bushList.Num() - 1)];
 			
@@ -123,7 +129,6 @@ void ABear::Flee()
 
 	if (!bHasAttacked)
 	{
-
 		TargetLocation = playerLocation;
 		if ((GetActorLocation() - TargetLocation).Length() <= 160.0f)
 		{
@@ -139,7 +144,19 @@ void ABear::Flee()
 	}
 	else
 	{
-		TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
+		if (!bIsWaitingAfterAttack)
+		{
+			AfterAttackTimer = AfterAttackTime;
+			bIsWaitingAfterAttack = true;
+		}
+		if (bIsWaitingAfterAttack && AfterAttackTimer <= 0.0f)
+		{
+			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
+			bIsWaitingAfterAttack = false;
+		}
+		
+
+		
 	}
 }
 

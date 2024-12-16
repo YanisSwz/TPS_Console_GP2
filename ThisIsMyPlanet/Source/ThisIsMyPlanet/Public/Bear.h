@@ -45,6 +45,11 @@ protected:
 	TArray<AActor*> bushList;
 	AAnimalController* AnimalController;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float AfterAttackTime;
+	float AfterAttackTimer;
+	bool bIsWaitingAfterAttack;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
