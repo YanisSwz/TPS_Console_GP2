@@ -77,6 +77,14 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			animal->GetMesh()->SetSimulatePhysics(true);
 			animal->GetCharacterMovement()->SetMovementMode(MOVE_None);
 			animal->bIsSleeping = true;
+
+			//faire voler l'animal
+			FVector inpulse = FVector(0.0f, 0.f, 100.f);
+
+			//animal->AddForce(inpulse);
+
+			//detruire l'animal
+			animal->InitialLifeSpan = 3.0f;
 		}
 	}
 }

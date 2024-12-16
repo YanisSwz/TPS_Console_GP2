@@ -7,6 +7,7 @@ void ABear::BeginPlay()
 {
 	Super::BeginPlay();
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABush::StaticClass(), bushList);
+	PointValue = 200;
 }
 
 void ABear::Tick(float DeltaTime)
