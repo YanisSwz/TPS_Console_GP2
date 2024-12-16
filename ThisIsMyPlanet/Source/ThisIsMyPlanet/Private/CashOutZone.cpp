@@ -72,11 +72,7 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
 			//desactiver l'animal
 
-			animal->bIsActive = false;
-			animal->GetCapsuleComponent()->SetSimulatePhysics(true);
-			animal->GetMesh()->SetSimulatePhysics(true);
-			animal->GetCharacterMovement()->SetMovementMode(MOVE_None);
-			animal->bIsSleeping = true;
+			animal->Sell();
 
 			//faire voler l'animal
 			FVector inpulse = FVector(0.0f, 0.f, 100.f);

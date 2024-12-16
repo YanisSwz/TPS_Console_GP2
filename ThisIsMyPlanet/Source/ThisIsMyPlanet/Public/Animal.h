@@ -111,7 +111,7 @@ public:
 	void SetReachedDestination(bool bResult);
 	void SetLastGrabbedBy(AActor* actor);
 	void ResetMeshPos();
-
+	void Sell();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

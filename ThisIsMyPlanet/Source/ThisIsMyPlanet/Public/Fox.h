@@ -34,6 +34,8 @@ protected:
 	float HungerTime;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Fox", meta = (AllowPrivateAccess = "true"))
 	float StunTime;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Fox", meta = (AllowPrivateAccess = "true"))
+	float EatingDistance = 120.f;
 
 protected:
 	// Called when the game starts or when spawned
