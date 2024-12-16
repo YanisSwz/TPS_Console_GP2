@@ -31,7 +31,7 @@ void UGrabbableComponent::BeginPlay()
 
 void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 {
-	if (GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true), socketName))
+	if (GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true), socketName))
 	{
 		if (GEngine != nullptr)
 			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::MakeRandomColor(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -48,11 +48,11 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 	{
 		own->SetLastGrabbedBy(Grabbed);
 
-		GetOwner()->SetActorLocation(socketPos);
+		GetOwner()->SetActorLocation(socketPos, false, nullptr, ETeleportType::TeleportPhysics);
 
 		own->GetMesh()->SetBodySimulatePhysics(own->GetMesh()->GetSocketBoneName(GrabSocket), false);
 
-		own->GetMesh()->SetRelativeRotation(own->GetMesh()->GetSocketRotation(GrabSocket).Quaternion().Inverse() * own->GetMesh()->GetComponentRotation().Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
+		own->GetMesh()->SetRelativeRotation((own->GetMesh()->GetSocketRotation(GrabSocket).Quaternion().Inverse() * own->GetMesh()->GetComponentRotation().Quaternion()), false, nullptr, ETeleportType::TeleportPhysics);
 
 		own->GetMesh()->SetWorldLocation(socketPos - (own->GetMesh()->GetSocketLocation(GrabSocket) - own->GetMesh()->GetComponentLocation()), false, nullptr, ETeleportType::TeleportPhysics);
 	}
@@ -76,7 +76,7 @@ void UGrabbableComponent::Launch(FVector dir)
 	{
 		own->SetUngrabbed();
 		own->GetMesh()->SetSimulatePhysics(true);
-		own->GetMesh()->AddImpulse(dir * LaunchPowerMult, NAME_None, true);
+		own->GetMesh()->AddImpulse(dir * LaunchPowerMult, own->GetMesh()->GetSocketBoneName(GrabSocket), true);
 	}
 
 	Grabbed = nullptr;
