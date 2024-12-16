@@ -35,7 +35,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float AttackRange;
-	TArray<AActor*> deerList;
+	TArray<AActor*> DeerList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float TurnTime;

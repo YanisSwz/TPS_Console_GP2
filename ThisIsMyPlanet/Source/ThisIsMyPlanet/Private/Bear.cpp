@@ -11,7 +11,7 @@ bool ABear::GetIsNapping()
 void ABear::BeginPlay()
 {
 	Super::BeginPlay();
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABush::StaticClass(), bushList);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABush::StaticClass(), BushList);
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
@@ -57,7 +57,7 @@ void ABear::Survive()
 		{
 			AnimalController->SightConfig->SightRadius = SightRadius;
 			AnimalController->HearingConfig->HearingRange = HearingRange;
-			AActor* randomBush = bushList[FMath::RandRange(0, bushList.Num() - 1)];
+			AActor* randomBush = BushList[FMath::RandRange(0, BushList.Num() - 1)];
 			
 
 			if (randomBush == nullptr)
@@ -71,7 +71,7 @@ void ABear::Survive()
 
 			bIsLookingForSpot = false;
 		}
-		if ((GetActorLocation() - TargetLocation).Length() <= 160.0f && !bIsEating)
+		if ((GetActorLocation() - TargetLocation).Length() <= EatingRange && !bIsEating)
 		{
 
 			bIsEating = true;
@@ -84,7 +84,7 @@ void ABear::Survive()
 			++BerryCount;
 			
 		}
-		if (BerryCount >= 2)
+		if (BerryCount >= MaxBerries)
 		{
 			if (AnimalController != nullptr) 
 			{
@@ -117,7 +117,7 @@ void ABear::Flee()
 	{
 		GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
 		TargetLocation = ClosestPlayer->GetActorLocation();
-		if ((GetActorLocation() - TargetLocation).Length() <= 160.0f)
+		if ((GetActorLocation() - TargetLocation).Length() <= AttackRange)
 		{
 			if (AttackAnimation != nullptr)
 				PlayAnimMontage(AttackAnimation);

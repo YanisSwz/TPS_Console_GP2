@@ -41,11 +41,11 @@ void ADeer::Survive()
 			return;
 
 		
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADeer::StaticClass(), deerList);
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADeer::StaticClass(), DeerList);
 		float dist = 1000.0f;
-		AActor* nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), deerList, dist);
-		deerList.RemoveSingle(nearestDeer);
-		nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), deerList, dist);
+		AActor* nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, dist);
+		DeerList.RemoveSingle(nearestDeer);
+		nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, dist);
 
 		FNavLocation targetFNavLocation;
 		if (nearestDeer == nullptr)
