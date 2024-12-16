@@ -25,9 +25,10 @@ void ADeer::Tick(float DeltaTime)
 		
 		bIsTurningLeft = !bIsTurningLeft;
 	}
-	else if (TurnTimer <= 0.5f * TurnTime)
+	AfterAttackTimer -= DeltaTime;
+	if (AfterAttackTimer < 0.0f)
 	{
-		//if (bHasAttacked) Jump();
+		AfterAttackTimer = 0.0f;
 	}
 }
 
@@ -89,15 +90,27 @@ void ADeer::Flee()
 	}
 	else
 	{
-		FVector projectedClosestPlayerLocation = FVector(ClosestPlayer->GetActorLocation().X, ClosestPlayer->GetActorLocation().Y, GetActorLocation().Z);
-		if (bIsTurningLeft)
+
+		if (!bIsWaitingAfterAttack)
 		{
-			TargetLocation = GetActorLocation() - (projectedClosestPlayerLocation - GetActorLocation()).RotateAngleAxis(-45.0f, FVector::UpVector);
+			AfterAttackTimer = AfterAttackTime;
+			bIsWaitingAfterAttack = true;
 		}
-		else
+		if (bIsWaitingAfterAttack && AfterAttackTimer <= 0.0f)
 		{
-			TargetLocation = GetActorLocation() - (projectedClosestPlayerLocation - GetActorLocation()).RotateAngleAxis(45.0f, FVector::UpVector);
+			FVector projectedClosestPlayerLocation = FVector(ClosestPlayer->GetActorLocation().X, ClosestPlayer->GetActorLocation().Y, GetActorLocation().Z);
+			if (bIsTurningLeft)
+			{
+				TargetLocation = GetActorLocation() - (projectedClosestPlayerLocation - GetActorLocation()).RotateAngleAxis(-45.0f, FVector::UpVector);
+			}
+			else
+			{
+				TargetLocation = GetActorLocation() - (projectedClosestPlayerLocation - GetActorLocation()).RotateAngleAxis(45.0f, FVector::UpVector);
+			}
+			bIsWaitingAfterAttack = false;
 		}
+
+		
 	}
 }
 

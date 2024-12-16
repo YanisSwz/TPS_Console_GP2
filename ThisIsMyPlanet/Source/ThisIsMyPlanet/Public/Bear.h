@@ -50,6 +50,14 @@ protected:
 	float AfterAttackTimer;
 	bool bIsWaitingAfterAttack;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float NapTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float ChaseSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float WalkSpeed;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

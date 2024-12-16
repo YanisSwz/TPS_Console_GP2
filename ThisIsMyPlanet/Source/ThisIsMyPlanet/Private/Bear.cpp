@@ -12,6 +12,7 @@ void ABear::BeginPlay()
 {
 	Super::BeginPlay();
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABush::StaticClass(), bushList);
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
 void ABear::Tick(float DeltaTime)
@@ -56,7 +57,6 @@ void ABear::Survive()
 		{
 			AnimalController->SightConfig->SightRadius = SightRadius;
 			AnimalController->HearingConfig->HearingRange = HearingRange;
-			float dist = 10000.0f;
 			AActor* randomBush = bushList[FMath::RandRange(0, bushList.Num() - 1)];
 			
 
@@ -91,7 +91,7 @@ void ABear::Survive()
 				AnimalController->SightConfig->SightRadius = 0.f;
 				AnimalController->HearingConfig->HearingRange = HearingRange / 2.f;
 			}
-			NapTimer = 15.0f;
+			NapTimer = NapTime;
 			bIsNapping = true;
 		}
 	}
@@ -112,34 +112,17 @@ void ABear::Flee()
 		bIsNapping = false;
 		BerryCount = 0;
 	}
-	FVector playerLocation;
-	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
-	FVector player2Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 1)->GetActorLocation();
-	APawn* nearestPlayer;
-	if ((player1Location - GetActorLocation()).Length() < (player2Location - GetActorLocation()).Length())
-	{
-		playerLocation = player1Location;
-		nearestPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	}
-	else
-	{
-		playerLocation = player2Location;
-		nearestPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 1);
-	}
-
+	
 	if (!bHasAttacked)
 	{
-		TargetLocation = playerLocation;
+		GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
+		TargetLocation = ClosestPlayer->GetActorLocation();
 		if ((GetActorLocation() - TargetLocation).Length() <= 160.0f)
 		{
-			APlayerCharacter* p = Cast<APlayerCharacter>(nearestPlayer);
-			if (p != nullptr)
-			{
-				if (AttackAnimation != nullptr)
-					PlayAnimMontage(AttackAnimation);
-				ApplyEffect(p);
-				bHasAttacked = true;
-			}
+			if (AttackAnimation != nullptr)
+				PlayAnimMontage(AttackAnimation);
+			ApplyEffect(ClosestPlayer);
+			bHasAttacked = true;
 		}
 	}
 	else
@@ -148,10 +131,11 @@ void ABear::Flee()
 		{
 			AfterAttackTimer = AfterAttackTime;
 			bIsWaitingAfterAttack = true;
+			GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 		}
 		if (bIsWaitingAfterAttack && AfterAttackTimer <= 0.0f)
 		{
-			TargetLocation = GetActorLocation() - (playerLocation - GetActorLocation());
+			TargetLocation = GetActorLocation() - (ClosestPlayer->GetActorLocation() - GetActorLocation());
 			bIsWaitingAfterAttack = false;
 		}
 		
