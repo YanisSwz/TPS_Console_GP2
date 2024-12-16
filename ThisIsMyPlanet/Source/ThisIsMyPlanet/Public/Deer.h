@@ -36,6 +36,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
 	float AttackRange;
+	TArray<AActor*> DeerList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* AttackAnimation;
@@ -45,6 +46,11 @@ protected:
 
 	float TurnTimer;
 	TArray<AActor*> deerList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Deer", meta = (AllowPrivateAccess = "true"))
+	float AfterAttackTime;
+	float AfterAttackTimer;
+	bool bIsWaitingAfterAttack;
 
 protected:
 	// Called when the game starts or when spawned

@@ -42,8 +42,27 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	bool GetIsNapping();
 
-	TArray<AActor*> bushList;
+	TArray<AActor*> BushList;
 	AAnimalController* AnimalController;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float AfterAttackTime;
+	float AfterAttackTimer;
+	bool bIsWaitingAfterAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float NapTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float ChaseSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float WalkSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float EatingRange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float AttackRange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	int MaxBerries;
 
 protected:
 	// Called when the game starts or when spawned

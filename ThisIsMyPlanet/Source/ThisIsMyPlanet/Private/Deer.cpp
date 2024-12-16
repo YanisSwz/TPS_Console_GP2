@@ -25,9 +25,10 @@ void ADeer::Tick(float DeltaTime)
 		
 		bIsTurningLeft = !bIsTurningLeft;
 	}
-	else if (TurnTimer <= 0.5f * TurnTime)
+	AfterAttackTimer -= DeltaTime;
+	if (AfterAttackTimer < 0.0f)
 	{
-		if (bHasAttacked) Jump();
+		AfterAttackTimer = 0.0f;
 	}
 }
 
@@ -40,11 +41,11 @@ void ADeer::Survive()
 			return;
 
 		
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADeer::StaticClass(), deerList);
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADeer::StaticClass(), DeerList);
 		float dist = 1000.0f;
-		AActor* nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), deerList, dist);
-		deerList.RemoveSingle(nearestDeer);
-		nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), deerList, dist);
+		AActor* nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, dist);
+		DeerList.RemoveSingle(nearestDeer);
+		nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, dist);
 
 		FNavLocation targetFNavLocation;
 		if (nearestDeer == nullptr)
@@ -91,15 +92,27 @@ void ADeer::Flee()
 	}
 	else
 	{
-		FVector projectedClosestPlayerLocation = FVector(ClosestPlayer->GetActorLocation().X, ClosestPlayer->GetActorLocation().Y, 0.0f);
-		if (bIsTurningLeft)
+
+		if (!bIsWaitingAfterAttack)
 		{
-			TargetLocation = GetActorLocation() - (projectedClosestPlayerLocation - GetActorLocation()).RotateAngleAxis(-45.0f, FVector::UpVector);
+			AfterAttackTimer = AfterAttackTime;
+			bIsWaitingAfterAttack = true;
 		}
-		else
+		if (bIsWaitingAfterAttack && AfterAttackTimer <= 0.0f)
 		{
-			TargetLocation = GetActorLocation() - (projectedClosestPlayerLocation - GetActorLocation()).RotateAngleAxis(45.0f, FVector::UpVector);
+			FVector projectedClosestPlayerLocation = FVector(ClosestPlayer->GetActorLocation().X, ClosestPlayer->GetActorLocation().Y, GetActorLocation().Z);
+			if (bIsTurningLeft)
+			{
+				TargetLocation = GetActorLocation() - (projectedClosestPlayerLocation - GetActorLocation()).RotateAngleAxis(-45.0f, FVector::UpVector);
+			}
+			else
+			{
+				TargetLocation = GetActorLocation() - (projectedClosestPlayerLocation - GetActorLocation()).RotateAngleAxis(45.0f, FVector::UpVector);
+			}
+			bIsWaitingAfterAttack = false;
 		}
+
+		
 	}
 }
 
