@@ -12,6 +12,7 @@ void ABear::BeginPlay()
 {
 	Super::BeginPlay();
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABush::StaticClass(), BushList);
+	PointValue = 200;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 

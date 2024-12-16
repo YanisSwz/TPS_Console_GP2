@@ -7,6 +7,7 @@
 void AFox::BeginPlay()
 {
 	Super::BeginPlay();
+	PointValue = 2000;
 	InitialSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
 

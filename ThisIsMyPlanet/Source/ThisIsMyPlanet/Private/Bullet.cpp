@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+//#include "Animal.h"
 
 ABullet::ABullet()
 {

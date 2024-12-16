@@ -4,14 +4,18 @@
 #include "CashOutZone.h"
 #include "animal.h"
 
+
 // Sets default values
 ACashOutZone::ACashOutZone()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	//PrimaryActorTick.bCanEverTick = true;
 
 	DetectionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("DetectionBox"));
-	//DetectionBox->OnComponentBeginOverlap.AddDynamic(this, &ACashOutZone::OnOverlap);
+	DetectionBox->OnComponentBeginOverlap.AddDynamic(this, &ACashOutZone::OnOverlap);
+
+	player1 = nullptr;
+	player2 = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -19,37 +23,68 @@ void ACashOutZone::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	player1 = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	player2 = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 1));
+
+	ChangeBlueScore();
+	ChangeRedScore();
 }
 
 // Called every frame
-void ACashOutZone::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+//void ACashOutZone::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//}
 
-}
-
-void ACashOutZone::OnOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AAnimal* animal = Cast<AAnimal>(OtherActor);
 	if (animal != nullptr)
 	{
-		if (animal->bIsSleeping) 
+		if (animal->bIsSleeping && animal->bIsActive) 
 		{
 			//mettre les points
 			
-			/*if (animal->lastGrabbed == player1) 
+			if (animal->LastGrabbedBy == player1)
 			{
-				bluePlayerPoints += animal->points;
+				bluePlayerPoints += animal->PointValue;
+				ChangeBlueScore();
+
+				if (GEngine != nullptr)
+					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "blue scored");
 			}
-			else if (animal->lastGrabbed == player2)
+			else if (animal->LastGrabbedBy == player2)
 			{
-				redPlayerPoints += animal->points;
-			}*/
+				redPlayerPoints += animal->PointValue;
+				ChangeRedScore();
+
+				if (GEngine != nullptr)
+					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "red scored");
+			}
+
+
+			if (GEngine != nullptr) 
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(redPlayerPoints));
+				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(bluePlayerPoints));
+			}
 
 			//desactiver l'animal
 
 			animal->bIsActive = false;
-			//voir si je peux pa juste supp le script
+			animal->GetCapsuleComponent()->SetSimulatePhysics(true);
+			animal->GetMesh()->SetSimulatePhysics(true);
+			animal->GetCharacterMovement()->SetMovementMode(MOVE_None);
+			animal->bIsSleeping = true;
+
+			//faire voler l'animal
+			FVector inpulse = FVector(0.0f, 0.f, 100.f);
+
+			//animal->AddForce(inpulse);
+
+			//detruire l'animal
+			animal->InitialLifeSpan = 3.0f;
 		}
 	}
 }

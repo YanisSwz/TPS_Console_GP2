@@ -163,6 +163,8 @@ void APlayerCharacter::Aim()
 			if (GrabLeftAnimation)
 				PlayAnimMontage(GrabLeftAnimation);
 			GrabComp->Grab(false);
+
+			Look(0);
 		}
 		else if (isAiming == Aiming::NONE)
 		{

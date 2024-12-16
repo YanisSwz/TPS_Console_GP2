@@ -55,27 +55,30 @@ void AAnimal::Flee()
 
 void AAnimal::Sleep()
 {
-	SleepTimer -= GetWorld()->DeltaTimeSeconds;
-	if (SleepTimer <= 0.f)
+	if (bIsActive)
 	{
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("woke up!"));
-		FVector inertia = GetMesh()->GetBoneLinearVelocity(NAME_None);
-		GrabbableComp->UnGrab();
-		GrabbableComp->SetIsGrabbable(false);
-		GetCapsuleComponent()->SetSimulatePhysics(false);
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		GetCharacterMovement()->GravityScale = 1;
-		GetMesh()->SetSimulatePhysics(false);
-		GetCapsuleComponent()->SetWorldLocation(GetMesh()->GetSocketLocation("") + BaseMeshOffset);
-		GetCapsuleComponent()->ResetSceneVelocity();
-		GetMesh()->SetRelativeLocationAndRotation(-BaseMeshOffset, BaseMeshRotation);
-		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-		GetCharacterMovement()->Velocity = inertia;
-		SleepTimer = SleepDuration;
-		bIsSleeping = false;
-		Health = MaxHealth;
-		bHasHitPlayer = false;
+		SleepTimer -= GetWorld()->DeltaTimeSeconds;
+		if (SleepTimer <= 0.f)
+		{
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("woke up!"));
+			FVector inertia = GetMesh()->GetBoneLinearVelocity(NAME_None);
+			GrabbableComp->UnGrab();
+			GrabbableComp->SetIsGrabbable(false);
+			GetCapsuleComponent()->SetSimulatePhysics(false);
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GetCharacterMovement()->GravityScale = 1;
+			GetMesh()->SetSimulatePhysics(false);
+			GetCapsuleComponent()->SetWorldLocation(GetMesh()->GetSocketLocation("") + BaseMeshOffset);
+			GetCapsuleComponent()->ResetSceneVelocity();
+			GetMesh()->SetRelativeLocationAndRotation(-BaseMeshOffset, BaseMeshRotation);
+			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+			GetCharacterMovement()->Velocity = inertia;
+			SleepTimer = SleepDuration;
+			bIsSleeping = false;
+			Health = MaxHealth;
+			bHasHitPlayer = false;
+		}
 	}
 }
 

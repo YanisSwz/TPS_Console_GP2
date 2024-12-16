@@ -6,6 +6,7 @@
 void ADeer::BeginPlay()
 {
 	Super::BeginPlay();
+	PointValue = 200;
 	TurnTimer = TurnTime;
 }
 

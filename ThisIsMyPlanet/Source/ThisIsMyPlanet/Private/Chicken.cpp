@@ -18,6 +18,7 @@ void AChicken::BeginPlay()
 	bIsLookingForSpot = true;
 	bIsEating = false;
 	EatingTimer = 0.0f;
+	PointValue = 200;
 }
 
 void AChicken::EndPlay(const EEndPlayReason::Type EndPlayReason)

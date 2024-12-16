@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
+#include "../PlayerCharacter.h"
 #include "GameFramework/Actor.h"
 #include "CashOutZone.generated.h"
 
@@ -15,12 +16,27 @@ class THISISMYPLANET_API ACashOutZone : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "DetectionZone", meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* DetectionBox;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "player", meta = (AllowPrivateAccess = "true"))
+	class APlayerCharacter* player1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "player", meta = (AllowPrivateAccess = "true"))
+	class APlayerCharacter* player2;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Points", meta = (AllowPrivateAccess = "true"))
+	float bluePlayerPoints = 100;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Points", meta = (AllowPrivateAccess = "true"))
+	float redPlayerPoints = 100;
+
 public:	
 	// Sets default values for this actor's properties
 	ACashOutZone();
 
-	int bluePlayerPoints = 0;
-	int redPlayerPoints = 0;
+	UFUNCTION(BlueprintImplementableEvent)
+	void ChangeBlueScore();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ChangeRedScore();
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,9 +44,9 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	void OnOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	void OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 };
