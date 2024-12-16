@@ -27,7 +27,7 @@ void ADeer::Tick(float DeltaTime)
 	}
 	else if (TurnTimer <= 0.5f * TurnTime)
 	{
-		if (bHasAttacked) Jump();
+		//if (bHasAttacked) Jump();
 	}
 }
 
@@ -89,7 +89,7 @@ void ADeer::Flee()
 	}
 	else
 	{
-		FVector projectedClosestPlayerLocation = FVector(ClosestPlayer->GetActorLocation().X, ClosestPlayer->GetActorLocation().Y, 0.0f);
+		FVector projectedClosestPlayerLocation = FVector(ClosestPlayer->GetActorLocation().X, ClosestPlayer->GetActorLocation().Y, GetActorLocation().Z);
 		if (bIsTurningLeft)
 		{
 			TargetLocation = GetActorLocation() - (projectedClosestPlayerLocation - GetActorLocation()).RotateAngleAxis(-45.0f, FVector::UpVector);
