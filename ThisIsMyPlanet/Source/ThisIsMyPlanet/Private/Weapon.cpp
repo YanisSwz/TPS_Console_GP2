@@ -28,7 +28,7 @@ void UWeapon::Fire(FVector LaunchDirection)
 		GetOwner()->GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
 		// Set MuzzleOffset to spawn projectiles slightly in front of the camera.
-		MuzzleOffset.Set(100.0f, 0.0f, 0.0f);
+		//MuzzleOffset.Set(100.0f, 0.0f, 0.0f);
 
 		// Transform MuzzleOffset from camera space to world space.
 		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
@@ -39,7 +39,7 @@ void UWeapon::Fire(FVector LaunchDirection)
 		//World->SpawnActor<ABullet>(ABullet::StaticClass(),  MuzzleLocation, MuzzleRotation, ActorSpawnParams);
 		ABullet* b = World->SpawnActor<ABullet>(bullet, MuzzleLocation, MuzzleRotation, ActorSpawnParams);
 		if(b)
-			b->FireInDirection(LaunchDirection * 4000);
+			b->FireInDirection(LaunchDirection * 4000.f);
 	}
 	else
 	{
