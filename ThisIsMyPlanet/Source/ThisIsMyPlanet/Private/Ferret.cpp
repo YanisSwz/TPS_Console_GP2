@@ -3,6 +3,11 @@
 
 #include "Ferret.h"
 
+bool AFerret::GetIsTurning()
+{
+	return bIsTurning;
+}
+
 void AFerret::BeginPlay()
 {
 	Super::BeginPlay();
@@ -50,7 +55,7 @@ void AFerret::Survive()
 	}
 	else
 	{
-		if (FVector::Dist(GetActorLocation(), TargetLocation) <= GetCapsuleComponent()->GetScaledCapsuleHalfHeight() + 5.f)
+		if (bReachedDestination)
 		{
 			WaitTimer = WaitDuration;
 			bIsLookingForSpot = true;
@@ -105,10 +110,16 @@ void AFerret::Flee()
 	else
 	{
 		bIsTurning = false;
-		TargetLocation = Burrow->GetActorLocation();
-		if (FVector::Dist(GetActorLocation(), TargetLocation) <= GetCapsuleComponent()->GetScaledCapsuleHalfHeight() + 5.f && !bIsBuried)
+		if (Burrow != nullptr)
 		{
-			Bury();
+			if (TargetLocation != Burrow->GetActorLocation())
+			{
+				TargetLocation = Burrow->GetActorLocation();
+			}
+			if (bReachedDestination && !bIsBuried)
+			{
+				Bury();
+			}
 		}
 	}
 }

@@ -3,6 +3,11 @@
 
 #include "Bear.h"
 
+bool ABear::GetIsNapping()
+{
+	return bIsNapping;
+}
+
 void ABear::BeginPlay()
 {
 	Super::BeginPlay();
@@ -20,9 +25,10 @@ void ABear::Tick(float DeltaTime)
 	}
 
 	NapTimer -= DeltaTime;
-	if (NapTimer <= 0.0f && BerryCount >= 5)
+	if (NapTimer <= 0.0f && BerryCount >= 2)
 	{
 		NapTimer = 0.0f;
+		bIsNapping = false;
 		BerryCount = 0;
 	}
 
@@ -72,9 +78,15 @@ void ABear::Survive()
 			++BerryCount;
 			
 		}
-		if (BerryCount >= 5)
+		if (BerryCount >= 2)
 		{
+			if (AnimalController != nullptr) 
+			{
+				AnimalController->SightConfig->SightRadius = 0.f;
+				AnimalController->HearingConfig->HearingRange = HearingRange / 2.f;
+			}
 			NapTimer = 15.0f;
+			bIsNapping = true;
 		}
 	}
 	
@@ -83,6 +95,17 @@ void ABear::Survive()
 
 void ABear::Flee()
 {
+	if (bIsNapping) 
+	{
+		if (AnimalController != nullptr)
+		{
+			AnimalController->SightConfig->SightRadius = SightRadius;
+			AnimalController->HearingConfig->HearingRange = HearingRange;
+		}
+		NapTimer = 0.0f;
+		bIsNapping = false;
+		BerryCount = 0;
+	}
 	FVector playerLocation;
 	FVector player1Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)->GetActorLocation();
 	FVector player2Location = UGameplayStatics::GetPlayerPawn(GetWorld(), 1)->GetActorLocation();
@@ -107,6 +130,8 @@ void ABear::Flee()
 			APlayerCharacter* p = Cast<APlayerCharacter>(nearestPlayer);
 			if (p != nullptr)
 			{
+				if (AttackAnimation != nullptr)
+					PlayAnimMontage(AttackAnimation);
 				ApplyEffect(p);
 				bHasAttacked = true;
 			}
@@ -122,4 +147,10 @@ void ABear::ApplyEffect(APlayerCharacter* player)
 {
 	player->Stun(StunTime);
 	Cast<ACharacter>(player)->GetMesh()->AddImpulse((player->GetActorLocation() - GetActorLocation()) * HitForce + HitForceBonus, NAME_None, true);
+}
+
+void ABear::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	AnimalController = Cast<AAnimalController>(NewController);
 }

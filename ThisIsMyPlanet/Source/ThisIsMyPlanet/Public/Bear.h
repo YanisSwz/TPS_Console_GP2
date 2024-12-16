@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Animal.h"
 #include "Bush.h"
+#include "AnimalController.h"
+#include "Animation/AnimMontage.h"
 #include "Bear.generated.h"
 
 /**
@@ -17,6 +19,7 @@ class THISISMYPLANET_API ABear : public AAnimal
 
 protected:
 	bool bIsLookingForSpot = true;
+	bool bIsNapping = false;
 	float EatingTimer = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
 	float EatingTime;
@@ -32,8 +35,15 @@ protected:
 	float HitForce = 100.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
 	FVector HitForceBonus;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* AttackAnimation;
 	
+	UFUNCTION(BlueprintCallable)
+	bool GetIsNapping();
+
 	TArray<AActor*> bushList;
+	AAnimalController* AnimalController;
 
 protected:
 	// Called when the game starts or when spawned
@@ -48,5 +58,5 @@ public:
 	//void Sleep() override;
 
 	void ApplyEffect(APlayerCharacter* player) override;
-	
+	void PossessedBy(AController* NewController) override;
 };
