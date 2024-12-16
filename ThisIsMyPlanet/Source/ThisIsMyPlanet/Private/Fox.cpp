@@ -50,7 +50,8 @@ void AFox::Survive()
 		TargetLocation = nearestChicken->GetActorLocation();
 		if ((TargetLocation - GetActorLocation()).Length() < 100.0f)
 		{
-			// TODO: ATTACC
+			if (AttackAnimation != nullptr)
+				PlayAnimMontage(AttackAnimation);
 			nearestChicken->Destroy();
 			HungerTimer = HungerTime;
 		}

@@ -43,7 +43,9 @@ void AChicken::Tick(float DeltaTime)
 void AChicken::Survive()
 {
 	if (bLaunched && !GetCharacterMovement()->IsFalling())
+	{
 		bLaunched = false;
+	}
 	
 	if (bLaunched)
 		return;

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animal.h"
 #include "Chicken.h"
+#include "Animation/AnimMontage.h"
 #include "Fox.generated.h"
 
 /**
@@ -34,6 +35,9 @@ protected:
 	float HungerTime;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Fox", meta = (AllowPrivateAccess = "true"))
 	float StunTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* AttackAnimation;
 
 protected:
 	// Called when the game starts or when spawned
