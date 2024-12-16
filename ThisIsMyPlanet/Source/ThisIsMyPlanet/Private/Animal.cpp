@@ -118,6 +118,13 @@ void AAnimal::ResetMeshPos()
 	
 }
 
+void AAnimal::Sell()
+{
+	bIsActive = false;
+	GrabbableComp->UnGrab();
+	GrabbableComp->SetIsGrabbable(false);
+}
+
 void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit)
 {
 	if (_OtherActor != nullptr)
