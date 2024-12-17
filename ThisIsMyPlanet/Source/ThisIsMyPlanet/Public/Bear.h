@@ -63,6 +63,13 @@ protected:
 	float AttackRange;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
 	int MaxBerries;
+	float SoundTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float MaxSoundTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	float SoundTimerRandOffset;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	USoundBase* BearDetectionSound;
 
 protected:
 	// Called when the game starts or when spawned
