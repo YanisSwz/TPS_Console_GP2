@@ -39,13 +39,13 @@ void AFox::Survive()
 	if (GetCharacterMovement()->GetMaxSpeed() != InitialSpeed)
 		GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
 
-	float dist = 1000.0f;
+	float dist;
 	AActor* nearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->GetChickens(), dist);
 	if (nearestChicken == nullptr)
 	{
-		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
+		TargetLocation = GetActorLocation() + FVector(MoveStep, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
 	}
-	else if (dist < 3000.0f && HungerTimer <= 0.0f)
+	else if (dist < ChickenSpottingRange && HungerTimer <= 0.0f)
 	{
 		TargetLocation = nearestChicken->GetActorLocation();
 		if (dist < EatingDistance)
@@ -58,7 +58,7 @@ void AFox::Survive()
 	}
 	else
 	{
-		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
+		TargetLocation = GetActorLocation() + FVector(MoveStep, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
 	}
 	
 }

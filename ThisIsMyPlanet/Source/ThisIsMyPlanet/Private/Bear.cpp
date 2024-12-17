@@ -90,7 +90,7 @@ void ABear::Survive()
 			if (AnimalController != nullptr) 
 			{
 				AnimalController->SightConfig->SightRadius = 0.f;
-				AnimalController->HearingConfig->HearingRange = HearingRange / 2.f;
+				AnimalController->HearingConfig->HearingRange = HearingRange * 0.5f;
 			}
 			NapTimer = NapTime;
 			bIsNapping = true;

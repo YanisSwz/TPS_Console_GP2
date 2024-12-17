@@ -43,7 +43,7 @@ void ADeer::Survive()
 
 		
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADeer::StaticClass(), DeerList);
-		float dist = 1000.0f;
+		float dist;
 		AActor* nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, dist);
 		DeerList.RemoveSingle(nearestDeer);
 		nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, dist);
