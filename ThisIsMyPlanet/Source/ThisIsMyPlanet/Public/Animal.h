@@ -91,6 +91,9 @@ protected:
 	//APlayerCharacter* LastGrabbedBy = nullptr;
 	float PlayerInvincibilityTimer;
 	bool bHasHitPlayer = false;
+
+	bool bIsSold = false;
+	float animalDeathTimer = 10.f;
 	
 public:
 	// Sets default values for this character's properties

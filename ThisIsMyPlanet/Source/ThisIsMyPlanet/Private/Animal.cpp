@@ -41,6 +41,13 @@ void AAnimal::Tick(float DeltaTime)
 			PlayerInvincibilityTimer = MaxPlayerInvincibilityTimer;
 		}
 	}
+
+	if (bIsSold)
+	{
+		animalDeathTimer -= DeltaTime;
+		if (animalDeathTimer <= 0.f)
+			Destroy();
+	}
 }
 
 void AAnimal::Survive()
@@ -123,6 +130,7 @@ void AAnimal::Sell()
 	bIsActive = false;
 	GrabbableComp->UnGrab();
 	GrabbableComp->SetIsGrabbable(false);
+	bIsSold = true;
 }
 
 void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _NormalImpulse, const FHitResult& _Hit)
