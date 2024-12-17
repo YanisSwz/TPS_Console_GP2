@@ -49,24 +49,11 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			{
 				bluePlayerPoints += animal->PointValue;
 				ChangeBlueScore();
-
-				if (GEngine != nullptr)
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "blue scored");
 			}
 			else if (animal->LastGrabbedBy == player2)
 			{
 				redPlayerPoints += animal->PointValue;
 				ChangeRedScore();
-
-				if (GEngine != nullptr)
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "red scored");
-			}
-
-
-			if (GEngine != nullptr) 
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(redPlayerPoints));
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(bluePlayerPoints));
 			}
 
 			//disable animal
@@ -81,7 +68,7 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			animal->GetMesh()->AddImpulse(inpulse);
 
 			//destroy the animal
-				animal->Sell();
+			animal->Sell();
 		}
 	}
 }

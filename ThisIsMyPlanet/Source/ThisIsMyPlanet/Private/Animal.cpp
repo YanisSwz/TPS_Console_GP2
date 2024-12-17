@@ -60,8 +60,6 @@ void AAnimal::Sleep()
 		SleepTimer -= GetWorld()->DeltaTimeSeconds;
 		if (SleepTimer <= 0.f)
 		{
-			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, TEXT("woke up!"));
 			FVector inertia = GetMesh()->GetBoneLinearVelocity(NAME_None);
 			GrabbableComp->UnGrab();
 			GrabbableComp->SetIsGrabbable(false);
@@ -137,12 +135,6 @@ void AAnimal::OnAnimalHit(AActor* _SelfActor, AActor* _OtherActor, FVector _Norm
 
 				if (player != nullptr && (LastGrabbedBy != player || !bIsPlayerInvincible))
 				{
-					if (GEngine != nullptr)
-						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), player->GetActorNameOrLabel());
-					if (GEngine != nullptr)
-						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), LastGrabbedBy->GetActorNameOrLabel());
-					if (GEngine != nullptr)
-						GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), FString::SanitizeFloat(bIsPlayerInvincible));
 					ApplyEffect(player);
 					SleepTimer = 0.f;
 					bHasHitPlayer = true;

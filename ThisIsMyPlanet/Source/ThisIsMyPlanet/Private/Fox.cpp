@@ -7,7 +7,6 @@
 void AFox::BeginPlay()
 {
 	Super::BeginPlay();
-	PointValue = 2000;
 	InitialSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
 
@@ -18,7 +17,6 @@ void AFox::Tick(float DeltaTime)
 	if (bIsTurningLeft)
 	{
 		ScoutStepAngle += TurningSpeed * DeltaTime;
-
 	}
 	else
 	{

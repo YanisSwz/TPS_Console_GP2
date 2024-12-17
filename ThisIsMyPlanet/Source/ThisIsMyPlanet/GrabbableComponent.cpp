@@ -31,10 +31,9 @@ void UGrabbableComponent::BeginPlay()
 
 void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 {
-	if (GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true), socketName))
+	if (!GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true), socketName))
 	{
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::MakeRandomColor(), "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		return;
 	}
 
 	FVector socketPos = parent->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(socketName);
@@ -102,7 +101,5 @@ bool UGrabbableComponent::GetIsTwoSlots()
 
 void UGrabbableComponent::SetIsGrabbable(bool bGrabbable)
 {
-	if (GEngine != nullptr)
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Purple, FString::SanitizeFloat(bGrabbable));
 	bIsGrabbable = bGrabbable;
 }

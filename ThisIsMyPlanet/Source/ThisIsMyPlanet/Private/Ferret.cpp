@@ -18,7 +18,6 @@ void AFerret::BeginPlay()
 	bAppliedSnare = false;
 	bIsTurning = false;
 	BuryTimer = 0.f;
-	PointValue = 200;
 }
 
 void AFerret::Tick(float DeltaTime)
