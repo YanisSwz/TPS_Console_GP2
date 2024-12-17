@@ -44,8 +44,7 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	{
 		if (animal->bIsSleeping && animal->bIsActive) 
 		{
-			//mettre les points
-			
+			//add points
 			if (animal->LastGrabbedBy == player1)
 			{
 				bluePlayerPoints += animal->PointValue;
@@ -70,21 +69,20 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(bluePlayerPoints));
 			}
 
-			//desactiver l'animal
-
+			//disable animal
 			animal->bIsActive = false;
 			animal->GetCapsuleComponent()->SetSimulatePhysics(true);
 			animal->GetMesh()->SetSimulatePhysics(true);
 			animal->GetCharacterMovement()->SetMovementMode(MOVE_None);
 			animal->bIsSleeping = true;
 
-			//faire voler l'animal
-			FVector inpulse = FVector(0.0f, 0.f, 100.f);
+			//make animal fly
+			FVector inpulse = FVector(0.0f, 0.f, 10000000.f);
+			animal->GetMesh()->AddImpulse(inpulse);
 
-			//animal->AddForce(inpulse);
-
-			//detruire l'animal
-			animal->InitialLifeSpan = 3.0f;
+			//destroy the animal
+			animal->InitialLifeSpan = 5.0f;
+			animal->bAutoDestroyWhenFinished = true;
 		}
 	}
 }

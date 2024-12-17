@@ -14,21 +14,12 @@ void UWeapon::Fire(FVector LaunchDirection)
 	UWorld* World = GetWorld();
 	if (World != nullptr)
 	{
-		/*if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Spawn");*/
-
 		FActorSpawnParameters ActorSpawnParams;
 		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-
-		/*FTransform spawnPos = GetOwner()->GetTransform();
-		spawnPos.TransformPosition(FVector(100, 0, 0));*/
 
 		FVector CameraLocation;
 		FRotator CameraRotation;
 		GetOwner()->GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
-		// Set MuzzleOffset to spawn projectiles slightly in front of the camera.
-		//MuzzleOffset.Set(100.0f, 0.0f, 0.0f);
 
 		// Transform MuzzleOffset from camera space to world space.
 		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
@@ -46,15 +37,6 @@ void UWeapon::Fire(FVector LaunchDirection)
 		if (GEngine != nullptr)
 			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "World is nullptr");
 	}
-
-	//changer de place (dans le player)
-	/*if (bCanShoot) 
-	{
-		
-
-		reloadTimer = 1.0f;
-		bCanShoot = false;
-	}*/
 }
 
  //Called when the game starts or when spawned
