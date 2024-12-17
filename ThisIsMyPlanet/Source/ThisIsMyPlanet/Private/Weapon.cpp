@@ -18,7 +18,7 @@ void UWeapon::Fire(FVector LaunchDirection)
 			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "Spawn");*/
 
 		FActorSpawnParameters ActorSpawnParams;
-		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+		ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 		/*FTransform spawnPos = GetOwner()->GetTransform();
 		spawnPos.TransformPosition(FVector(100, 0, 0));*/
