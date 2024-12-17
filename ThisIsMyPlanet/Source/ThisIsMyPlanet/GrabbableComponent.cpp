@@ -51,14 +51,21 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 
 		own->GetMesh()->SetBodySimulatePhysics(own->GetMesh()->GetSocketBoneName(GrabSocket), false);
 
+
+		// This is here because when an animal is in ragdoll with one bone not simulated (only when it's not the "root" bone like "BEAR_-Pelvis"), it moves weirdly (like break-dancing), but deactivating the AnimClass fixes it.
+		AnimClass = own->GetMesh()->GetAnimClass();
+		own->GetMesh()->SetAnimClass(nullptr);
+		//
+
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::MakeRandomColor(), own->GetMesh()->GetSocketBoneName(GrabSocket).ToString());
+
 		own->GetMesh()->SetRelativeRotation((own->GetMesh()->GetSocketRotation(GrabSocket).Quaternion().Inverse() * own->GetMesh()->GetComponentRotation().Quaternion()), false, nullptr, ETeleportType::TeleportPhysics);
 
 		own->GetMesh()->SetWorldLocation(socketPos - (own->GetMesh()->GetSocketLocation(GrabSocket) - own->GetMesh()->GetComponentLocation()), false, nullptr, ETeleportType::TeleportPhysics);
 	}
 
-	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(false);
-
-	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	bIsGrabbable = false;
 }
 
 void UGrabbableComponent::Launch(FVector dir)
@@ -76,9 +83,16 @@ void UGrabbableComponent::Launch(FVector dir)
 		own->SetUngrabbed();
 		own->GetMesh()->SetSimulatePhysics(true);
 		own->GetMesh()->AddImpulse(dir * LaunchPowerMult, own->GetMesh()->GetSocketBoneName(GrabSocket), true);
+
+		// check comment at line 56
+		own->GetMesh()->SetAnimClass(AnimClass);
+		//
 	}
 
+
 	Grabbed = nullptr;
+
+	bIsGrabbable = true;
 }
 
 void UGrabbableComponent::UnGrab()

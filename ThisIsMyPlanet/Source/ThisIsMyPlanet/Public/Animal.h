@@ -73,6 +73,8 @@ public:
 	APlayerCharacter* LastGrabbedBy = nullptr;
 	FVector TargetLocation;
 	APlayerCharacter* ClosestPlayer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
 	bool bIsSleeping;
 
 protected:

@@ -44,8 +44,8 @@ APlayerCharacter::APlayerCharacter()
 	Weapon = CreateDefaultSubobject<UWeapon>(TEXT("Weapon"));
 
 	SetupStimulusSource();
-	if (CrouchNoiseReduction <= 0.f)
-		CrouchNoiseReduction = 1.f;
+	if (CrouchSoundNoiseReduction <= 0.f)
+		CrouchSoundNoiseReduction = 1.f;
 }
 
 // Called when the game starts or when spawned
@@ -92,17 +92,17 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 
-		if (Footsteps->CurrentPlayCount.Num() == 0)
+		if (FootstepsSound->CurrentPlayCount.Num() == 0)
 		{
 			if (!bIsCrouched)
 			{
-				UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f);
-				UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f, this, FootstepsRange);
+				//UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f);
+				//UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f, this, FootstepsRange);
 			}
 			else
 			{
-				UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f / CrouchNoiseReduction);
-				UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f / CrouchNoiseReduction, this, FootstepsRange);
+				//UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f / CrouchNoiseReduction);
+				//UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f / CrouchNoiseReduction, this, FootstepsRange);
 			}
 		}
 
