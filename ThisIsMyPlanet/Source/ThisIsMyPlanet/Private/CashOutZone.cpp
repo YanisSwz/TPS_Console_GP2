@@ -30,11 +30,10 @@ void ACashOutZone::BeginPlay()
 	ChangeRedScore();
 }
 
-// Called every frame
+// //Called every frame
 //void ACashOutZone::Tick(float DeltaTime)
 //{
 //	Super::Tick(DeltaTime);
-//
 //}
 
 void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -62,13 +61,11 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			animal->GetMesh()->SetSimulatePhysics(true);
 			animal->GetCharacterMovement()->SetMovementMode(MOVE_None);
 			animal->bIsSleeping = true;
+			animal->Sell();
 
 			//make animal fly
 			FVector inpulse = FVector(0.0f, 0.f, 10000000.f);
 			animal->GetMesh()->AddImpulse(inpulse);
-
-			//destroy the animal
-			animal->Sell();
 		}
 	}
 }
