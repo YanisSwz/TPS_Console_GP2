@@ -35,6 +35,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
 	float HorizontalImpulse;
 
+	float SoundTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
+	float MaxSoundTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
+	float SoundTimerRandOffset;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
+	USoundBase* ChickenAmbientSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Chicken", meta = (AllowPrivateAccess = "true"))
+	USoundAttenuation* ChickenSoundAttenuation;
+
 	UFUNCTION(BlueprintCallable)
 	bool GetIsFlying();
 

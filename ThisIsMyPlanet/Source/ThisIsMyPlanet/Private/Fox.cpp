@@ -8,6 +8,7 @@ void AFox::BeginPlay()
 {
 	Super::BeginPlay();
 	InitialSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	SoundTimer = MaxSoundTimer + FMath::RandRange(-SoundTimerRandOffset, SoundTimerRandOffset);
 }
 
 void AFox::Tick(float DeltaTime)
@@ -35,6 +36,16 @@ void AFox::Tick(float DeltaTime)
 	if (AfterAttackTimer < 0.0f)
 	{
 		AfterAttackTimer = 0.0f;
+	}
+
+	if (!bIsSleeping)
+	{
+		SoundTimer -= DeltaTime;
+		if (SoundTimer < 0.0f)
+		{
+			SoundTimer = MaxSoundTimer + FMath::RandRange(-SoundTimerRandOffset, SoundTimerRandOffset);
+			UGameplayStatics::PlaySoundAtLocation(this, FoxAmbientSound, this->GetActorLocation(), 1.f, FMath::RandRange(0.8f, 1.2f), 0.0f, FoxSoundAttenuation);
+		}
 	}
 }
 

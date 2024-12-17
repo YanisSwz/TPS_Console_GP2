@@ -70,6 +70,10 @@ protected:
 	float SoundTimerRandOffset;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Bear", meta = (AllowPrivateAccess = "true"))
 	USoundBase* BearDetectionSound;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	USoundBase* BearSnoringSound;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Bear", meta = (AllowPrivateAccess = "true"))
+	USoundAttenuation* BearSoundAttenuation;
 
 protected:
 	// Called when the game starts or when spawned
