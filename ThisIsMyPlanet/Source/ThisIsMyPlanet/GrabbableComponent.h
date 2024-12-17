@@ -19,7 +19,7 @@ class THISISMYPLANET_API UGrabbableComponent : public UActorComponent
 	bool bIsTwoSlots = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
-	bool bIsGrabbable = false;
+	bool bIsGrabbable = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	FName GrabSocket;
@@ -28,6 +28,7 @@ class THISISMYPLANET_API UGrabbableComponent : public UActorComponent
 	FQuat GrabQuaternion;
 
 	AActor* Grabbed = nullptr;
+	TSubclassOf<UAnimInstance> AnimClass;
 
 public:	
 	// Sets default values for this component's properties
