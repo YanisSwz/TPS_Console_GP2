@@ -43,16 +43,9 @@ void ABear::Tick(float DeltaTime)
 
 void ABear::Survive()
 {
-	/*if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("BEAR"));*/
 	
 
-	if (NapTimer > 0.0f)
-	{
-		// honk mimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimimi
-		
-	}
-	else
+	if (NapTimer <= 0.0f)
 	{
 		if (bIsLookingForSpot)
 		{
