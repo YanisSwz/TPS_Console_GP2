@@ -39,34 +39,3 @@ void UWeapon::Fire(FVector LaunchDirection)
 	}
 }
 
- //Called when the game starts or when spawned
-//void UWeapon::BeginPlay()
-//{
-//	Super::BeginPlay();
-//	UE_LOG(LogTemp, Error, TEXT("BBBBB"));
-//	if (GEngine != nullptr)
-//		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "bbbbbbbbbbb");
-//	
-//}
-
-// Called every frame
-//void UWeapon::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//
-//	UE_LOG(LogTemp, Error, TEXT("AAAA"));
-//	if (GEngine != nullptr)
-//		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "aaaaaaaaaaaaaaaaaaaaaaa");
-//
-//	//changer de place (dans le player)
-//	if (!bCanShoot)
-//	{
-//
-//		if (GEngine != nullptr)
-//			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(DeltaTime) );
-//
-//		reloadTimer -= DeltaTime;
-//		if (reloadTimer <= 0.f)
-//			bCanShoot = true;
-//	}
-//}
