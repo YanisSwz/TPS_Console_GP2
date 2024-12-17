@@ -30,11 +30,10 @@ void ACashOutZone::BeginPlay()
 	ChangeRedScore();
 }
 
-// Called every frame
+// //Called every frame
 //void ACashOutZone::Tick(float DeltaTime)
 //{
 //	Super::Tick(DeltaTime);
-//
 //}
 
 void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -44,43 +43,29 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	{
 		if (animal->bIsSleeping && animal->bIsActive) 
 		{
-			//mettre les points
-			
+			//add points
 			if (animal->LastGrabbedBy == player1)
 			{
 				bluePlayerPoints += animal->PointValue;
 				ChangeBlueScore();
-
-				if (GEngine != nullptr)
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "blue scored");
 			}
 			else if (animal->LastGrabbedBy == player2)
 			{
 				redPlayerPoints += animal->PointValue;
 				ChangeRedScore();
-
-				if (GEngine != nullptr)
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, "red scored");
 			}
 
-
-			if (GEngine != nullptr) 
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(redPlayerPoints));
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::SanitizeFloat(bluePlayerPoints));
-			}
-
-			//desactiver l'animal
-
+			//disable animal
+			animal->bIsActive = false;
+			animal->GetCapsuleComponent()->SetSimulatePhysics(true);
+			animal->GetMesh()->SetSimulatePhysics(true);
+			animal->GetCharacterMovement()->SetMovementMode(MOVE_None);
+			animal->bIsSleeping = true;
 			animal->Sell();
 
-			//faire voler l'animal
-			FVector inpulse = FVector(0.0f, 0.f, 100.f);
-
-			//animal->AddForce(inpulse);
-
-			//detruire l'animal
-			animal->InitialLifeSpan = 3.0f;
+			//make animal fly
+			FVector inpulse = FVector(0.0f, 0.f, 10000000.f);
+			animal->GetMesh()->AddImpulse(inpulse);
 		}
 	}
 }

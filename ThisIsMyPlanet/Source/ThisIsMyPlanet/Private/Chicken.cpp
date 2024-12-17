@@ -18,7 +18,6 @@ void AChicken::BeginPlay()
 	bIsLookingForSpot = true;
 	bIsEating = false;
 	EatingTimer = 0.0f;
-	PointValue = 200;
 }
 
 void AChicken::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -56,9 +55,9 @@ void AChicken::Survive()
 		if (!NavSystem)
 			return;
 
-		FNavLocation targetFNavLocation;
-		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), SeedSearchingRadius, targetFNavLocation);
-		TargetLocation = targetFNavLocation.Location;
+		FNavLocation TargetFNavLocation;
+		NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), SeedSearchingRadius, TargetFNavLocation);
+		TargetLocation = TargetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
 	else

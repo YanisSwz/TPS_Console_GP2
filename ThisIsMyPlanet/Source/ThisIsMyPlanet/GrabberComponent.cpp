@@ -43,7 +43,7 @@ void UGrabberComponent::Grab(bool bIsRightHand)
 	TArray<AActor*> Ignore;
 	TArray<FHitResult> Hits;
 
-	if (UKismetSystemLibrary::BoxTraceMultiForObjects(GetWorld(), start + forward, start + forward, HalfSize, owner->GetActorRotation(), Actors, false, Ignore, EDrawDebugTrace::ForDuration, Hits, true))
+	if (UKismetSystemLibrary::BoxTraceMultiForObjects(GetWorld(), start + forward, start + forward, HalfSize, owner->GetActorRotation(), Actors, false, Ignore, EDrawDebugTrace::None, Hits, true))
 	{
 		for (size_t i = 0; i < Hits.Num(); i++)
 		{

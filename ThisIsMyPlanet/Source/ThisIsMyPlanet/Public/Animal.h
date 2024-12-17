@@ -24,12 +24,6 @@ class THISISMYPLANET_API AAnimal : public ACharacter
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
-	float Speed;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal", meta = (AllowPrivateAccess = "true"))
-	float MinEffectVelocity;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	FVector BaseMeshOffset;
 
@@ -72,14 +66,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|Active", meta = (AllowPrivateAccess = "true"))
 	bool bIsActive = true;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|points", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animal|Points", meta = (AllowPrivateAccess = "true"))
 	int PointValue;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animal|points", meta = (AllowPrivateAccess = "true"))
+	
 	APlayerCharacter* LastGrabbedBy = nullptr;
-
 	FVector TargetLocation;
 	APlayerCharacter* ClosestPlayer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animal|Sleep", meta = (AllowPrivateAccess = "true"))
 	bool bIsSleeping;
 
 protected:
@@ -88,9 +83,11 @@ protected:
 	bool bIsGrabbed;
 	bool bReachedDestination;
 	bool bIsPlayerInvincible = false;
-	//APlayerCharacter* LastGrabbedBy = nullptr;
 	float PlayerInvincibilityTimer;
 	bool bHasHitPlayer = false;
+
+	bool bIsSold = false;
+	float animalDeathTimer = 10.f;
 	
 public:
 	// Sets default values for this character's properties
