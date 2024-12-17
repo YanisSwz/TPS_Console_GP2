@@ -14,13 +14,13 @@ EBTNodeResult::Type UBTTask_Flee::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
     {
         return EBTNodeResult::Failed;
     }
-
+    
     AAnimalController* Controller = Cast<AAnimalController>(OwnerComp.GetAIOwner());
     if (!Controller)
     {
         return EBTNodeResult::Failed;
     }
     Controller->Flee();
-
+    
     return EBTNodeResult::Succeeded;
 }
