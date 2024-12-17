@@ -32,33 +32,44 @@ void AFox::Tick(float DeltaTime)
 
 	if(bIsSleeping && GetCharacterMovement()->GetMaxSpeed() != InitialSpeed)
 		GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
+
+	AfterAttackTimer -= DeltaTime;
+	if (AfterAttackTimer < 0.0f)
+	{
+		AfterAttackTimer = 0.0f;
+	}
 }
 
 void AFox::Survive()
 {
 	if (GetCharacterMovement()->GetMaxSpeed() != InitialSpeed)
 		GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
-
-	float dist;
-	AActor* nearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->GetChickens(), dist);
-	if (nearestChicken == nullptr)
+	
+	float Dist;
+	AActor* NearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->GetChickens(), Dist);
+	if (Dist < ChickenSpottingRange && HungerTimer <= 0.0f && NearestChicken != nullptr)
 	{
-		TargetLocation = GetActorLocation() + FVector(MoveStep, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
-	}
-	else if (dist < ChickenSpottingRange && HungerTimer <= 0.0f)
-	{
-		TargetLocation = nearestChicken->GetActorLocation();
-		if (dist < EatingDistance)
+		TargetLocation = NearestChicken->GetActorLocation();
+		if (Dist < EatingDistance)
 		{
 			if (AttackAnimation != nullptr)
 				PlayAnimMontage(AttackAnimation);
-			nearestChicken->Destroy();
+			NearestChicken->Destroy();
 			HungerTimer = HungerTime;
 		}
 	}
 	else
 	{
-		TargetLocation = GetActorLocation() + FVector(MoveStep, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
+		if (!bIsWaitingAfterAttack)
+		{
+			AfterAttackTimer = AfterAttackTime;
+			bIsWaitingAfterAttack = true;
+		}
+		if (bIsWaitingAfterAttack && AfterAttackTimer <= 0.0f)
+		{
+			TargetLocation = GetActorLocation() + FVector(MoveStep, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
+			bIsWaitingAfterAttack = false;
+		}
 	}
 	
 }

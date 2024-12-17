@@ -58,16 +58,16 @@ void ABear::Survive()
 		{
 			AnimalController->SightConfig->SightRadius = SightRadius;
 			AnimalController->HearingConfig->HearingRange = HearingRange;
-			AActor* randomBush = BushList[FMath::RandRange(0, BushList.Num() - 1)];
+			AActor* RandomBush = BushList[FMath::RandRange(0, BushList.Num() - 1)];
 			
 
-			if (randomBush == nullptr)
+			if (RandomBush == nullptr)
 			{
 				TargetLocation = GetActorLocation();
 			}
 			else
 			{
-				TargetLocation = randomBush->GetActorLocation();
+				TargetLocation = RandomBush->GetActorLocation();
 			}
 
 			bIsLookingForSpot = false;
