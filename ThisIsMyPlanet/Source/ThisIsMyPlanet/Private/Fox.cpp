@@ -54,7 +54,9 @@ void AFox::Survive()
 		{
 			if (AttackAnimation != nullptr)
 				PlayAnimMontage(AttackAnimation);
-			NearestChicken->Destroy();
+			FVector SpawnLocation = FVector(FMath::RandRange(-2000.0f, 2000.0f), FMath::RandRange(-2000.0f, 2000.0f), 50000.0f);
+			if (FMath::Abs(SpawnLocation.X) < 500.0f && FMath::Abs(SpawnLocation.Y) < 500.0f) SpawnLocation = FVector(1000.0f, 1000.0f, 50000.0f);
+			NearestChicken->SetActorLocation(SpawnLocation);
 			HungerTimer = HungerTime;
 		}
 	}
