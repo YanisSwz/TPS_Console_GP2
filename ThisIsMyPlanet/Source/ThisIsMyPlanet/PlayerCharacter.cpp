@@ -360,6 +360,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 	default:
 		break;
 	}
+
+	if (GetActorLocation().X > 10000.0f || GetActorLocation().X < -10000.0f || GetActorLocation().Y > 10000.0f || GetActorLocation().Y < -10000.0f)
+	{
+		SetActorLocation(FVector(-500.0f, -500.0f, 3000.0f));
+	}
 }
 
 // Called to bind functionality to input
