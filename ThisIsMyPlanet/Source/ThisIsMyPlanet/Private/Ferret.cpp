@@ -44,12 +44,12 @@ void AFerret::Survive()
 			if (!NavSystem)
 				return;
 
-			FNavLocation targetFNavLocation;
+			FNavLocation TargetFNavLocation;
 			if (Burrow != nullptr)
-				NavSystem->GetRandomReachablePointInRadius(Burrow->GetActorLocation(), PatrolRadius, targetFNavLocation);
+				NavSystem->GetRandomReachablePointInRadius(Burrow->GetActorLocation(), PatrolRadius, TargetFNavLocation);
 			else
-				NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), PatrolRadius, targetFNavLocation);
-			TargetLocation = targetFNavLocation.Location;
+				NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), PatrolRadius, TargetFNavLocation);
+			TargetLocation = TargetFNavLocation.Location;
 			bIsLookingForSpot = false;
 		}
 	}

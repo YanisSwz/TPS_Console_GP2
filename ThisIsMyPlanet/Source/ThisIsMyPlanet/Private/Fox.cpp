@@ -30,33 +30,46 @@ void AFox::Tick(float DeltaTime)
 
 	if(bIsSleeping && GetCharacterMovement()->GetMaxSpeed() != InitialSpeed)
 		GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
+
+	AfterAttackTimer -= DeltaTime;
+	if (AfterAttackTimer < 0.0f)
+	{
+		AfterAttackTimer = 0.0f;
+	}
 }
 
 void AFox::Survive()
 {
 	if (GetCharacterMovement()->GetMaxSpeed() != InitialSpeed)
 		GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
-
-	float dist = 1000.0f;
-	AActor* nearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->GetChickens(), dist);
-	if (nearestChicken == nullptr)
+	
+	float Dist;
+	AActor* NearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->GetChickens(), Dist);
+	if (Dist < ChickenSpottingRange && HungerTimer <= 0.0f && NearestChicken != nullptr)
 	{
-		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
-	}
-	else if (dist < 3000.0f && HungerTimer <= 0.0f)
-	{
-		TargetLocation = nearestChicken->GetActorLocation();
-		if (dist < EatingDistance)
+		TargetLocation = NearestChicken->GetActorLocation();
+		if (Dist < EatingDistance)
 		{
 			if (AttackAnimation != nullptr)
 				PlayAnimMontage(AttackAnimation);
-			nearestChicken->Destroy();
+			FVector SpawnLocation = FVector(FMath::RandRange(-2000.0f, 2000.0f), FMath::RandRange(-2000.0f, 2000.0f), 50000.0f);
+			if (FMath::Abs(SpawnLocation.X) < 500.0f && FMath::Abs(SpawnLocation.Y) < 500.0f) SpawnLocation = FVector(1000.0f, 1000.0f, 50000.0f);
+			NearestChicken->SetActorLocation(SpawnLocation);
 			HungerTimer = HungerTime;
 		}
 	}
 	else
 	{
-		TargetLocation = GetActorLocation() + FVector(100.0f, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
+		if (!bIsWaitingAfterAttack)
+		{
+			AfterAttackTimer = AfterAttackTime;
+			bIsWaitingAfterAttack = true;
+		}
+		if (bIsWaitingAfterAttack && AfterAttackTimer <= 0.0f)
+		{
+			TargetLocation = GetActorLocation() + FVector(MoveStep, 0.0f, 0.0f).RotateAngleAxis(ScoutStepAngle, FVector::UpVector);
+			bIsWaitingAfterAttack = false;
+		}
 	}
 	
 }

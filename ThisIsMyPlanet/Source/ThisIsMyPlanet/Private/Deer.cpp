@@ -42,22 +42,22 @@ void ADeer::Survive()
 
 		
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ADeer::StaticClass(), DeerList);
-		float dist = 1000.0f;
-		AActor* nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, dist);
-		DeerList.RemoveSingle(nearestDeer);
-		nearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, dist);
+		float Dist;
+		AActor* NearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, Dist);
+		DeerList.RemoveSingle(NearestDeer);
+		NearestDeer = UGameplayStatics::FindNearestActor(GetActorLocation(), DeerList, Dist);
 
-		FNavLocation targetFNavLocation;
-		if (nearestDeer == nullptr)
+		FNavLocation TargetFNavLocation;
+		if (NearestDeer == nullptr)
 		{
-			NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), GrassSearchingRadius, targetFNavLocation);
+			NavSystem->GetRandomReachablePointInRadius(GetActorLocation(), GrassSearchingRadius, TargetFNavLocation);
 		}
 		else
 		{
-			NavSystem->GetRandomReachablePointInRadius(nearestDeer->GetActorLocation(), GrassSearchingRadius, targetFNavLocation);
+			NavSystem->GetRandomReachablePointInRadius(NearestDeer->GetActorLocation(), GrassSearchingRadius, TargetFNavLocation);
 		}
 		
-		TargetLocation = targetFNavLocation.Location;
+		TargetLocation = TargetFNavLocation.Location;
 		bIsLookingForSpot = false;
 	}
 	if (bReachedDestination && !bIsEating)

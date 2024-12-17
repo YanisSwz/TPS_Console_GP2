@@ -42,26 +42,24 @@ void ABear::Tick(float DeltaTime)
 
 void ABear::Survive()
 {
+	
 
-	if (NapTimer > 0.0f)
-	{
-	}
-	else
+	if (NapTimer <= 0.0f)
 	{
 		if (bIsLookingForSpot)
 		{
 			AnimalController->SightConfig->SightRadius = SightRadius;
 			AnimalController->HearingConfig->HearingRange = HearingRange;
-			AActor* randomBush = BushList[FMath::RandRange(0, BushList.Num() - 1)];
+			AActor* RandomBush = BushList[FMath::RandRange(0, BushList.Num() - 1)];
 			
 
-			if (randomBush == nullptr)
+			if (RandomBush == nullptr)
 			{
 				TargetLocation = GetActorLocation();
 			}
 			else
 			{
-				TargetLocation = randomBush->GetActorLocation();
+				TargetLocation = RandomBush->GetActorLocation();
 			}
 
 			bIsLookingForSpot = false;
@@ -84,7 +82,7 @@ void ABear::Survive()
 			if (AnimalController != nullptr) 
 			{
 				AnimalController->SightConfig->SightRadius = 0.f;
-				AnimalController->HearingConfig->HearingRange = HearingRange / 2.f;
+				AnimalController->HearingConfig->HearingRange = HearingRange * 0.5f;
 			}
 			NapTimer = NapTime;
 			bIsNapping = true;
