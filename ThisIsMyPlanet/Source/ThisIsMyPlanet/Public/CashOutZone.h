@@ -28,6 +28,9 @@ class THISISMYPLANET_API ACashOutZone : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Points", meta = (AllowPrivateAccess = "true"))
 	float redPlayerPoints = 100;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Sounds", meta = (AllowPrivateAccess = "true"))
+	USoundBase* SellSound;
+
 public:	
 	// Sets default values for this actor's properties
 	ACashOutZone();

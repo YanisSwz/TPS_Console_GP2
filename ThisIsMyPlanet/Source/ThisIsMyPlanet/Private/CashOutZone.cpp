@@ -66,6 +66,8 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			//make animal fly
 			FVector inpulse = FVector(0.0f, 0.f, 10000000.f);
 			animal->GetMesh()->AddImpulse(inpulse);
+
+			UGameplayStatics::PlaySoundAtLocation(this, SellSound, this->GetActorLocation(), 1.f);
 		}
 	}
 }

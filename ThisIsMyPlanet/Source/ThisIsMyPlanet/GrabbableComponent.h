@@ -19,7 +19,7 @@ class THISISMYPLANET_API UGrabbableComponent : public UActorComponent
 	bool bIsTwoSlots = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
-	bool bIsGrabbable = true;
+	bool bIsGrabbable = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grab", meta = (AllowPrivateAccess = "true"))
 	FName GrabSocket;
