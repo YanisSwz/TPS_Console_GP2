@@ -8,9 +8,6 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Chicken.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class THISISMYPLANET_API AChicken : public AAnimal
 {

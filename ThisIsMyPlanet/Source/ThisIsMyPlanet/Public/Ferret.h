@@ -6,9 +6,6 @@
 #include "Animal.h"
 #include "Ferret.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class THISISMYPLANET_API AFerret : public AAnimal
 {

@@ -10,10 +10,8 @@ ABullet::ABullet()
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
 
-	//cree le collision profil
+	//create collision profile
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
-
-	//CollisionComp->OnComponentHit.AddDynamic(this, &ABullet::OnHit);
 
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
@@ -38,10 +36,4 @@ void ABullet::FireInDirection(FVector ShootDirection)
 {
 	CollisionComp->AddImpulse(ShootDirection, NAME_None, true);
 }
-
-//void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-//{
-//	//endormir les animeaux
-//	//Destroy();
-//}
 

@@ -91,21 +91,6 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
-
-		if (FootstepsSound->CurrentPlayCount.Num() == 0)
-		{
-			if (!bIsCrouched)
-			{
-				//UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f);
-				//UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f, this, FootstepsRange);
-			}
-			else
-			{
-				//UGameplayStatics::PlaySoundAtLocation(this, Footsteps, this->GetActorLocation(), 1.f / CrouchNoiseReduction);
-				//UAISense_Hearing::ReportNoiseEvent(this, this->GetActorLocation(), 1.f / CrouchNoiseReduction, this, FootstepsRange);
-			}
-		}
-
 	}
 
 }
@@ -118,14 +103,12 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	{
 		if (isAiming != Aiming::NONE)
 		{
-			//this->GetActorForwardVector().X = FollowCamera->GetForwardVector().X;
-
 			FRotator ControlRotation = Controller->GetControlRotation();
 
-			// Conserver uniquement le Yaw (axe horizontal) pour �viter les inclinaisons
+			// Keep only Yaw (horizontal axe) to avoid tilting
 			FRotator NewRotation = FRotator(0.0f, ControlRotation.Yaw, 0.0f);
 
-			// Appliquer cette rotation au personnage
+			// Apply this rotation to character
 			SetActorRotation(NewRotation);
 		}
 		AddControllerYawInput(LookAxisVector.X);

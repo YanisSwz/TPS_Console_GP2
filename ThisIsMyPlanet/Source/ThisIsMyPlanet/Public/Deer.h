@@ -7,9 +7,6 @@
 #include "Animation/AnimMontage.h"
 #include "Deer.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class THISISMYPLANET_API ADeer : public AAnimal
 {
@@ -61,8 +58,6 @@ public:
 	void Survive() override;
 
 	void Flee() override;
-
-	//void Sleep() override;
 
 	void ApplyEffect(APlayerCharacter* player) override;
 	

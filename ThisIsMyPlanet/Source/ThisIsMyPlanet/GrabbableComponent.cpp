@@ -20,15 +20,6 @@ void UGrabbableComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-
-//// Called every frame
-//void UGrabbableComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-//{
-//	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-//
-//	// ...
-//}
-
 void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 {
 	if (!GetOwner()->AttachToComponent(parent->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true), socketName))
@@ -57,9 +48,6 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 		own->GetMesh()->SetAnimClass(nullptr);
 		//
 
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::MakeRandomColor(), own->GetMesh()->GetSocketBoneName(GrabSocket).ToString());
-
 		own->GetMesh()->SetRelativeRotation((own->GetMesh()->GetSocketRotation(GrabSocket).Quaternion().Inverse() * own->GetMesh()->GetComponentRotation().Quaternion()), false, nullptr, ETeleportType::TeleportPhysics);
 
 		own->GetMesh()->SetWorldLocation(socketPos - (own->GetMesh()->GetSocketLocation(GrabSocket) - own->GetMesh()->GetComponentLocation()), false, nullptr, ETeleportType::TeleportPhysics);
@@ -71,10 +59,6 @@ void UGrabbableComponent::AttachTo(AActor* parent, FName socketName)
 void UGrabbableComponent::Launch(FVector dir)
 {
 	GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-
-	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
-	//GetOwner()->GetComponentByClass<UCapsuleComponent>()->SetSimulatePhysics(true);
 
 	AAnimal* own = Cast<AAnimal, AActor>(GetOwner());
 
