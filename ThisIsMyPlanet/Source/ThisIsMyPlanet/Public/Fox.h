@@ -8,9 +8,6 @@
 #include "Animation/AnimMontage.h"
 #include "Fox.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class THISISMYPLANET_API AFox : public AAnimal
 {

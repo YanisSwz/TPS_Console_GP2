@@ -9,9 +9,6 @@
 #include "Animation/AnimMontage.h"
 #include "Bear.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class THISISMYPLANET_API ABear : public AAnimal
 {
