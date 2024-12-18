@@ -22,5 +22,5 @@ EBTNodeResult::Type UBTTask_Sleep::ExecuteTask(UBehaviorTreeComponent& OwnerComp
     }
     Controller->Sleep();
 
-    return EBTNodeResult::Succeeded; return EBTNodeResult::Type();
+    return EBTNodeResult::Succeeded; 
 }
