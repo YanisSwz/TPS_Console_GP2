@@ -57,8 +57,6 @@ void AFox::Survive()
 	if (NearestChicken == nullptr)
 	{
 		NearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->GetChickens(), NearestChickenDistance);
-		if (GEngine != nullptr)
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), "Thou Seeketh Chickens???");
 	}
 	if (NearestChickenDistance < ChickenSpottingRange && HungerTimer <= 0.0f && NearestChicken != nullptr)
 	{
