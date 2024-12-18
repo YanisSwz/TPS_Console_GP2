@@ -43,6 +43,13 @@ void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	{
 		if (animal->bIsSleeping && animal->bIsActive) 
 		{
+			//check for players
+			if (player1 == nullptr || player2 == nullptr)
+			{
+				player1 = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+				player2 = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 1));
+			}
+
 			//add points
 			if (animal->LastGrabbedBy == player1)
 			{
