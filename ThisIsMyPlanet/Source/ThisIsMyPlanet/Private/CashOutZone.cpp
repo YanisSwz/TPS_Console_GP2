@@ -9,7 +9,7 @@
 ACashOutZone::ACashOutZone()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	//PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	DetectionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("DetectionBox"));
 	DetectionBox->OnComponentBeginOverlap.AddDynamic(this, &ACashOutZone::OnOverlap);
@@ -29,12 +29,6 @@ void ACashOutZone::BeginPlay()
 	ChangeBlueScore();
 	ChangeRedScore();
 }
-
-// //Called every frame
-//void ACashOutZone::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//}
 
 void ACashOutZone::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {

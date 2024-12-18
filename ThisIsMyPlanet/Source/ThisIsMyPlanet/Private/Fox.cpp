@@ -54,12 +54,16 @@ void AFox::Survive()
 	if (GetCharacterMovement()->GetMaxSpeed() != InitialSpeed)
 		GetCharacterMovement()->MaxWalkSpeed = InitialSpeed;
 	
-	float Dist;
-	AActor* NearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->GetChickens(), Dist);
-	if (Dist < ChickenSpottingRange && HungerTimer <= 0.0f && NearestChicken != nullptr)
+	if (NearestChicken == nullptr)
+	{
+		NearestChicken = UGameplayStatics::FindNearestActor(GetActorLocation(), GetWorld()->GetGameInstance()->GetSubsystem<UChickenDirector>()->GetChickens(), NearestChickenDistance);
+		if (GEngine != nullptr)
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::MakeRandomColor(), "Thou Seeketh Chickens???");
+	}
+	if (NearestChickenDistance < ChickenSpottingRange && HungerTimer <= 0.0f && NearestChicken != nullptr)
 	{
 		TargetLocation = NearestChicken->GetActorLocation();
-		if (Dist < EatingDistance)
+		if (FVector::Dist(TargetLocation, GetActorLocation()) < EatingDistance)
 		{
 			if (AttackAnimation != nullptr)
 				PlayAnimMontage(AttackAnimation);
@@ -67,6 +71,9 @@ void AFox::Survive()
 			if (FMath::Abs(SpawnLocation.X) < 500.0f && FMath::Abs(SpawnLocation.Y) < 500.0f) SpawnLocation = FVector(1000.0f, 1000.0f, 50000.0f);
 			NearestChicken->SetActorLocation(SpawnLocation);
 			HungerTimer = HungerTime;
+
+			NearestChicken = nullptr;
+			NearestChickenDistance = ChickenSpottingRange + 100.f;
 		}
 	}
 	else

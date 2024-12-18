@@ -101,9 +101,14 @@ void AFerret::Flee()
 
 			NewLocation.X += RotateValue.X;
 			NewLocation.Y += RotateValue.Y;
-			NewLocation.Z += RotateValue.Z;
+			NewLocation.Z += 100.f;
 
 			SetActorLocation(NewLocation);
+
+			NewLocation.Z -= 5000.f;
+
+			SetActorLocation(NewLocation, true);
+			
 			TargetLocation = NewLocation;
 		}
 	}
