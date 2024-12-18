@@ -119,5 +119,5 @@ void ADeer::Flee()
 void ADeer::ApplyEffect(APlayerCharacter* player)
 {
 	player->Stun(StunTime);
-	Cast<ACharacter>(player)->GetMesh()->AddImpulse((player->GetActorLocation() - GetActorLocation()) * HitForce + HitForceBonus, NAME_None, true);
+	Cast<ACharacter>(player)->GetMesh()->AddImpulse((player->GetActorLocation() - GetActorLocation()).GetSafeNormal() * HitForce + HitForceBonus, NAME_None, true);
 }

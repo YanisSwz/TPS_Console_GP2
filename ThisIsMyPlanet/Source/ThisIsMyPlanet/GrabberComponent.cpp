@@ -11,7 +11,7 @@ UGrabberComponent::UGrabberComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	owner = GetOwner();
 }
@@ -24,15 +24,6 @@ void UGrabberComponent::BeginPlay()
 
 	// ...
 	
-}
-
-
-// Called every frame
-void UGrabberComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void UGrabberComponent::Grab(bool bIsRightHand)

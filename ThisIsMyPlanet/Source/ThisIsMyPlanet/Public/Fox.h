@@ -59,6 +59,8 @@ protected:
 	float AfterAttackTime;
 	float AfterAttackTimer;
 	bool bIsWaitingAfterAttack;
+	float NearestChickenDistance = 0;
+	AActor* NearestChicken = nullptr;
 
 protected:
 	// Called when the game starts or when spawned

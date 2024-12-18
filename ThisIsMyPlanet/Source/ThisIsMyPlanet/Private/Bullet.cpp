@@ -30,6 +30,8 @@ ABullet::ABullet()
 	ProjectileMovement->ProjectileGravityScale = 0.1f;
 
 	InitialLifeSpan = 5.0f;
+
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void ABullet::FireInDirection(FVector ShootDirection)
