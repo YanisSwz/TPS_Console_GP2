@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<psproject fmt="gp4" version="1000">
+  <volume>
+    <volume_type>bd25</volume_type>
+    <volume_id>PS4VOLUME</volume_id>
+    <volume_ts>2024-12-18 16:07:43</volume_ts>
+    <iso_fs_type>UDF2.50+ISO Lv3+Joliet</iso_fs_type>
+    <mdi_date>2024-12-18</mdi_date>
+    <mdi_copyright></mdi_copyright>
+    <mdi_producer></mdi_producer>
+  </volume>
+  <components layer0_align="inner">
+    <component component_type="system" label="">
+      <component_extent layer_no="0" order="0"/>
+    </component>
+    <component component_type="updater" label="">
+      <component_extent layer_no="0" order="1"/>
+    </component>
+    <component component_type="ps4_app" pkg_path="TT0000-TEST23714_00-THISISMYPLANET00-A0100-V0100.pkg" label="">
+      <component_extent layer_no="0" order="2"/>
+    </component>
+  </components>
+</psproject>

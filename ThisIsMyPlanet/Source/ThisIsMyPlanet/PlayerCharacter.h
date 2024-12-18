@@ -194,7 +194,7 @@ protected:
 	void Shoot();
 	void StopShooting();
 	void Switch();
-	void StartCrouching();
+	void HandleCrouch();
 	void EndCrouching();
 	void StartJumping(const FInputActionValue& Value);
 	void EndJumping(const FInputActionValue& Value);

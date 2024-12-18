@@ -116,18 +116,14 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void APlayerCharacter::StartCrouching()
+void APlayerCharacter::HandleCrouch()
 {
 	if (bIsStunned || GetCharacterMovement()->IsFalling())
 		return;
-	Crouch();
-}
-
-void APlayerCharacter::EndCrouching()
-{
-	if (bIsStunned)
-		return;
-	UnCrouch();
+	if (bIsCrouched)
+		UnCrouch();
+	else
+		Crouch();
 }
 
 void APlayerCharacter::Aim()
@@ -325,20 +321,20 @@ void APlayerCharacter::Tick(float DeltaTime)
 	switch (isAiming)
 	{
 	case Aiming::NONE:
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, initialFieldofView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
-		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, initialFieldofView, FMath::Clamp(CameraZoomSpeed * GetWorld()->DeltaTimeSeconds, 0.f, 1.f));
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos,FMath::Clamp(CameraZoomSpeed * GetWorld()->DeltaTimeSeconds,0.f,1.f)));
 		break;
 	case Aiming::WEAPON:
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
-		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, FMath::Clamp(CameraZoomSpeed * GetWorld()->DeltaTimeSeconds, 0.f, 1.f));
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), BaseCameraPos, FMath::Clamp(CameraZoomSpeed * GetWorld()->DeltaTimeSeconds, 0.f, 1.f)));
 		break;
 	case Aiming::ANIMAL_LEFT:
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
-		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), FVector(CameraZoomGrabPosition.X, -CameraZoomGrabPosition.Y, CameraZoomGrabPosition.Z), CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, FMath::Clamp(CameraZoomSpeed * GetWorld()->DeltaTimeSeconds, 0.f, 1.f));
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), FVector(CameraZoomGrabPosition.X, -CameraZoomGrabPosition.Y, CameraZoomGrabPosition.Z), FMath::Clamp(CameraZoomSpeed * GetWorld()->DeltaTimeSeconds, 0.f, 1.f)));
 		break;
 	case Aiming::ANIMAL_RIGHT:
-		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds);
-		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), CameraZoomGrabPosition, CameraZoomSpeed * GetWorld()->DeltaTimeSeconds));
+		FollowCamera->FieldOfView = FMath::Lerp(FollowCamera->FieldOfView, zoomedFieldOfView, FMath::Clamp(CameraZoomSpeed * GetWorld()->DeltaTimeSeconds, 0.f, 1.f));
+		FollowCamera->SetRelativeLocation(FMath::Lerp(FollowCamera->GetRelativeLocation(), CameraZoomGrabPosition, FMath::Clamp(CameraZoomSpeed * GetWorld()->DeltaTimeSeconds, 0.f, 1.f)));
 		break;
 	default:
 		break;
@@ -379,8 +375,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 
 		// Crouching
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &APlayerCharacter::StartCrouching);
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::EndCrouching);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &APlayerCharacter::HandleCrouch);
 
 		// Aim
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &APlayerCharacter::Aim);

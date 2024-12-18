@@ -40,7 +40,7 @@ void ABear::Tick(float DeltaTime)
 	}
 
 	if (SoundTimer >= 0.f)
-	SoundTimer -= DeltaTime;
+		SoundTimer -= DeltaTime;
 }
 
 void ABear::Survive()
