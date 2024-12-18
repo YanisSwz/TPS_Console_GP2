@@ -18,6 +18,7 @@ void AChicken::BeginPlay()
 	bIsLookingForSpot = true;
 	bIsEating = false;
 	EatingTimer = 0.0f;
+	SoundTimer = MaxSoundTimer + FMath::RandRange(-SoundTimerRandOffset, SoundTimerRandOffset);
 }
 
 void AChicken::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -37,6 +38,16 @@ void AChicken::Tick(float DeltaTime)
 
 	if (bIsSleeping && bLaunched)
 		bLaunched = false;
+
+	if (!bIsSleeping)
+	{
+		SoundTimer -= DeltaTime;
+		if (SoundTimer < 0.0f)
+		{
+			SoundTimer = MaxSoundTimer + FMath::RandRange(-SoundTimerRandOffset, SoundTimerRandOffset);
+			UGameplayStatics::PlaySoundAtLocation(this, ChickenAmbientSound, this->GetActorLocation(), 1.f, FMath::RandRange(0.8f, 1.2f), 0.0f, ChickenSoundAttenuation);
+		}
+	}
 }
 
 void AChicken::Survive()

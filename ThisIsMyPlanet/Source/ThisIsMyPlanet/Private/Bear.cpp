@@ -38,6 +38,9 @@ void ABear::Tick(float DeltaTime)
 	{
 		AfterAttackTimer = 0.0f;
 	}
+
+	if (SoundTimer >= 0.f)
+	SoundTimer -= DeltaTime;
 }
 
 void ABear::Survive()
@@ -116,6 +119,12 @@ void ABear::Flee()
 				PlayAnimMontage(AttackAnimation);
 			ApplyEffect(ClosestPlayer);
 			bHasAttacked = true;
+		}
+
+		if (SoundTimer < 0.0f)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, BearDetectionSound, this->GetActorLocation(), 1.f, FMath::RandRange(0.8f, 1.2f), 0.0f, BearSoundAttenuation);
+			SoundTimer = MaxSoundTimer + FMath::RandRange(-SoundTimerRandOffset, SoundTimerRandOffset);
 		}
 	}
 	else

@@ -441,6 +441,7 @@ void APlayerCharacter::Stun(float Duration)
 	GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis", true);
 	GetMesh()->SetAllBodiesBelowPhysicsBlendWeight("pelvis", 1.f);
 
+	UGameplayStatics::PlaySoundAtLocation(this, StunSound, this->GetActorLocation(), 1.f, FMath::RandRange(0.8f, 1.2f));
 }
 
 void APlayerCharacter::Snare(float Duration, float SlowAmount)
